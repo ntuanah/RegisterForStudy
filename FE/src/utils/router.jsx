@@ -25,6 +25,10 @@ export const ROUTERS = {
   },
 
   ADMIN: {
-    PROFILE: "/admin/profile"
+    PROFILE: "/admin/profile",
+    FACULTYMANAGEMENT: "/admin/faculty-management",
+    SUBJECTMANAGEMENT: "/admin/subject-management",
+    SEMESTERCONFIGURATION: "/admin/semester-configuration",
+    USERMANAGEMENT: "/admin/user-management"
   }
 };
