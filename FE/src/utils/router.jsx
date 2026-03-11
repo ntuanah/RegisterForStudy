@@ -29,6 +29,7 @@ export const ROUTERS = {
     FACULTYMANAGEMENT: "/admin/faculty-management",
     SUBJECTMANAGEMENT: "/admin/subject-management",
     SEMESTERCONFIGURATION: "/admin/semester-configuration",
-    USERMANAGEMENT: "/admin/user-management"
+    USERMANAGEMENT: "/admin/user-management",
+    USERACCOUNT: "/admin/user-account",
   }
 };

@@ -23,6 +23,7 @@ import FacultyManagementPage from "./pages/admin/facultyManagementPage";
 import SubjectManagementPage from "./pages/admin/subjectManagementPage";
 import SemesterConfigurationPage from "./pages/admin/semesterConfigurationPage";
 import UserManagementPage from "./pages/admin/userManagementPage";
+import UserAccountPage from "./pages/admin/userAccountPage";
 
 // const renderRouterUser = () => {
 //   const userRouter = [
@@ -136,6 +137,7 @@ const RouterCustom = () => {
     {path: ROUTERS.ADMIN.SUBJECTMANAGEMENT, component: <SubjectManagementPage />},
     {path: ROUTERS.ADMIN.SEMESTERCONFIGURATION, component: <SemesterConfigurationPage />},
     {path: ROUTERS.ADMIN.USERMANAGEMENT, component: <UserManagementPage />},
+    {path: ROUTERS.ADMIN.USERACCOUNT, component: <UserAccountPage />},
 
   ];
 
