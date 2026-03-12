@@ -1,4 +1,10 @@
+import { useState } from "react";
+import EditInformationUser from "../Modal/EditInformationUser";
+import InformationUser from "../Modal/InformationUser";
+
 const UserManagementTable = () => {
+  const [openModalInfo, setOpenModalInfo] = useState(false);
+  const [openModalEdit, setOpenModalEdit] = useState(false);
   return (
     <div className="border border-slate-200 rounded-xl shadow-sm mt-5">
       <table className="w-full text-left border-collapse">
@@ -58,6 +64,7 @@ const UserManagementTable = () => {
                   height="18px"
                   viewBox="0 0 24 24"
                   className="cursor-pointer"
+                  onClick={() => setOpenModalEdit(true)}
                 >
                   <path
                     fill="none"
@@ -88,6 +95,7 @@ const UserManagementTable = () => {
                   height="18px"
                   viewBox="0 0 24 24"
                   className="cursor-pointer"
+                  onClick={() => setOpenModalInfo(true)}
                 >
                   <path
                     fill="none"
@@ -395,6 +403,13 @@ const UserManagementTable = () => {
           </tr>
         </tbody>
       </table>
+
+      {openModalEdit && (
+        <EditInformationUser close={() => setOpenModalEdit(false)} />
+      )}
+      {openModalInfo && (
+        <InformationUser close={() => setOpenModalInfo(false)} />
+      )}
     </div>
   );
 };
