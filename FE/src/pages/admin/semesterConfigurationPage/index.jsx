@@ -1,3 +1,4 @@
+import OpenSubjectTable from "../../../components/admin/OpenSubjectTable";
 import RegistrationPeriodCard from "../../../components/admin/RegistrationPeriodCard";
 
 const SemesterConfigurationPage = () => {
@@ -108,6 +109,41 @@ const SemesterConfigurationPage = () => {
           </div>
 
           <RegistrationPeriodCard />
+          <RegistrationPeriodCard />
+        </div>
+
+        <div className="space-y-7 mt-7">
+          <div className="mb-8 flex justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-slate-900">
+                Mở môn
+              </h2>
+            </div>
+
+            <div className="">
+              <button className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18px"
+                  height="18px"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.5"
+                    d="M4 12h8m0 0h8m-8 0V4m0 8v8"
+                  />
+                </svg>
+                Thêm môn học
+              </button>
+            </div>
+          </div>
+
+          <OpenSubjectTable />
+
         </div>
       </div>
     </div>

@@ -10,10 +10,10 @@ const UserManagementTable = () => {
       <table className="w-full text-left border-collapse">
         <thead>
           <tr className="bg-blue-50">
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-20">
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-5">
               STT
             </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-32">
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-15">
               Mã người dùng
             </th>
             <th className="px-6 py-2 text-[10px] font-bold text-slate-400">
@@ -22,13 +22,19 @@ const UserManagementTable = () => {
             <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50">
               Email
             </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50">
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-35">
+              Mật khẩu
+            </th>
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-30">
               Số điện thoại
             </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50">
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-35">
+              Vai trò
+            </th>
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-44">
               Trạng thái
             </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50">
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-30">
               Thao tác
             </th>
           </tr>
@@ -40,7 +46,9 @@ const UserManagementTable = () => {
             <td className="px-6 py-4">A46573</td>
             <td className="px-6 py-4">Nguyễn Tuấn Anh</td>
             <td className="px-6 py-4">A46573@thanglong.edu.vn</td>
+            <td className="px-6 py-4">N2mcSH7QZL</td>
             <td className="px-6 py-4">0987244992</td>
+            <td className="px-6 py-4">Sinh viên</td>
             <td className="px-6 py-4 flex text-green-600 items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -115,7 +123,9 @@ const UserManagementTable = () => {
             <td className="px-6 py-4">A46573</td>
             <td className="px-6 py-4">Nguyễn Tuấn Anh</td>
             <td className="px-6 py-4">A46573@thanglong.edu.vn</td>
+            <td className="px-6 py-4">N2mcSH7QZL</td>
             <td className="px-6 py-4">0987244992</td>
+            <td className="px-6 py-4">Sinh viên</td>
             <td className="px-6 py-4 flex text-slate-600 items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -139,6 +149,7 @@ const UserManagementTable = () => {
                   height="18px"
                   viewBox="0 0 24 24"
                   className="cursor-pointer"
+                  onClick={() => setOpenModalEdit(true)}
                 >
                   <path
                     fill="none"
@@ -169,6 +180,7 @@ const UserManagementTable = () => {
                   height="18px"
                   viewBox="0 0 24 24"
                   className="cursor-pointer"
+                  onClick={() => setOpenModalInfo(true)}
                 >
                   <path
                     fill="none"
@@ -188,7 +200,9 @@ const UserManagementTable = () => {
             <td className="px-6 py-4">A46573</td>
             <td className="px-6 py-4">Nguyễn Tuấn Anh</td>
             <td className="px-6 py-4">A46573@thanglong.edu.vn</td>
+            <td className="px-6 py-4">N2mcSH7QZL</td>
             <td className="px-6 py-4">0987244992</td>
+            <td className="px-6 py-4">Giảng viên</td>
             <td className="px-6 py-4 flex text-green-600 items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -212,6 +226,7 @@ const UserManagementTable = () => {
                   height="18px"
                   viewBox="0 0 24 24"
                   className="cursor-pointer"
+                  onClick={() => setOpenModalEdit(true)}
                 >
                   <path
                     fill="none"
@@ -242,6 +257,7 @@ const UserManagementTable = () => {
                   height="18px"
                   viewBox="0 0 24 24"
                   className="cursor-pointer"
+                  onClick={() => setOpenModalInfo(true)}
                 >
                   <path
                     fill="none"
@@ -261,7 +277,9 @@ const UserManagementTable = () => {
             <td className="px-6 py-4">A46573</td>
             <td className="px-6 py-4">Nguyễn Tuấn Anh</td>
             <td className="px-6 py-4">A46573@thanglong.edu.vn</td>
+            <td className="px-6 py-4">N2mcSH7QZL</td>
             <td className="px-6 py-4">0987244992</td>
+            <td className="px-6 py-4">Sinh viên</td>
             <td className="px-6 py-4 flex text-green-600 items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -285,6 +303,7 @@ const UserManagementTable = () => {
                   height="18px"
                   viewBox="0 0 24 24"
                   className="cursor-pointer"
+                  onClick={() => setOpenModalEdit(true)}
                 >
                   <path
                     fill="none"
@@ -315,6 +334,7 @@ const UserManagementTable = () => {
                   height="18px"
                   viewBox="0 0 24 24"
                   className="cursor-pointer"
+                  onClick={() => setOpenModalInfo(true)}
                 >
                   <path
                     fill="none"
@@ -334,7 +354,9 @@ const UserManagementTable = () => {
             <td className="px-6 py-4">A46573</td>
             <td className="px-6 py-4">Nguyễn Tuấn Anh</td>
             <td className="px-6 py-4">A46573@thanglong.edu.vn</td>
+            <td className="px-6 py-4">N2mcSH7QZL</td>
             <td className="px-6 py-4">0987244992</td>
+            <td className="px-6 py-4">Sinh viên</td>
             <td className="px-6 py-4 flex text-green-600 items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -358,6 +380,7 @@ const UserManagementTable = () => {
                   height="18px"
                   viewBox="0 0 24 24"
                   className="cursor-pointer"
+                  onClick={() => setOpenModalEdit(true)}
                 >
                   <path
                     fill="none"
@@ -388,6 +411,7 @@ const UserManagementTable = () => {
                   height="18px"
                   viewBox="0 0 24 24"
                   className="cursor-pointer"
+                  onClick={() => setOpenModalInfo(true)}
                 >
                   <path
                     fill="none"

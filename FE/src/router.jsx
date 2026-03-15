@@ -19,11 +19,9 @@ import ProfileAdminPage from "./pages/admin/profileAdminPage";
 import MasterLayoutDean from "./pages/dean/theme/masterLayoutDean";
 import MasterLayoutDepartmentHead from "./pages/departmentHead/theme/masterLayoutDepartmentHead";
 import MasterLayoutAdmin from "./pages/admin/theme/masterLayoutAdmin";
-import FacultyManagementPage from "./pages/admin/facultyManagementPage";
 import SubjectManagementPage from "./pages/admin/subjectManagementPage";
 import SemesterConfigurationPage from "./pages/admin/semesterConfigurationPage";
 import UserManagementPage from "./pages/admin/userManagementPage";
-import UserAccountPage from "./pages/admin/userAccountPage";
 
 // const renderRouterUser = () => {
 //   const userRouter = [
@@ -133,11 +131,9 @@ const RouterCustom = () => {
 
   const adminRouter = [
     {path: ROUTERS.ADMIN.PROFILE, component: <ProfileAdminPage />},
-    {path: ROUTERS.ADMIN.FACULTYMANAGEMENT, component: <FacultyManagementPage />},
     {path: ROUTERS.ADMIN.SUBJECTMANAGEMENT, component: <SubjectManagementPage />},
     {path: ROUTERS.ADMIN.SEMESTERCONFIGURATION, component: <SemesterConfigurationPage />},
     {path: ROUTERS.ADMIN.USERMANAGEMENT, component: <UserManagementPage />},
-    {path: ROUTERS.ADMIN.USERACCOUNT, component: <UserAccountPage />},
 
   ];
 
