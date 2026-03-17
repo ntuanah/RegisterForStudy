@@ -29,5 +29,6 @@ export const ROUTERS = {
     SUBJECTMANAGEMENT: "/admin/subject-management",
     SEMESTERCONFIGURATION: "/admin/semester-configuration",
     USERMANAGEMENT: "/admin/user-management",
+    TRAININGPROGRAMMANAGEMENT: "/admin/training-program-management"
   }
 };

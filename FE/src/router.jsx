@@ -22,6 +22,7 @@ import MasterLayoutAdmin from "./pages/admin/theme/masterLayoutAdmin";
 import SubjectManagementPage from "./pages/admin/subjectManagementPage";
 import SemesterConfigurationPage from "./pages/admin/semesterConfigurationPage";
 import UserManagementPage from "./pages/admin/userManagementPage";
+import TrainingProgramManagement from "./pages/admin/trainingProgramManagement";
 
 // const renderRouterUser = () => {
 //   const userRouter = [
@@ -134,6 +135,7 @@ const RouterCustom = () => {
     {path: ROUTERS.ADMIN.SUBJECTMANAGEMENT, component: <SubjectManagementPage />},
     {path: ROUTERS.ADMIN.SEMESTERCONFIGURATION, component: <SemesterConfigurationPage />},
     {path: ROUTERS.ADMIN.USERMANAGEMENT, component: <UserManagementPage />},
+    {path: ROUTERS.ADMIN.TRAININGPROGRAMMANAGEMENT, component: <TrainingProgramManagement/>},
 
   ];
 

@@ -51,6 +51,17 @@ const Sidebar = () => {
         </NavLink>
 
         <NavLink
+          to="/admin/training-program-management"
+          className={({ isActive }) =>
+            `border border-[#0A4174] rounded-full px-5 py-3 inline-block hover:bg-gray-200 hover:text-[#5483B3] transition-all duration-300 hover:-translate-y-1 ${
+              isActive ? "bg-[#5483B3] text-white" : ""
+            }`
+          }
+        >
+            Quản lý chương trình đào tạo
+        </NavLink>
+
+        <NavLink
           to="/admin/semester-configuration"
           className={({ isActive }) =>
             `border border-[#0A4174] rounded-full px-5 py-3 inline-block hover:bg-gray-200 hover:text-[#5483B3] transition-all duration-300 hover:-translate-y-1 ${
