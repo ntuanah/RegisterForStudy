@@ -1,9 +1,9 @@
-const AddTrainingProgram = ({close}) => {
+const UpdateScore = ({ close }) => {
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white w-1/2 rounded-xl p-6 border border-[#0A4174]">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Thêm chương trình đào tạo</h2>
+          <h2 className="text-xl font-bold">Cập nhật điểm số</h2>
 
           <button
             onClick={close}
@@ -30,58 +30,24 @@ const AddTrainingProgram = ({close}) => {
         <div className="space-y-10">
           <div>
             <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
-              Khoá
+              Điểm quá trình
             </label>
-            <div className="w-full">
-              <select
-                name=""
-                id=""
-                className="w-full px-5 py-3 rounded-xl border border-[#0A4174] shadow-sm bg-white font-semibold text-slate-700 focus:outline-none cursor-pointer"
-              >
-                <option>K33</option>
-                <option>K34</option>
-                <option>K35</option>
-                <option>K36</option>
-                <option>K37</option>
-                <option>K38</option>
-              </select>
-            </div>
+            <input
+              type="text"
+              defaultValue="8"
+              className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
+            />
           </div>
 
           <div>
             <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
-              Ngành
+              Điểm cuối kỳ
             </label>
-            <div className="w-full">
-              <select
-                name=""
-                id=""
-                className="w-full px-5 py-3 rounded-xl border border-[#0A4174] shadow-sm bg-white font-semibold text-slate-700 focus:outline-none cursor-pointer"
-              >
-                <option>Công nghệ thông tin</option>
-                <option>Hệ thống thông tin</option>
-                <option>Trí tuệ nhân tạo</option>
-                <option>2025-2026</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
-              STC
-            </label>
-            <div className="w-full">
-              <select
-                name=""
-                id=""
-                className="w-full px-5 py-3 rounded-xl border border-[#0A4174] shadow-sm bg-white font-semibold text-slate-700 focus:outline-none cursor-pointer"
-              >
-                <option>2022-2023</option>
-                <option>2023-2024</option>
-                <option>2024-2025</option>
-                <option>2025-2026</option>
-              </select>
-            </div>
+            <input
+              type="text"
+              defaultValue="8"
+              className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
+            />
           </div>
         </div>
 
@@ -102,7 +68,7 @@ const AddTrainingProgram = ({close}) => {
                 d="M4 12h8m0 0h8m-8 0V4m0 8v8"
               />
             </svg>
-            Thêm chương trình đào tạo
+            Cập nhật điểm số
           </button>
         </div>
       </div>
@@ -110,4 +76,4 @@ const AddTrainingProgram = ({close}) => {
   );
 };
 
-export default AddTrainingProgram;
+export default UpdateScore;

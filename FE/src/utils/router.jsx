@@ -8,6 +8,7 @@ export const ROUTERS = {
     ANNOUNCEMENT: "/announcement",
     TRAINING_PROGRAM: "/training-program",
     PAY_TUITION: "/pay-tuition",
+    SCORE: "/score"
   },
 
   LECTURER: {
@@ -29,6 +30,7 @@ export const ROUTERS = {
     SUBJECTMANAGEMENT: "/admin/subject-management",
     SEMESTERCONFIGURATION: "/admin/semester-configuration",
     USERMANAGEMENT: "/admin/user-management",
-    TRAININGPROGRAMMANAGEMENT: "/admin/training-program-management"
+    TRAININGPROGRAMMANAGEMENT: "/admin/training-program-management",
+    SCOREMANAGEMENT: "/admin/score-management"
   }
 };

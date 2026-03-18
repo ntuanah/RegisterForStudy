@@ -23,6 +23,8 @@ import SubjectManagementPage from "./pages/admin/subjectManagementPage";
 import SemesterConfigurationPage from "./pages/admin/semesterConfigurationPage";
 import UserManagementPage from "./pages/admin/userManagementPage";
 import TrainingProgramManagement from "./pages/admin/trainingProgramManagement";
+import ScorePage from "./pages/users/scorePage";
+import ScoreManagementPage from "./pages/admin/ScoreManagementPage";
 
 // const renderRouterUser = () => {
 //   const userRouter = [
@@ -114,6 +116,7 @@ const RouterCustom = () => {
     { path: ROUTERS.USER.ANNOUNCEMENT, component: <AnnouncementPage /> },
     { path: ROUTERS.USER.TRAINING_PROGRAM, component: <TrainingProgramPage /> },
     { path: ROUTERS.USER.PAY_TUITION, component: <PayTuitionPage /> },
+    { path: ROUTERS.USER.SCORE, component: <ScorePage /> },
   ];
 
   const lecturerRouter = [
@@ -136,6 +139,7 @@ const RouterCustom = () => {
     {path: ROUTERS.ADMIN.SEMESTERCONFIGURATION, component: <SemesterConfigurationPage />},
     {path: ROUTERS.ADMIN.USERMANAGEMENT, component: <UserManagementPage />},
     {path: ROUTERS.ADMIN.TRAININGPROGRAMMANAGEMENT, component: <TrainingProgramManagement/>},
+    {path: ROUTERS.ADMIN.SCOREMANAGEMENT, component: <ScoreManagementPage/>},
 
   ];
 
