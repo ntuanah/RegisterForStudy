@@ -1,7 +1,10 @@
+import { useState } from "react";
 import OpenSubjectTable from "../../../components/admin/OpenSubjectTable";
 import RegistrationPeriodCard from "../../../components/admin/RegistrationPeriodCard";
+import AddOpenSubject from "../../../components/admin/Modal/AddOpenSubject";
 
 const SemesterConfigurationPage = () => {
+  const [openSubject, setOpenSubject] = useState(false);
   return (
     <div>
       <div className="p-5 border-b border-gray-300 shadow-xl">
@@ -115,13 +118,14 @@ const SemesterConfigurationPage = () => {
         <div className="space-y-7 mt-7">
           <div className="mb-8 flex justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-slate-900">
-                Mở môn
-              </h2>
+              <h2 className="text-xl font-semibold text-slate-900">Mở môn</h2>
             </div>
 
             <div className="">
-              <button className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+              <button
+                onClick={() => setOpenSubject(true)}
+                className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18px"
@@ -143,7 +147,9 @@ const SemesterConfigurationPage = () => {
           </div>
 
           <OpenSubjectTable />
-
+          {openSubject && (
+            <AddOpenSubject close={() => setOpenSubject(false)} />
+          )}
         </div>
       </div>
     </div>

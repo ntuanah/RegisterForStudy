@@ -1,9 +1,9 @@
-const AddTrainingProgram = ({close}) => {
+const AddOpenSubject = ({ close }) => {
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white w-1/2 rounded-xl p-6 border border-[#0A4174]">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Thêm chương trình đào tạo</h2>
+          <h2 className="text-xl font-bold">Mở môn học</h2>
 
           <button
             onClick={close}
@@ -28,41 +28,53 @@ const AddTrainingProgram = ({close}) => {
         </div>
 
         <div className="space-y-10">
-
           <div>
             <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
-              Ngành
+              Mã môn học
             </label>
             <div className="w-full">
               <select
                 name=""
                 id=""
-                className="w-full px-5 py-3 rounded-xl border border-[#0A4174] shadow-sm bg-white font-semibold text-slate-700 focus:outline-none cursor-pointer"
+                className="w-full px-5 py-3 rounded-xl border border-gray-300 shadow-sm bg-white font-semibold text-slate-700 focus:outline-none cursor-pointer"
               >
-                <option>Công nghệ thông tin</option>
-                <option>Hệ thống thông tin</option>
-                <option>Trí tuệ nhân tạo</option>
-                <option>2025-2026</option>
+                <option>AD205</option>
+                <option>AD205</option>
+                <option>AD205</option>
+                <option>AD205</option>
+                <option>AD205</option>
               </select>
             </div>
           </div>
 
           <div>
             <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
-              STC
+              Tên môn học
             </label>
             <div className="w-full">
               <select
                 name=""
                 id=""
-                className="w-full px-5 py-3 rounded-xl border border-[#0A4174] shadow-sm bg-white font-semibold text-slate-700 focus:outline-none cursor-pointer"
+                className="w-full px-5 py-3 rounded-xl border border-gray-300 shadow-sm bg-white font-semibold text-slate-700 focus:outline-none cursor-pointer"
               >
-                <option>2022-2023</option>
-                <option>2023-2024</option>
-                <option>2024-2025</option>
-                <option>2025-2026</option>
+                <option>Ẩm thực Việt Nam</option>
+                <option>Ẩm thực Việt Nam</option>
+                <option>Ẩm thực Việt Nam</option>
+                <option>Ẩm thực Việt Nam</option>
+                <option>Ẩm thực Việt Nam</option>
               </select>
             </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
+              Số lượng lớp học phần
+            </label>
+            <input
+              type="text"
+              defaultValue="8"
+              className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
+            />
           </div>
         </div>
 
@@ -83,7 +95,7 @@ const AddTrainingProgram = ({close}) => {
                 d="M4 12h8m0 0h8m-8 0V4m0 8v8"
               />
             </svg>
-            Thêm chương trình đào tạo
+            Thêm 
           </button>
         </div>
       </div>
@@ -91,4 +103,4 @@ const AddTrainingProgram = ({close}) => {
   );
 };
 
-export default AddTrainingProgram;
+export default AddOpenSubject;

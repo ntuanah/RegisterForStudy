@@ -91,7 +91,7 @@ const TrainingProgramManagement = () => {
                 }
                 className="text-slate-900 cursor-pointer"
               >
-                1. Chương trình đào tạo ngành công nghệ thông tin khoá 35 năm
+                1. Chương trình đào tạo ngành công nghệ thông tin năm
                 2024-2025
               </p>
               <div>
@@ -123,7 +123,7 @@ const TrainingProgramManagement = () => {
           </div>
           <div>
             <p className="text-slate-900 cursor-pointer">
-              2. Chương trình đào tạo ngành công nghệ thông tin khoá 35 năm
+              2. Chương trình đào tạo ngành công nghệ thông tin năm
               2025-2026
             </p>
           </div>
