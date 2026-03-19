@@ -1,10 +1,13 @@
 import { useState } from "react";
 import AddTrainingProgram from "../../../components/admin/Modal/AddTrainingProgram";
 import TrainingProgramTable from "../../../components/admin/TrainingProgramTable";
+import AddSubjectTrainingProgram from "../../../components/admin/Modal/AddSubjectTrainingProgram";
 
 const TrainingProgramManagement = () => {
   const [openAddTrainingProgram, setOpenAddTrainingProgram] = useState(false);
   const [openTrainingProgramTable, setOpenTrainingProgramTable] =
+    useState(false);
+  const [openAddSubjectTrainingProgram, setOpenAddSubjectTrainingProgram] =
     useState(false);
   return (
     <div>
@@ -91,11 +94,13 @@ const TrainingProgramManagement = () => {
                 }
                 className="text-slate-900 cursor-pointer"
               >
-                1. Chương trình đào tạo ngành công nghệ thông tin năm
-                2024-2025
+                1. Chương trình đào tạo ngành công nghệ thông tin năm 2024-2025
               </p>
               <div>
-                <button className="text-white font-medium border border-[#0A4174] rounded-full p-2 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 whitespace-nowrap">
+                <button
+                  onClick={() => setOpenAddSubjectTrainingProgram(true)}
+                  className="text-white font-medium border border-[#0A4174] rounded-full p-2 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 whitespace-nowrap"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20px"
@@ -120,11 +125,16 @@ const TrainingProgramManagement = () => {
                 <TrainingProgramTable />
               </div>
             )}
+
+            {openAddSubjectTrainingProgram && (
+              <AddSubjectTrainingProgram
+                close={() => setOpenAddSubjectTrainingProgram(false)}
+              />
+            )}
           </div>
           <div>
             <p className="text-slate-900 cursor-pointer">
-              2. Chương trình đào tạo ngành công nghệ thông tin năm
-              2025-2026
+              2. Chương trình đào tạo ngành công nghệ thông tin năm 2025-2026
             </p>
           </div>
         </div>
