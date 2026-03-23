@@ -19,6 +19,7 @@ export const ROUTERS = {
 
   DEAN: {
     PROFILE: "/dean/profile",
+    ARRANGECLASSSCHEDULE: "/dean/arrange-class-schedule",
   },
 
   DEPARTMENTHEAD: {

@@ -25,6 +25,8 @@ import UserManagementPage from "./pages/admin/userManagementPage";
 import TrainingProgramManagement from "./pages/admin/trainingProgramManagement";
 import ScorePage from "./pages/users/scorePage";
 import ScoreManagementPage from "./pages/admin/ScoreManagementPage";
+import ArrangeClassSchedulePage from "./pages/dean/ArrangeClassSchedulePage";
+
 
 // const renderRouterUser = () => {
 //   const userRouter = [
@@ -127,6 +129,7 @@ const RouterCustom = () => {
 
   const deanRouter = [
     {path: ROUTERS.DEAN.PROFILE, component: <ProfileDeanPage />},
+    {path: ROUTERS.DEAN.ARRANGECLASSSCHEDULE, component: <ArrangeClassSchedulePage />},
   ];
 
   const departmentHeadRouter = [
