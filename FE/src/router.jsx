@@ -26,6 +26,7 @@ import TrainingProgramManagement from "./pages/admin/trainingProgramManagement";
 import ScorePage from "./pages/users/scorePage";
 import ScoreManagementPage from "./pages/admin/ScoreManagementPage";
 import ArrangeClassSchedulePage from "./pages/dean/ArrangeClassSchedulePage";
+import AssignInstructorsPage from "./pages/departmentHead/ assignInstructorsPage";
 
 
 // const renderRouterUser = () => {
@@ -134,6 +135,7 @@ const RouterCustom = () => {
 
   const departmentHeadRouter = [
     {path: ROUTERS.DEPARTMENTHEAD.PROFILE, component: <ProfileDepartmentHeadPage />},
+    {path: ROUTERS.DEPARTMENTHEAD.ASSIGNINSTRUCTORS, component: <AssignInstructorsPage />},
   ];
 
   const adminRouter = [

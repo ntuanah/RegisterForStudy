@@ -23,7 +23,8 @@ export const ROUTERS = {
   },
 
   DEPARTMENTHEAD: {
-    PROFILE: "/department-head/profile"
+    PROFILE: "/department-head/profile",
+    ASSIGNINSTRUCTORS: "/department-head/assign-instructors",
   },
 
   ADMIN: {

@@ -29,6 +29,17 @@ const Sidebar = () => {
             Thông tin cá nhân
         </NavLink>
 
+        <NavLink
+          to="/department-head/assign-instructors"
+          className={({ isActive }) =>
+            `border border-[#0A4174] rounded-full px-5 py-3 inline-block hover:bg-gray-200 hover:text-[#5483B3] transition-all duration-300 hover:-translate-y-1 ${
+              isActive ? "bg-[#5483B3] text-white" : ""
+            }`
+          }
+        >
+            Phân công giảng viên
+        </NavLink>
+
       </div>
 
       <div className="mt-auto pb-6 flex justify-center">
