@@ -43,6 +43,15 @@ const ListStudent = ({ close }) => {
                 <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-24">
                   Lớp
                 </th>
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-35">
+                  Điểm quá trình
+                </th>
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-24">
+                  Điểm thi
+                </th>
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-55">
+                  Thao tác
+                </th>
               </tr>
             </thead>
 
@@ -52,6 +61,28 @@ const ListStudent = ({ close }) => {
                 <td className="px-6 py-4">A46573</td>
                 <td className="px-6 py-4">Nguyễn Tuấn Anh</td>
                 <td className="px-6 py-4">TT35CL07</td>
+                <td className="px-6 py-4 text-center">10</td>
+                <td className="px-6 py-4 text-center">10</td>
+                <td className="px-6 py-4">
+                  <button className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18px"
+                      height="18px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.5"
+                        d="M4 12h8m0 0h8m-8 0V4m0 8v8"
+                      />
+                    </svg>
+                    Cập nhật điểm
+                  </button>
+                </td>
               </tr>
 
               <tr>
@@ -59,6 +90,28 @@ const ListStudent = ({ close }) => {
                 <td className="px-6 py-4">A46573</td>
                 <td className="px-6 py-4">Nguyễn Tuấn Anh</td>
                 <td className="px-6 py-4">TT35CL07</td>
+                <td className="px-6 py-4 text-center">10</td>
+                <td className="px-6 py-4 text-center">10</td>
+                <td className="px-6 py-4">
+                  <button className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18px"
+                      height="18px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.5"
+                        d="M4 12h8m0 0h8m-8 0V4m0 8v8"
+                      />
+                    </svg>
+                    Cập nhật điểm
+                  </button>
+                </td>
               </tr>
 
               <tr>
@@ -66,6 +119,28 @@ const ListStudent = ({ close }) => {
                 <td className="px-6 py-4">A46573</td>
                 <td className="px-6 py-4">Nguyễn Tuấn Anh</td>
                 <td className="px-6 py-4">TT35CL07</td>
+                <td className="px-6 py-4 text-center">10</td>
+                <td className="px-6 py-4 text-center">10</td>
+                <td className="px-6 py-4">
+                  <button className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18px"
+                      height="18px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.5"
+                        d="M4 12h8m0 0h8m-8 0V4m0 8v8"
+                      />
+                    </svg>
+                    Cập nhật điểm
+                  </button>
+                </td>
               </tr>
 
               <tr>
@@ -73,6 +148,28 @@ const ListStudent = ({ close }) => {
                 <td className="px-6 py-4">A46573</td>
                 <td className="px-6 py-4">Nguyễn Tuấn Anh</td>
                 <td className="px-6 py-4">TT35CL07</td>
+                <td className="px-6 py-4 text-center">10</td>
+                <td className="px-6 py-4 text-center">10</td>
+                <td className="px-6 py-4">
+                  <button className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18px"
+                      height="18px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.5"
+                        d="M4 12h8m0 0h8m-8 0V4m0 8v8"
+                      />
+                    </svg>
+                    Cập nhật điểm
+                  </button>
+                </td>
               </tr>
 
               <tr>
@@ -80,8 +177,29 @@ const ListStudent = ({ close }) => {
                 <td className="px-6 py-4">A46573</td>
                 <td className="px-6 py-4">Nguyễn Tuấn Anh</td>
                 <td className="px-6 py-4">TT35CL07</td>
+                <td className="px-6 py-4 text-center">10</td>
+                <td className="px-6 py-4 text-center">10</td>
+                <td className="px-6 py-4">
+                  <button className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18px"
+                      height="18px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.5"
+                        d="M4 12h8m0 0h8m-8 0V4m0 8v8"
+                      />
+                    </svg>
+                    Cập nhật điểm
+                  </button>
+                </td>
               </tr>
-
             </tbody>
           </table>
         </div>

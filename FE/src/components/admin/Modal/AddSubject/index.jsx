@@ -74,22 +74,11 @@ const AddSubject = ({ close }) => {
 
           <div>
             <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
-              Số tiết lý thuyết
+              Bộ môn
             </label>
             <input
               type="text"
-              defaultValue="2"
-              className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
-              Số tiết bài tập
-            </label>
-            <input
-              type="text"
-              defaultValue="3"
+              defaultValue="Tự do"
               className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
             />
           </div>
