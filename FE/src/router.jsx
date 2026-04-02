@@ -1,6 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 import { ROUTERS } from "./utils/router";
+import ProtectedRoute from "./utils/ProtectedRoute"; 
 import MasterLayout from "./pages/users/theme/masterLayout";
+import MasterLayoutLecturer from "./pages/lecturer/theme/masterLayoutLecturer";
+import MasterLayoutDean from "./pages/dean/theme/masterLayoutDean";
+import MasterLayoutDepartmentHead from "./pages/departmentHead/theme/masterLayoutDepartmentHead";
+import MasterLayoutAdmin from "./pages/admin/theme/masterLayoutAdmin";
 import HomePage from "./pages/users/homePage";
 import LoginPage from "./pages/users/loginPage";
 import ProfilePage from "./pages/users/profilePage";
@@ -9,110 +14,26 @@ import TimetablePage from "./pages/users/timetablePage";
 import TrainingProgramPage from "./pages/users/trainingProgram";
 import AnnouncementPage from "./pages/users/AnnouncementPage";
 import PayTuitionPage from "./pages/users/payTuitionPage";
-import MasterLayoutLecturer from "./pages/lecturer/theme/masterLayoutLecturer";
+import ScorePage from "./pages/users/scorePage";
 import MyClassPage from "./pages/lecturer/myClassPage";
 import TimetableLecturerPage from "./pages/lecturer/timetableLecturerPage";
 import ProfileLecturerPage from "./pages/lecturer/profileLecturerPage";
 import ProfileDeanPage from "./pages/dean/profileDeanPage";
+import ArrangeClassSchedulePage from "./pages/dean/ArrangeClassSchedulePage";
 import ProfileDepartmentHeadPage from "./pages/departmentHead/profileDepartmentHeadPage";
+import AssignInstructorsPage from "./pages/departmentHead/ assignInstructorsPage";
 import ProfileAdminPage from "./pages/admin/profileAdminPage";
-import MasterLayoutDean from "./pages/dean/theme/masterLayoutDean";
-import MasterLayoutDepartmentHead from "./pages/departmentHead/theme/masterLayoutDepartmentHead";
-import MasterLayoutAdmin from "./pages/admin/theme/masterLayoutAdmin";
 import SubjectManagementPage from "./pages/admin/subjectManagementPage";
 import SemesterConfigurationPage from "./pages/admin/semesterConfigurationPage";
 import UserManagementPage from "./pages/admin/userManagementPage";
 import TrainingProgramManagement from "./pages/admin/trainingProgramManagement";
-import ScorePage from "./pages/users/scorePage";
 import ScoreManagementPage from "./pages/admin/ScoreManagementPage";
-import ArrangeClassSchedulePage from "./pages/dean/ArrangeClassSchedulePage";
-import AssignInstructorsPage from "./pages/departmentHead/ assignInstructorsPage";
-
-
-// const renderRouterUser = () => {
-//   const userRouter = [
-//     {
-//       path: ROUTERS.USER.HOME,
-//       component: <HomePage />,
-//     },
-//     {
-//       path: ROUTERS.USER.LOGIN,
-//       component: <LoginPage />,
-//     },
-//     {
-//       path: ROUTERS.USER.PROFILE,
-//       component: <ProfilePage />,
-//     },
-//     {
-//       path: ROUTERS.USER.REGISTER,
-//       component: <RegisterStudyPage />,
-//     },
-//     {
-//       path: ROUTERS.USER.TIMETABLE,
-//       component: <TimetablePage />,
-//     },
-//     {
-//       path: ROUTERS.USER.ANNOUNCEMENT,
-//       component: <AnnouncementPage />,
-//     },
-//     {
-//       path: ROUTERS.USER.TRAINING_PROGRAM,
-//       component: <TrainingProgramPage />,
-//     },
-//     {
-//       path: ROUTERS.USER.PAY_TUITION,
-//       component: <PayTuitionPage />,
-//     },
-//   ];
-//   return (
-//     <MasterLayout>
-//       <Routes>
-//         {userRouter.map((item, key) => {
-//           return <Route key={key} path={item.path} element={item.component} />;
-//         })}
-//       </Routes>
-//     </MasterLayout>
-//   );
-// };
-
-// const renderRouterLecturer = () => {
-//   const lecturerRouter = [
-//     {
-//       path: ROUTERS.LECTURER.TIMETABLE,
-//       component: <TimetableLecturerPage />,
-//     },
-//     {
-//       path: ROUTERS.LECTURER.MY_CLASS,
-//       component: <MyClassPage />,
-//     },
-//   ];
-
-//   return (
-//     <MasterLayoutLecturer>
-//       <Routes>
-//         {lecturerRouter.map((item, key) => (
-//           <Route key={key} path={item.path} element={item.component} />
-//         ))}
-//       </Routes>
-//     </MasterLayoutLecturer>
-//   );
-// };
-
-// const RouterCustom = () => {
-//   return (
-//     <>
-//       {renderRouterUser()}
-//       {renderRouterLecturer()}
-//     </>
-//   );
-// };
-
-// export default RouterCustom;
+import MajorManagementPage from "./pages/admin/majorManagementPage";
+import CohortManagementPage from "./pages/admin/cohortManagementPage";
 
 const RouterCustom = () => {
   const userRouter = [
     { path: ROUTERS.USER.HOME, component: <HomePage /> },
-    { path: ROUTERS.USER.LOGIN, component: <LoginPage /> },
     { path: ROUTERS.USER.PROFILE, component: <ProfilePage /> },
     { path: ROUTERS.USER.REGISTER, component: <RegisterStudyPage /> },
     { path: ROUTERS.USER.TIMETABLE, component: <TimetablePage /> },
@@ -145,39 +66,52 @@ const RouterCustom = () => {
     {path: ROUTERS.ADMIN.USERMANAGEMENT, component: <UserManagementPage />},
     {path: ROUTERS.ADMIN.TRAININGPROGRAMMANAGEMENT, component: <TrainingProgramManagement/>},
     {path: ROUTERS.ADMIN.SCOREMANAGEMENT, component: <ScoreManagementPage/>},
-
+    {path: ROUTERS.ADMIN.MAJORMANAGEMENT, component: <MajorManagementPage />},
+    {path: ROUTERS.ADMIN.COHORTMANAGEMENT, component: <CohortManagementPage />},
   ];
 
   return (
     <Routes>
-      <Route element={<MasterLayout />}>
-        {userRouter.map((item, key) => (
-          <Route key={key} path={item.path} element={item.component} />
-        ))}
+      <Route path={ROUTERS.USER.LOGIN} element={<LoginPage />} />
+
+      <Route element={<ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_STUDENT"]} />}>
+        <Route element={<MasterLayout />}>
+          {userRouter.map((item, key) => (
+            <Route key={key} path={item.path} element={item.component} />
+          ))}
+        </Route>
       </Route>
 
-      <Route element={<MasterLayoutLecturer />}>
-        {lecturerRouter.map((item, key) => (
-          <Route key={key} path={item.path} element={item.component} />
-        ))}
+      <Route element={<ProtectedRoute allowedRoles={["ROLE_LECTURER"]} />}>
+        <Route element={<MasterLayoutLecturer />}>
+          {lecturerRouter.map((item, key) => (
+            <Route key={key} path={item.path} element={item.component} />
+          ))}
+        </Route>
       </Route>
 
-      <Route element={<MasterLayoutDean />}>
-        {deanRouter.map((item, key) => (
-          <Route key={key} path={item.path} element={item.component} />
-        ))}
+      <Route element={<ProtectedRoute allowedRoles={["ROLE_DEAN"]} />}>
+        <Route element={<MasterLayoutDean />}>
+          {deanRouter.map((item, key) => (
+            <Route key={key} path={item.path} element={item.component} />
+          ))}
+        </Route>
       </Route>
 
-      <Route element={<MasterLayoutDepartmentHead />}>
-        {departmentHeadRouter.map((item, key) => (
-          <Route key={key} path={item.path} element={item.component} />
-        ))}
+      <Route element={<ProtectedRoute allowedRoles={["ROLE_DEPARTMENTHEAD", "ROLE_DEPARTMENT_HEAD"]} />}>
+        <Route element={<MasterLayoutDepartmentHead />}>
+          {departmentHeadRouter.map((item, key) => (
+            <Route key={key} path={item.path} element={item.component} />
+          ))}
+        </Route>
       </Route>
 
-      <Route element={<MasterLayoutAdmin />}>
-        {adminRouter.map((item, key) => (
-          <Route key={key} path={item.path} element={item.component} />
-        ))}
+      <Route element={<ProtectedRoute allowedRoles={["ROLE_ADMIN"]} />}>
+        <Route element={<MasterLayoutAdmin />}>
+          {adminRouter.map((item, key) => (
+            <Route key={key} path={item.path} element={item.component} />
+          ))}
+        </Route>
       </Route>
     </Routes>
   );

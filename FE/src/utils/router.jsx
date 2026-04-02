@@ -33,6 +33,8 @@ export const ROUTERS = {
     SEMESTERCONFIGURATION: "/admin/semester-configuration",
     USERMANAGEMENT: "/admin/user-management",
     TRAININGPROGRAMMANAGEMENT: "/admin/training-program-management",
-    SCOREMANAGEMENT: "/admin/score-management"
+    SCOREMANAGEMENT: "/admin/score-management",
+    MAJORMANAGEMENT: "/admin/major-management",
+    COHORTMANAGEMENT: "/admin/cohort-management",
   }
 };

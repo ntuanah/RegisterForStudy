@@ -1,7 +1,75 @@
+import { useState, useRef } from "react";
 import UserFilterBar from "../../../components/admin/UserFilterBar";
 import UserManagementTable from "../../../components/admin/UserManagementTable";
+import {
+  downloadExcelTemplateAPI,
+  importExcelAPI,
+} from "../../../service/authService";
+import { toast } from "react-toastify";
 
 const UserManagementPage = () => {
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
+
+  const fileInputRef = useRef(null);
+
+  // 1. Hàm kích hoạt chọn file
+  const handleTriggerFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    event.target.value = null;
+
+    try {
+      setIsImporting(true);
+
+      const response = await importExcelAPI(file);
+      const data = response.data;
+
+      if (data.code === 1000) {
+        toast.success("Thêm sinh viên thành công!");
+      } else {
+        toast.error(data.message || "Thêm sinh viên thất bại, vui lòng kiểm tra lại file!");
+      }
+    } catch (error) {
+      console.error("Lỗi import:", error);
+      toast.error(error.response?.data?.message || "Lỗi kết nối server!");
+    } finally {
+      setIsImporting(false); 
+    }
+  };
+
+  const handleDownloadTemplate = async () => {
+    try {
+      setIsDownloading(true);
+      const response = await downloadExcelTemplateAPI();
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Template_SinhVien.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Tải form mẫu thành công!");
+    } catch (error) {
+      console.error("Lỗi tải file:", error);
+      toast.error("Có lỗi xảy ra khi tải form mẫu!");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   return (
     <div>
       <div className="p-5 border-b border-gray-300 shadow-xl">
@@ -42,25 +110,44 @@ const UserManagementPage = () => {
               Xuất dữ liệu
             </button>
 
-            <button className="h-fit text-[#5483B3] font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-white hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18px"
-                height="18px"
-                viewBox="0 0 24 24"
-              >
-                <g
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept=".xlsx"
+              className="hidden"
+            />
+
+            <button
+              onClick={handleTriggerFileInput}
+              disabled={isImporting}
+              className={`h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
+                ${
+                  isImporting
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-white text-[#5483B3] hover:bg-gray-200 cursor-pointer hover:-translate-y-1"
+                }`}
+            >
+              {!isImporting && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18px"
+                  height="18px"
+                  viewBox="0 0 24 24"
                 >
-                  <path d="M15 8A5 5 0 1 0 5 8a5 5 0 0 0 10 0m2.5 13v-7M14 17.5h7" />
-                  <path d="M3 20a7 7 0 0 1 11-5.745" />
-                </g>
-              </svg>
-              Thêm sinh viên
+                  <g
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.5"
+                  >
+                    <path d="M15 8A5 5 0 1 0 5 8a5 5 0 0 0 10 0m2.5 13v-7M14 17.5h7" />
+                    <path d="M3 20a7 7 0 0 1 11-5.745" />
+                  </g>
+                </svg>
+              )}
+              {isImporting ? "Đang xử lý..." : "Thêm sinh viên"}
             </button>
 
             <button className="h-fit text-[#5483B3] font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-white hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
@@ -84,23 +171,34 @@ const UserManagementPage = () => {
               Thêm giảng viên
             </button>
 
-            <button className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18px"
-                height="18px"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                  d="M4 16.004V17a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1M12 4.5v11m3.5-3.5L12 15.5L8.5 12"
-                />
-              </svg>
-              Tải form
+            <button
+              onClick={handleDownloadTemplate}
+              disabled={isDownloading}
+              className={`h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 flex items-center justify-center gap-2 transition-all duration-300
+                ${
+                  isDownloading
+                    ? "bg-gray-400 opacity-80 cursor-not-allowed w-[180px]" // Fix cứng nhẹ chiều rộng để nút không bị giật thụt thò khi mất icon
+                    : "bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer hover:-translate-y-1"
+                }`}
+            >
+              {!isDownloading && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18px"
+                  height="18px"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.5"
+                    d="M4 16.004V17a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1M12 4.5v11m3.5-3.5L12 15.5L8.5 12"
+                  />
+                </svg>
+              )}
+              {isDownloading ? "Đang tải..." : "Tải form sinh viên"}
             </button>
           </div>
         </div>

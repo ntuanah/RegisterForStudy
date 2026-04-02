@@ -3,7 +3,10 @@ import SubjectTable from "../../../components/admin/SubjectTable";
 import AddSubject from "../../../components/admin/Modal/AddSubject";
 
 const SubjectManagementPage = () => {
-  const [openModalAdd, setOpenModalAdd] = useState(false)
+  const [openModalAdd, setOpenModalAdd] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [refresh, setRefresh] = useState(false);
+
   return (
     <div>
       <div className="p-5 border-b border-gray-300 shadow-xl">
@@ -60,16 +63,21 @@ const SubjectManagementPage = () => {
           </svg>
           <input
             type="text"
-            placeholder="Tìm kiếm nội dung bất kỳ"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            placeholder="Tìm kiếm môn học"
             className="flex-1 outline-none text-sm"
           />
         </div>
 
-        <SubjectTable />
+        <SubjectTable keyword={keyword} refresh={refresh} />
       </div>
 
       {openModalAdd && (
-        <AddSubject close={() => setOpenModalAdd(false)} />
+        <AddSubject
+          close={() => setOpenModalAdd(false)}
+          onSuccess={() => setRefresh(!refresh)}
+        />
       )}
     </div>
   );
