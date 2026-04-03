@@ -36,3 +36,15 @@ export const getSubjectPrerequisitesAPI = async (id) => {
 export const createSubjectComponentAPI = async (data) => {
   return await axiosClient.post(`/subject-components`, data);
 };
+
+export const getSubjectComponentsAPI = async (subjectId) => {
+  return await axiosClient.get(`/subject-components/subject/${subjectId}`);
+};
+
+export const updateSubjectComponentAPI = async (id, data) => {
+  return await axiosClient.put(`/subject-components/${id}`, data);
+};
+
+export const deleteSubjectComponentAPI = async (id) => {
+  return await axiosClient.delete(`/subject-components/${id}`);
+};

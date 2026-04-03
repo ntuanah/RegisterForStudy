@@ -1,18 +1,46 @@
 import { useEffect, useState } from "react";
 import {
+  createSubjectComponentAPI,
+  deleteSubjectComponentAPI,
   getAllSubjectsAPI,
   getSubjectByIdAPI,
+  getSubjectComponentsAPI,
   getSubjectPrerequisitesAPI,
   updatePrerequisitesAPI,
   updateSubjectAPI,
+  updateSubjectComponentAPI,
 } from "../../../../service/subjectService";
 import { toast } from "react-toastify";
+
+const ROOM_TYPES = [
+  {
+    id: "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+    name: "Phòng học lý thuyết (REGULAR)",
+  },
+  { id: "b2c3d4e5-f6a7-8b9c-0d1e-2f3a4b5c6d7e", name: "Phòng máy tính (LAB)" },
+  { id: "c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f", name: "Phòng Studio (STUDIO)" },
+  {
+    id: "d4e5f6a7-b8c9-0d1e-2f3a-4b5c6d7e8f9a",
+    name: "Xưởng thực hành (WORKSHOP)",
+  },
+  {
+    id: "e5f6a7b8-c9d0-1e2f-3a4b-5c6d7e8f9a0b",
+    name: "Giảng đường (LECTURE_HALL)",
+  },
+  {
+    id: "f6a7b8c9-d0e1-2f3a-4b5c-6d7e8f9a0b1c",
+    name: "E-learning (E_LEARNING)",
+  },
+];
 
 const EditSubject = ({ id, close, refresh }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdatingPrereq, setIsUpdatingPrereq] = useState(false);
+  const [isUpdatingConfig, setIsUpdatingConfig] = useState(false);
   const [allSubjects, setAllSubjects] = useState([]);
   const [prerequisites, setPrerequisites] = useState([""]);
+  const [components, setComponents] = useState([]);
+  const [deletedComponentIds, setDeletedComponentIds] = useState([]);
 
   const [formData, setFormData] = useState({
     code: "",
@@ -70,8 +98,8 @@ const EditSubject = ({ id, close, refresh }) => {
 
         if (data.code === 1000 || data.code === 200) {
           const prereqList = data.result || [];
-          
-          const prereqIds = prereqList.map(item => item.id);
+
+          const prereqIds = prereqList.map((item) => item.id);
 
           setPrerequisites(prereqIds.length > 0 ? prereqIds : [""]);
         }
@@ -80,10 +108,40 @@ const EditSubject = ({ id, close, refresh }) => {
       }
     };
 
+    const fetchSubjectComponents = async () => {
+      try {
+        const response = await getSubjectComponentsAPI(id);
+        const { data } = response;
+
+        if (data.code === 1000 || data.code === 200) {
+          const fetchedComponents = data.result || [];
+
+          if (fetchedComponents.length > 0) {
+            const formattedComponents = fetchedComponents.map((comp) => ({
+              id: comp.id,
+              type: comp.type,
+              requiredRoomTypeId: comp.requiredRoomTypeId,
+              sessionsPerWeek: comp.sessionsPerWeek,
+              periodsPerSession: comp.periodsPerSession,
+              totalPeriods: comp.totalPeriods,
+              weightPercent: comp.weightPercent,
+            }));
+
+            setComponents(formattedComponents);
+          } else {
+            setComponents([]);
+          }
+        }
+      } catch (error) {
+        toast.error("Không thể tải cấu hình môn học cũ!");
+      }
+    };
+
     if (id) {
       fetchSubjectDetails();
       fetchAllSubjects();
       fetchPrerequisites();
+      fetchSubjectComponents();
     }
   }, [id]);
 
@@ -165,7 +223,7 @@ const EditSubject = ({ id, close, refresh }) => {
 
       if (data.code === 200) {
         toast.success("Cập nhật điều kiện tiên quyết thành công!");
-        refresh(); 
+        refresh();
       } else {
         toast.error(data.message || "Cập nhật thất bại!");
       }
@@ -173,6 +231,76 @@ const EditSubject = ({ id, close, refresh }) => {
       toast.error(error.response?.data?.message || "Lỗi kết nối khi cập nhật!");
     } finally {
       setIsUpdatingPrereq(false);
+    }
+  };
+
+  const handleAddComponent = () => {
+    setComponents([
+      ...components,
+      {
+        type: "THEORY",
+        requiredRoomTypeId: ROOM_TYPES[0].id,
+        sessionsPerWeek: 0,
+        periodsPerSession: 0,
+        totalPeriods: 0,
+        weightPercent: 0,
+      },
+    ]);
+  };
+
+  const handleRemoveComponent = (indexToRemove) => {
+    const compToRemove = components[indexToRemove];
+    if (compToRemove.id) {
+      setDeletedComponentIds([...deletedComponentIds, compToRemove.id]);
+    }
+
+    setComponents(components.filter((_, index) => index !== indexToRemove));
+  };
+
+  const handleComponentChange = (index, field, value) => {
+    const newComponents = [...components];
+    newComponents[index][field] = value;
+    setComponents(newComponents);
+  };
+
+  const handleSaveConfig = async () => {
+    if (components.length === 0 && deletedComponentIds.length === 0)
+      return toast.warning("Vui lòng thêm ít nhất 1 cấu hình!");
+
+    setIsUpdatingConfig(true);
+    try {
+      const deletePromises = deletedComponentIds.map((deletedId) =>
+        deleteSubjectComponentAPI(deletedId)
+      );
+
+      const savePromises = components.map(async (comp) => {
+        const payload = {
+          subjectId: id,
+          type: comp.type,
+          requiredRoomTypeId: comp.requiredRoomTypeId,
+          sessionsPerWeek: parseInt(comp.sessionsPerWeek, 10),
+          periodsPerSession: parseInt(comp.periodsPerSession, 10),
+          totalPeriods: parseInt(comp.totalPeriods, 10),
+          weightPercent: parseFloat(comp.weightPercent),
+        };
+
+        if (comp.id) {
+          return await updateSubjectComponentAPI(comp.id, payload);
+        } else {
+          return await createSubjectComponentAPI(payload);
+        }
+      });
+
+      await Promise.all([...deletePromises, ...savePromises]);
+
+      toast.success("Lưu cấu hình thành công!");
+      
+      setDeletedComponentIds([]);
+
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Lỗi khi lưu cấu hình!");
+    } finally {
+      setIsUpdatingConfig(false);
     }
   };
 
@@ -441,73 +569,17 @@ const EditSubject = ({ id, close, refresh }) => {
         <div className="">
           <h2 className="text-xl font-bold">Cấu hình môn học</h2>
 
-          <div className="mt-3">
-            <div>
-              <h2 className="text-lg font-semibold text-[#5483B3]">
-                Lớp lý thuyết
-              </h2>
-
-              <div className="grid grid-cols-2 gap-10 my-5">
-                <div>
-                  <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
-                    Số buổi/tuần
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue="1"
-                    className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
-                    Số tiết/buổi
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue="2"
-                    className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-lg font-semibold text-[#5483B3]">
-                Lớp bài tập/ thực hành
-              </h2>
-
-              <div className="grid grid-cols-2 gap-10 my-5">
-                <div>
-                  <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
-                    Số buổi/tuần
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue="1"
-                    className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
-                    Số tiết/buổi
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue="3"
-                    className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end mt-5">
-              <button className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+          <div>
+            <div className="flex justify-between items-center my-4">
+              <h2 className="text-xl font-bold">Cấu hình thành phần môn học</h2>
+              <button
+                onClick={handleAddComponent}
+                className="text-white font-medium border border-[#0A4174] rounded-full p-2 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 whitespace-nowrap"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="18px"
-                  height="18px"
+                  width="20px"
+                  height="20px"
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -516,11 +588,194 @@ const EditSubject = ({ id, close, refresh }) => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth="1.5"
-                    d="M16.25 21v-4.765a1.59 1.59 0 0 0-1.594-1.588H9.344a1.59 1.59 0 0 0-1.594 1.588V21m8.5-17.715v2.362a1.59 1.59 0 0 1-1.594 1.588H9.344A1.59 1.59 0 0 1 7.75 5.647V3m8.5.285A3.2 3.2 0 0 0 14.93 3H7.75m8.5.285c.344.156.661.374.934.645l2.382 2.375A3.17 3.17 0 0 1 20.5 8.55v9.272A3.18 3.18 0 0 1 17.313 21H6.688A3.18 3.18 0 0 1 3.5 17.823V6.176A3.18 3.18 0 0 1 6.688 3H7.75"
+                    d="M4 12h8m0 0h8m-8 0V4m0 8v8"
                   />
                 </svg>
-                Lưu cấu hình
+                <span className="text-sm px-1">Thêm cấu hình lớp</span>
               </button>
+            </div>
+
+            <div className="space-y-6 mt-3">
+              {components.length === 0 && (
+                <p className="text-sm text-gray-500 italic">
+                  Chưa có cấu hình lớp nào. Bấm nút Thêm để bắt đầu.
+                </p>
+              )}
+
+              {components.map((comp, index) => (
+                <div
+                  key={index}
+                  className="bg-blue-50 p-5 rounded-xl border border-[#0A4174] relative"
+                >
+                  <button
+                    onClick={() => handleRemoveComponent(index)}
+                    className="absolute top-4 right-4 text-red-400 hover:text-red-600 transition-colors cursor-pointer"
+                    title="Xóa lớp này"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20px"
+                      height="20px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M18 6L6 18M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+
+                  <h3 className="font-semibold text-[#0A4174] mb-4 border-b border-[#0A4174] pb-2">
+                    Lớp thứ {index + 1}
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+                        Loại lớp
+                      </label>
+                      <select
+                        value={comp.type}
+                        onChange={(e) =>
+                          handleComponentChange(index, "type", e.target.value)
+                        }
+                        className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3] bg-white cursor-pointer"
+                      >
+                        <option value="THEORY">Lý thuyết</option>
+                        <option value="PRACTICE">Bài tập / Thực hành</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+                        Loại phòng yêu cầu
+                      </label>
+                      <select
+                        value={comp.requiredRoomTypeId}
+                        onChange={(e) =>
+                          handleComponentChange(
+                            index,
+                            "requiredRoomTypeId",
+                            e.target.value,
+                          )
+                        }
+                        className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3] bg-white cursor-pointer"
+                      >
+                        {ROOM_TYPES.map((room) => (
+                          <option key={room.id} value={room.id}>
+                            {room.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+                        Trọng số điểm (%)
+                      </label>
+                      <input
+                        type="number"
+                        value={comp.weightPercent}
+                        onChange={(e) =>
+                          handleComponentChange(
+                            index,
+                            "weightPercent",
+                            e.target.value,
+                          )
+                        }
+                        className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3] bg-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+                        Tổng số tiết của lớp
+                      </label>
+                      <input
+                        type="number"
+                        value={comp.totalPeriods}
+                        onChange={(e) =>
+                          handleComponentChange(
+                            index,
+                            "totalPeriods",
+                            e.target.value,
+                          )
+                        }
+                        className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3] bg-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+                        Số buổi / tuần
+                      </label>
+                      <input
+                        type="number"
+                        value={comp.sessionsPerWeek}
+                        onChange={(e) =>
+                          handleComponentChange(
+                            index,
+                            "sessionsPerWeek",
+                            e.target.value,
+                          )
+                        }
+                        className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3] bg-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+                        Số tiết / buổi
+                      </label>
+                      <input
+                        type="number"
+                        value={comp.periodsPerSession}
+                        onChange={(e) =>
+                          handleComponentChange(
+                            index,
+                            "periodsPerSession",
+                            e.target.value,
+                          )
+                        }
+                        className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3] bg-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              <div className="flex justify-end mt-5">
+                <button
+                  onClick={handleSaveConfig}
+                  disabled={isUpdatingConfig}
+                  className={`h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 flex items-center gap-2 transition-all duration-300 hover:-translate-y-1 ${
+                    isUpdatingConfig
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer"
+                  }`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18px"
+                    height="18px"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.5"
+                      d="M16.25 21v-4.765a1.59 1.59 0 0 0-1.594-1.588H9.344a1.59 1.59 0 0 0-1.594 1.588V21m8.5-17.715v2.362a1.59 1.59 0 0 1-1.594 1.588H9.344A1.59 1.59 0 0 1 7.75 5.647V3m8.5.285A3.2 3.2 0 0 0 14.93 3H7.75m8.5.285c.344.156.661.374.934.645l2.382 2.375A3.17 3.17 0 0 1 20.5 8.55v9.272A3.18 3.18 0 0 1 17.313 21H6.688A3.18 3.18 0 0 1 3.5 17.823V6.176A3.18 3.18 0 0 1 6.688 3H7.75"
+                    />
+                  </svg>
+                  {isUpdatingConfig ? "Đang lưu..." : "Lưu tất cả cấu hình"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
