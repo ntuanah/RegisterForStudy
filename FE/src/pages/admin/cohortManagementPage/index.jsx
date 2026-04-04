@@ -4,6 +4,9 @@ import AddCohort from "../../../components/admin/Modal/AddCohort";
 
 const CohortManagementPage = () => {
   const [openAddCohort, setOpenAddCohort] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [refresh, setRefresh] = useState(false);
+
   return (
     <div>
       <div className="p-5 border-b border-gray-300 shadow-xl">
@@ -16,9 +19,7 @@ const CohortManagementPage = () => {
       <div className="p-8">
         <div className="mb-8 flex justify-between">
           <div>
-            <h1 className="text-3xl font-black text-slate-900">
-              Quản lý khoá
-            </h1>
+            <h1 className="text-3xl font-black text-slate-900">Quản lý khoá</h1>
             <p className="text-slate-500 mt-1">
               Quản lý thông tin của các khoá.
             </p>
@@ -49,8 +50,34 @@ const CohortManagementPage = () => {
           </div>
         </div>
 
-        <CohortTable />
-        {openAddCohort && <AddCohort close={() => setOpenAddCohort(false)} />}
+        <div className="flex-1 flex items-center border border-[#0A4174] rounded-full px-3 py-3 hover:bg-blue-50 cursor-text">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18px"
+            height="18px"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="currentColor"
+              d="m19.485 20.154l-6.262-6.262q-.75.639-1.725.989t-1.96.35q-2.398 0-4.064-1.666Q3.808 11.898 3.808 9.5t1.666-4.064t4.064-1.667t4.065 1.667T15.269 9.5q0 1.042-.369 2.017t-.97 1.668l6.262 6.261zM9.539 14.23q1.99 0 3.36-1.37t1.37-3.361t-1.37-3.36t-3.36-1.37t-3.361 1.37t-1.37 3.36t1.37 3.36t3.36 1.37"
+            />
+          </svg>
+          <input
+            type="text"
+            placeholder="Tìm kiếm khoá"
+            className="flex-1 outline-none text-sm ml-2 bg-transparent"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+        </div>
+
+        <CohortTable keyword={keyword} refresh={refresh} />
+        {openAddCohort && (
+          <AddCohort
+            close={() => setOpenAddCohort(false)}
+            refresh={() => setRefresh(!refresh)}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,74 @@
-const EditMajor = ({ close }) => {
+import { useEffect, useState } from "react";
+import {
+  getMajorByIdAPI,
+  updateMajorAPI,
+} from "../../../../service/majorService";
+import { toast } from "react-toastify";
+
+const EditMajor = ({ close, id, refresh }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    code: "",
+    name: "",
+  });
+
+  useEffect(() => {
+    const fetchMajorDetails = async () => {
+      try {
+        const response = await getMajorByIdAPI(id);
+        const { data } = response;
+        if (data.code === 1000) {
+          setFormData({
+            code: data.result.code || "",
+            name: data.result.name || "",
+          });
+        }
+      } catch (error) {
+        toast.error("Không thể tải thông tin chi tiết ngành học!");
+      }
+    };
+
+    if (id) {
+      fetchMajorDetails();
+    }
+  }, [id]);
+
+  const handleOnChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleUpdateMajor = async () => {
+    if (!formData.code.trim() || !formData.name.trim()) {
+      return toast.warning("Vui lòng nhập đầy đủ mã ngành và tên ngành!");
+    }
+
+    try {
+      setIsLoading(true);
+      const payload = {
+        code: formData.code,
+        name: formData.name,
+      };
+
+      const response = await updateMajorAPI(id, payload);
+      const { data } = response;
+
+      if (data.code === 1000) {
+        toast.success("Cập nhật ngành học thành công!");
+        refresh();
+        close();
+      } else {
+        toast.error(data.message || "Cập nhật thất bại!");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Lỗi kết nối khi cập nhật!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white w-1/2 rounded-xl p-6 border border-[#0A4174]">
@@ -34,7 +104,9 @@ const EditMajor = ({ close }) => {
             </label>
             <input
               type="text"
-              defaultValue="CNTT"
+              name="code"
+              value={formData.code}
+              onChange={handleOnChange}
               className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
             />
           </div>
@@ -45,14 +117,20 @@ const EditMajor = ({ close }) => {
             </label>
             <input
               type="text"
-              defaultValue="Công nghệ thông tin"
+              name="name"
+              value={formData.name}
+              onChange={handleOnChange}
               className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
             />
           </div>
         </div>
 
         <div className="flex justify-end mt-5">
-          <button className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+          <button
+            onClick={handleUpdateMajor}
+            disabled={isLoading}
+            className={`h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 flex items-center gap-2 transition-all duration-300 hover:-translate-y-1 ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer"}`}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18px"
@@ -68,7 +146,7 @@ const EditMajor = ({ close }) => {
                 d="M4 21h16M5.666 13.187A2.28 2.28 0 0 0 5 14.797V18h3.223c.604 0 1.183-.24 1.61-.668l9.5-9.505a2.28 2.28 0 0 0 0-3.22l-.938-.94a2.277 2.277 0 0 0-3.222.001z"
               />
             </svg>
-            Chỉnh sửa thông tin ngành
+            {isLoading ? "Đang xử lý..." : "Chỉnh sửa thông tin ngành"}
           </button>
         </div>
       </div>

@@ -3,8 +3,8 @@ import EditMajor from "../Modal/EditMajor";
 import { getAllMajorsAPI, searchMajorAPI } from "../../../service/majorService";
 import { toast } from "react-toastify";
 
-const MajorTable = ({ keyword }) => {
-  const [openEditMajor, setOpenEditMajor] = useState(false);
+const MajorTable = ({ keyword, refresh }) => {
+  const [editMajorId, setEditMajorId] = useState(null);
   const [majors, setMajors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,7 +41,7 @@ const MajorTable = ({ keyword }) => {
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [keyword]);
+  }, [keyword, refresh]);
 
   return (
     <div className="border border-slate-200 rounded-xl shadow-sm mt-5">
@@ -98,7 +98,7 @@ const MajorTable = ({ keyword }) => {
                       height="18px"
                       viewBox="0 0 24 24"
                       className="cursor-pointer hover:text-blue-700 transition"
-                      onClick={() => setOpenEditMajor(true)}
+                      onClick={() => setEditMajorId(major.id)}
                     >
                       <path
                         fill="none"
@@ -115,7 +115,6 @@ const MajorTable = ({ keyword }) => {
                       height="18px"
                       viewBox="0 0 24 24"
                       className="cursor-pointer hover:text-red-700 transition"
-                      onClick={() => toast.info("Tính năng Xóa sẽ thêm sau")}
                     >
                       <path
                         fill="red"
@@ -130,7 +129,13 @@ const MajorTable = ({ keyword }) => {
         </tbody>
       </table>
 
-      {openEditMajor && <EditMajor close={() => setOpenEditMajor(false)} />}
+      {editMajorId && (
+        <EditMajor
+          id={editMajorId}
+          close={() => setEditMajorId(null)}
+          refresh={fetchMajors}
+        />
+      )}
     </div>
   );
 };

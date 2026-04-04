@@ -5,6 +5,7 @@ import AddMajor from "../../../components/admin/Modal/AddMajor";
 const MajorManagementPage = () => {
   const [openAddMajor, setOpenAddMajor] = useState(false);
   const [keyword, setKeyword] = useState("");
+  const [refresh, setRefresh] = useState(false);
 
   return (
     <div>
@@ -72,8 +73,13 @@ const MajorManagementPage = () => {
           />
         </div>
 
-        <MajorTable keyword={keyword}/>
-        {openAddMajor && <AddMajor close={() => setOpenAddMajor(false)} />}
+        <MajorTable keyword={keyword} refresh={refresh} />
+        {openAddMajor && (
+          <AddMajor
+            close={() => setOpenAddMajor(false)}
+            refresh={() => setRefresh(!refresh)}
+          />
+        )}
       </div>
     </div>
   );
