@@ -1,4 +1,99 @@
-const EditInformationUser = ({ close }) => {
+import { useEffect, useState } from "react";
+import { getUserByIdAPI, updateStudentProfileAPI } from "../../../../service/userService";
+import { toast } from "react-toastify";
+
+const EditInformationUser = ({ close, id, refresh }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    role: "ROLE_USER",
+    studentCode: "",
+    majorName: "",
+    gender: "MALE",
+    dob: "",
+    cccd: "",
+    emergencyContact: "",
+    email: "",
+    phone: "",
+    address: "",
+  });
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const response = await getUserByIdAPI(id);
+        const { data } = response;
+        if (data.code === 1000) {
+          const result = data.result;
+
+          setFormData({
+            fullName: result.fullName || "",
+            role: result.roles?.[0] || "ROLE_USER", // Lấy role đầu tiên trong mảng
+            studentCode: result.studentInfo?.studentCode || "",
+            majorName: result.studentInfo?.majorName || "",
+            gender: result.studentInfo?.gender || "MALE",
+            dob: result.studentInfo?.dob || "", // Nếu BE chưa có thì mặc định rỗng
+            cccd: result.studentInfo?.cccd || "",
+            emergencyContact: result.studentInfo?.emergencyContact || "",
+            email: result.email || "",
+            phone: result.studentInfo?.phone || "",
+            address: result.studentInfo?.address || "",
+          });
+        }
+      } catch (error) {
+        toast.error("Không thể tải thông tin chi tiết người dùng!");
+      }
+    };
+
+    if (id) {
+      fetchUserDetails();
+    }
+  }, [id]);
+
+  const handleOnChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleUpdate = async () => {
+    if (
+      !formData.fullName.trim() ||
+      !formData.studentCode.trim() ||
+      !formData.email.trim() ||
+      !formData.phone.trim() ||
+      !formData.address.trim()
+    ) {
+      return toast.warning("Vui lòng không bỏ trống thông tin!");
+    }
+
+    try {
+      setIsLoading(true);
+
+      // Gửi toàn bộ dữ liệu đi. Nếu BE cần biến roles là mảng thì ép kiểu nó thành mảng
+      const payload = {
+        ...formData,
+        roles: [formData.role],
+      };
+
+      const response = await updateStudentProfileAPI(id, payload);
+      const { data } = response;
+
+      if (data.code === 1000) {
+        toast.success("Cập nhật thông tin thành công!");
+        refresh(); // Load lại bảng
+        close(); // Đóng form
+      } else {
+        toast.error(data.message || "Cập nhật thất bại!");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Lỗi kết nối khi cập nhật!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white w-1/2 rounded-xl p-6 border border-[#0A4174]">
@@ -79,7 +174,9 @@ const EditInformationUser = ({ close }) => {
                 </label>
                 <input
                   type="text"
-                  defaultValue="Nguyễn Tuấn Anh"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleOnChange}
                   className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
                 />
               </div>
@@ -88,31 +185,42 @@ const EditInformationUser = ({ close }) => {
                 <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
                   Vai trò
                 </label>
+                <select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleOnChange}
+                  className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3] bg-white"
+                >
+                  <option value="ROLE_USER">Sinh viên</option>
+                  <option value="ROLE_LECTURER">Giảng viên</option>
+                  <option value="ROLE_DEPARTMENTHEAD">Trưởng bộ môn</option>
+                  <option value="ROLE_DEAN">Trưởng khoa</option>
+                  <option value="ROLE_ADMIN">Quản trị viên</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
+                  Mã số
+                </label>
                 <input
                   type="text"
-                  defaultValue="Sinh viên"
+                  name="studentCode"
+                  value={formData.studentCode}
+                  onChange={handleOnChange}
                   className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
-                  Mã
+                  Ngành
                 </label>
                 <input
                   type="text"
-                  defaultValue="A46573"
-                  className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
-                  Khoa
-                </label>
-                <input
-                  type="text"
-                  defaultValue="Công nghệ thông tin"
+                  name="majorName"
+                  value={formData.majorName}
+                  onChange={handleOnChange}
                   className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
                 />
               </div>
@@ -121,11 +229,15 @@ const EditInformationUser = ({ close }) => {
                 <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
                   Giới tính
                 </label>
-                <input
-                  type="text"
-                  defaultValue="Nam"
-                  className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
-                />
+                <select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleOnChange}
+                  className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3] bg-white"
+                >
+                  <option value="MALE">Nam</option>
+                  <option value="FEMALE">Nữ</option>
+                </select>
               </div>
 
               <div>
@@ -134,7 +246,9 @@ const EditInformationUser = ({ close }) => {
                 </label>
                 <input
                   type="date"
-                  defaultValue="2004-05-01"
+                  name="dob"
+                  value={formData.dob}
+                  onChange={handleOnChange}
                   className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
                 />
               </div>
@@ -145,7 +259,9 @@ const EditInformationUser = ({ close }) => {
                 </label>
                 <input
                   type="text"
-                  defaultValue="019204002062"
+                  name="cccd"
+                  value={formData.cccd}
+                  onChange={handleOnChange}
                   className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
                 />
               </div>
@@ -156,7 +272,9 @@ const EditInformationUser = ({ close }) => {
                 </label>
                 <input
                   type="text"
-                  defaultValue="0123456789"
+                  name="emergencyContact"
+                  value={formData.emergencyContact}
+                  onChange={handleOnChange}
                   className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
                 />
               </div>
@@ -188,7 +306,9 @@ const EditInformationUser = ({ close }) => {
                 </label>
                 <input
                   type="email"
-                  defaultValue="ntuanah15@gmail.com"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleOnChange}
                   className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
                 />
               </div>
@@ -199,7 +319,9 @@ const EditInformationUser = ({ close }) => {
                 </label>
                 <input
                   type="text"
-                  defaultValue="0987244992"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleOnChange}
                   className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
                 />
               </div>
@@ -208,34 +330,24 @@ const EditInformationUser = ({ close }) => {
                 <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
                   Địa chỉ
                 </label>
-                <input
-                  type="text"
-                  defaultValue="Thái Nguyên"
-                  className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
-                  Vai trò
-                </label>
-                <select
-                  name=""
-                  id=""
-                  className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
-                >
-                  <option>Sinh viên</option>
-                  <option>Giảng viên</option>
-                  <option>Trưởng bộ môn</option>
-                  <option>Trưởng khoa</option>
-                </select>
+                <textarea
+                  rows="3"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleOnChange}
+                  className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3] resize-none"
+                ></textarea>
               </div>
             </div>
           </div>
         </div>
 
         <div className="flex justify-end mt-5">
-          <button className=" text-white font-medium border border-[#0A4174] rounded-full px-10 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+          <button
+            onClick={handleUpdate}
+            disabled={isLoading}
+            className={`h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 flex items-center gap-2 transition-all duration-300 hover:-translate-y-1 ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer"}`}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18px"
@@ -248,10 +360,10 @@ const EditInformationUser = ({ close }) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="1.5"
-                d="M4 21h16M5.666 13.187A2.28 2.28 0 0 0 5 14.797V18h3.223c.604 0 1.183-.24 1.61-.668l9.5-9.505a2.28 2.28 0 0 0 0-3.22l-.938-.94a2.277 2.277 0 0 0-3.222.001z"
+                d="M16.25 21v-4.765a1.59 1.59 0 0 0-1.594-1.588H9.344a1.59 1.59 0 0 0-1.594 1.588V21m8.5-17.715v2.362a1.59 1.59 0 0 1-1.594 1.588H9.344A1.59 1.59 0 0 1 7.75 5.647V3m8.5.285A3.2 3.2 0 0 0 14.93 3H7.75m8.5.285c.344.156.661.374.934.645l2.382 2.375A3.17 3.17 0 0 1 20.5 8.55v9.272A3.18 3.18 0 0 1 17.313 21H6.688A3.18 3.18 0 0 1 3.5 17.823V6.176A3.18 3.18 0 0 1 6.688 3H7.75"
               />
             </svg>
-            Chỉnh sửa
+            {isLoading ? "Đang xử lý..." : "Chỉnh sửa"}
           </button>
         </div>
       </div>

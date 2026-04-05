@@ -1,7 +1,20 @@
-const UserFilterBar = () => {
+const UserFilterBar = ({
+  searchWord,
+  setSearchWord,
+  selectedRole,
+  setSelectedRole,
+}) => {
+  const roles = [
+    { value: "ALL", label: "Tất cả vai trò" },
+    { value: "ROLE_USER", label: "Sinh viên" },
+    { value: "ROLE_LECTURER", label: "Giảng viên" },
+    { value: "ROLE_DEPARTMENTHEAD", label: "Trưởng bộ môn" },
+    { value: "ROLE_DEAN", label: "Trưởng khoa" },
+  ];
+
   return (
-    <div className="flex gap-6">
-      <div className="flex-1 flex items-center border border-[#0A4174] rounded-full px-3 py-3 hover:bg-blue-50 cursor-pointer">
+    <div className="flex gap-4 mb-6">
+      <div className="flex-1 flex items-center border border-[#0A4174] rounded-full px-3 py-3 hover:bg-blue-50 cursor-text">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="18px"
@@ -15,34 +28,29 @@ const UserFilterBar = () => {
         </svg>
         <input
           type="text"
-          placeholder="Tìm kiếm nội dung bất kỳ"
-          className="flex-1 outline-none text-sm"
+          placeholder="Tìm kiếm nội dung người dùng"
+          className="flex-1 outline-none text-sm ml-2 bg-transparent"
+          value={searchWord}
+          onChange={(e) => setSearchWord(e.target.value)}
         />
       </div>
 
-      <div className = "flex gap-3">
-        <button className=" text-white font-medium border border-[#0A4174] rounded-full px-10 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
-          Tất cả vai trò
-        </button>
-
-        <button className=" text-[#5483B3] font-medium border border-[#0A4174] rounded-full px-10 py-3 bg-white hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
-          Sinh viên
-        </button>
-
-        <button className=" text-[#5483B3] font-medium border border-[#0A4174] rounded-full px-10 py-3 bg-white hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
-          Giảng viên
-        </button>
-
-        <button className=" text-[#5483B3] font-medium border border-[#0A4174] rounded-full px-10 py-3 bg-white hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
-          Trưởng bộ môn
-        </button>
-
-        <button className=" text-[#5483B3] font-medium border border-[#0A4174] rounded-full px-10 py-3 bg-white hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
-          Trưởng khoa
-        </button>
+      <div className="flex gap-3 flex-wrap">
+        {roles.map((role) => (
+          <button
+            key={role.value}
+            onClick={() => setSelectedRole(role.value)}
+            className={`font-medium border border-[#0A4174] rounded-full px-8 py-2.5 cursor-pointer transition-all duration-300 hover:-translate-y-1 ${
+              selectedRole === role.value
+                ? "bg-[#5483B3] text-white"
+                : "bg-white text-[#5483B3] hover:bg-gray-100"
+            }`}
+          >
+            {role.label}
+          </button>
+        ))}
       </div>
     </div>
   );
 };
-
 export default UserFilterBar;

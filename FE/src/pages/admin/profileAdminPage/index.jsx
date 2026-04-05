@@ -1,4 +1,28 @@
+import { useEffect, useState } from "react";
+import { getMyInfoAPI } from "../../../service/userService";
+import ChangePassword from "../../../components/admin/Modal/ChangePassword";
+
 const ProfileAdminPage = () => {
+  const [userInfo, setUserInfo] = useState(null);
+  const [openChangePassword, setOpenChangePassword] = useState(false);
+
+  useEffect(() => {
+    const fetchMyInfo = async () => {
+      try {
+        const response = await getMyInfoAPI();
+        if (response.data.code === 1000) {
+          setUserInfo(response.data.result);
+        }
+      } catch (error) {
+        console.error("Lỗi lấy thông tin profile:", error);
+      }
+    };
+    fetchMyInfo();
+  }, []);
+
+  const defaultAvatar =
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+
   return (
     <div>
       <div className="p-5 border-b border-gray-300 shadow-xl">
@@ -27,7 +51,7 @@ const ProfileAdminPage = () => {
             <div className="size-32 rounded-2xl bg-white p-1 shadow-lg">
               <img
                 className="w-full h-full rounded-xl border border-slate-100"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1ngOY_Yq7YHqXKHGTe8sgBUczFjiM-63QZBVCPNGMdX9d1YGbcTN5fu-C2Hw6MUE8y_LsdreLUqu5EyR9aA7F3MFInMjXAvRnnfSv8jRPfWI28Rz6PgYs-8Vfqg6uS9kOZmKXOGsjImgiw6eOl9TJP-iC3ZCgRraxEBIG5dQQSTtYQWuc6BPHtPv0qBSBxTga31ICw70DBoScpOqgQbeNKofDCOloEnUsewieQ7coKLJqqMU3ZH9GcUktYNGlGC4pUmAd0tseCS8"
+                src={defaultAvatar}
                 alt=""
               />
             </div>
@@ -35,13 +59,15 @@ const ProfileAdminPage = () => {
             <div className="flex-1 flex flex-col justify-between gap-4 pb-2">
               <div>
                 <h3 className="text-2xl font-bold text-slate-900">
-                  Nguyễn Tuấn Anh
+                  {userInfo?.fullName || "-"}
                 </h3>
-                
               </div>
             </div>
 
-            <button className=" text-white font-medium border border-[#0A4174] rounded-full px-10 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+            <button
+              onClick={() => setOpenChangePassword(true)}
+              className=" text-white font-medium border border-[#0A4174] rounded-full px-10 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="18px"
@@ -57,7 +83,7 @@ const ProfileAdminPage = () => {
                   d="M4 21h16M5.666 13.187A2.28 2.28 0 0 0 5 14.797V18h3.223c.604 0 1.183-.24 1.61-.668l9.5-9.505a2.28 2.28 0 0 0 0-3.22l-.938-.94a2.277 2.277 0 0 0-3.222.001z"
                 />
               </svg>
-              Chỉnh sửa hồ sơ
+              Đổi mật khẩu
             </button>
           </div>
         </div>
@@ -117,7 +143,9 @@ const ProfileAdminPage = () => {
                 >
                   Họ và tên
                 </label>
-                <p className="text-sm font-medium">Nguyễn Tuấn Anh</p>
+                <p className="text-sm font-medium">
+                  {userInfo?.fullName || "-"}
+                </p>
               </div>
 
               <div>
@@ -127,7 +155,7 @@ const ProfileAdminPage = () => {
                 >
                   Ngày sinh
                 </label>
-                <p className="text-sm font-medium">01/05/2004</p>
+                <p className="text-sm font-medium">-</p>
               </div>
 
               <div>
@@ -137,7 +165,13 @@ const ProfileAdminPage = () => {
                 >
                   Giới tính
                 </label>
-                <p className="text-sm font-medium">Nam</p>
+                <p className="text-sm font-medium">
+                  {userInfo?.studentInfo?.gender === "MALE"
+                    ? "Nam"
+                    : userInfo?.studentInfo?.gender === "FEMALE"
+                      ? "Nữ"
+                      : "-"}
+                </p>
               </div>
 
               <div>
@@ -147,7 +181,7 @@ const ProfileAdminPage = () => {
                 >
                   Số căn cước công dân
                 </label>
-                <p className="text-sm font-medium">123456789012</p>
+                <p className="text-sm font-medium">-</p>
               </div>
 
               <div className="col-span-2">
@@ -157,7 +191,7 @@ const ProfileAdminPage = () => {
                 >
                   Liên lạc khẩn cấp
                 </label>
-                <p className="text-sm font-medium">0123456789</p>
+                <p className="text-sm font-medium">-</p>
               </div>
             </div>
           </div>
@@ -202,9 +236,11 @@ const ProfileAdminPage = () => {
 
                 <div>
                   <p className="text-sm text-slate-400 uppercase tracking-wider">
-                    Email admin
+                    Email sinh viên
                   </p>
-                  <p className="text-sm font-medium">ntuanah15@gmailcom</p>
+                  <p className="text-sm font-medium">
+                    {userInfo?.email || "-"}
+                  </p>
                 </div>
               </div>
 
@@ -231,7 +267,9 @@ const ProfileAdminPage = () => {
                   <p className="text-sm text-slate-400 uppercase tracking-wider">
                     Số điện thoại
                   </p>
-                  <p className="text-sm font-medium">0987244992</p>
+                  <p className="text-sm font-medium">
+                    {userInfo?.studentInfo?.phone || "-"}
+                  </p>
                 </div>
               </div>
 
@@ -258,13 +296,19 @@ const ProfileAdminPage = () => {
                   <p className="text-sm text-slate-400 uppercase tracking-wider">
                     Địa chỉ thường trú
                   </p>
-                  <p className="text-sm font-medium">Thái Nguyên</p>
+                  <p className="text-sm font-medium">
+                    {userInfo?.studentInfo?.address || "-"}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {openChangePassword && (
+        <ChangePassword close={() => setOpenChangePassword(false)} />
+      )}
     </div>
   );
 };

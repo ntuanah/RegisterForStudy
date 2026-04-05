@@ -1,4 +1,28 @@
+import { useEffect, useState } from "react";
+import { getMyInfoAPI } from "../../../service/userService";
+import ChangePassword from "../../../components/dean/Modal/ChangePassword";
+
 const ProfileDeanPage = () => {
+  const [userInfo, setUserInfo] = useState(null);
+  const [openChangePassword, setOpenChangePassword] = useState(false);
+
+  useEffect(() => {
+    const fetchMyInfo = async () => {
+      try {
+        const response = await getMyInfoAPI();
+        if (response.data.code === 1000) {
+          setUserInfo(response.data.result);
+        }
+      } catch (error) {
+        console.error("Lỗi lấy thông tin profile:", error);
+      }
+    };
+    fetchMyInfo();
+  }, []);
+
+  const defaultAvatar =
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+
   return (
     <div>
       <div className="p-5 border-b border-gray-300 shadow-xl">
@@ -27,7 +51,7 @@ const ProfileDeanPage = () => {
             <div className="size-32 rounded-2xl bg-white p-1 shadow-lg">
               <img
                 className="w-full h-full rounded-xl border border-slate-100"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1ngOY_Yq7YHqXKHGTe8sgBUczFjiM-63QZBVCPNGMdX9d1YGbcTN5fu-C2Hw6MUE8y_LsdreLUqu5EyR9aA7F3MFInMjXAvRnnfSv8jRPfWI28Rz6PgYs-8Vfqg6uS9kOZmKXOGsjImgiw6eOl9TJP-iC3ZCgRraxEBIG5dQQSTtYQWuc6BPHtPv0qBSBxTga31ICw70DBoScpOqgQbeNKofDCOloEnUsewieQ7coKLJqqMU3ZH9GcUktYNGlGC4pUmAd0tseCS8"
+                src={defaultAvatar}
                 alt=""
               />
             </div>
@@ -35,31 +59,12 @@ const ProfileDeanPage = () => {
             <div className="flex-1 flex flex-col justify-between gap-4 pb-2">
               <div>
                 <h3 className="text-2xl font-bold text-slate-900">
-                  Nguyễn Tuấn Anh
+                  {userInfo?.fullName || "-"}
                 </h3>
-                <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
-                  <span className="text-[#5483B3] font-semibold flex items-center gap-1">
-                    Mã giảng viên: A46573
-                  </span>
-                  <span className="text-slate-500 font-semibold flex items-center gap-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18px"
-                      height="18px"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M4.23 21.77Q3.5 21.037 3.5 20t.73-1.77T6 17.5q.292 0 .612.085q.319.084.594.228l2.54-3.16q-.546-.582-.744-1.288t-.068-1.43l-3.736-1.233q-.329.586-.912.942T3 12q-1.038 0-1.77-.73T.5 9.5t.73-1.77T3 7t1.77.73t.73 1.77q0 .127-.01.196q-.01.07-.01.138l3.718 1.297q.327-.631.934-1.102t1.426-.608V5.458q-.956-.18-1.507-.89T9.5 3q0-1.038.73-1.77T12 .5t1.77.73T14.5 3q0 .858-.554 1.568t-1.504.89V9.42q.82.137 1.417.608t.943 1.102l3.717-1.296q-.019-.089-.019-.149V9.5q0-1.038.73-1.77T21 7t1.77.73t.73 1.77t-.73 1.77T21 12q-.704 0-1.29-.356q-.585-.356-.908-.942l-3.737 1.233q.131.724-.067 1.427t-.744 1.273l2.54 3.154q.275-.126.595-.207T18 17.5q1.039 0 1.77.73T20.5 20t-.73 1.77t-1.77.73t-1.77-.73T15.5 20q0-.442.143-.857t.476-.77l-2.54-3.198q-.679.44-1.572.44t-1.591-.44L7.88 18.373q.313.356.466.77T8.5 20q0 1.039-.73 1.77T6 22.5t-1.77-.73M3 11q.617 0 1.059-.441q.441-.442.441-1.059t-.441-1.059T3 8t-1.059.441Q1.5 8.883 1.5 9.5t.441 1.059T3 11m4.059 10.059Q7.5 20.617 7.5 20t-.441-1.059T6 18.5t-1.059.441Q4.5 19.383 4.5 20t.441 1.059Q5.383 21.5 6 21.5t1.059-.441m6-17Q13.5 3.617 13.5 3t-.441-1.059Q12.617 1.5 12 1.5t-1.059.441T10.5 3t.441 1.059Q11.383 4.5 12 4.5t1.059-.441M12 14.616q.877 0 1.496-.62t.62-1.496t-.62-1.496t-1.496-.62t-1.496.62t-.62 1.496t.62 1.496t1.496.62m7.059 6.443q.441-.442.441-1.059t-.441-1.059T18 18.5t-1.059.441Q16.5 19.383 16.5 20t.441 1.059q.442.441 1.059.441t1.059-.441m3-10.5q.441-.442.441-1.059t-.441-1.059T21 8t-1.059.441Q19.5 8.883 19.5 9.5t.441 1.059T21 11t1.059-.441M18 20"
-                      />
-                    </svg>
-                    Khoa: Công nghệ thông tin
-                  </span>
-                </div>
               </div>
             </div>
 
-            <button className=" text-white font-medium border border-[#0A4174] rounded-full px-10 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+            <button onClick={() => setOpenChangePassword(true)} className=" text-white font-medium border border-[#0A4174] rounded-full px-10 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="18px"
@@ -75,7 +80,7 @@ const ProfileDeanPage = () => {
                   d="M4 21h16M5.666 13.187A2.28 2.28 0 0 0 5 14.797V18h3.223c.604 0 1.183-.24 1.61-.668l9.5-9.505a2.28 2.28 0 0 0 0-3.22l-.938-.94a2.277 2.277 0 0 0-3.222.001z"
                 />
               </svg>
-              Chỉnh sửa hồ sơ
+              Đổi mật khẩu
             </button>
           </div>
         </div>
@@ -135,7 +140,9 @@ const ProfileDeanPage = () => {
                 >
                   Họ và tên
                 </label>
-                <p className="text-sm font-medium">Nguyễn Tuấn Anh</p>
+                <p className="text-sm font-medium">
+                  {userInfo?.fullName || "-"}
+                </p>
               </div>
 
               <div>
@@ -145,7 +152,7 @@ const ProfileDeanPage = () => {
                 >
                   Ngày sinh
                 </label>
-                <p className="text-sm font-medium">01/05/2004</p>
+                <p className="text-sm font-medium">-</p>
               </div>
 
               <div>
@@ -155,7 +162,13 @@ const ProfileDeanPage = () => {
                 >
                   Giới tính
                 </label>
-                <p className="text-sm font-medium">Nam</p>
+                <p className="text-sm font-medium">
+                  {userInfo?.studentInfo?.gender === "MALE"
+                    ? "Nam"
+                    : userInfo?.studentInfo?.gender === "FEMALE"
+                      ? "Nữ"
+                      : "-"}
+                </p>
               </div>
 
               <div>
@@ -165,7 +178,7 @@ const ProfileDeanPage = () => {
                 >
                   Số căn cước công dân
                 </label>
-                <p className="text-sm font-medium">123456789012</p>
+                <p className="text-sm font-medium">-</p>
               </div>
 
               <div className="col-span-2">
@@ -175,7 +188,7 @@ const ProfileDeanPage = () => {
                 >
                   Liên lạc khẩn cấp
                 </label>
-                <p className="text-sm font-medium">0123456789</p>
+                <p className="text-sm font-medium">-</p>
               </div>
             </div>
           </div>
@@ -220,9 +233,11 @@ const ProfileDeanPage = () => {
 
                 <div>
                   <p className="text-sm text-slate-400 uppercase tracking-wider">
-                    Email giảng viên
+                    Email sinh viên
                   </p>
-                  <p className="text-sm font-medium">ntuanah15@gmailcom</p>
+                  <p className="text-sm font-medium">
+                    {userInfo?.email || "-"}
+                  </p>
                 </div>
               </div>
 
@@ -249,7 +264,9 @@ const ProfileDeanPage = () => {
                   <p className="text-sm text-slate-400 uppercase tracking-wider">
                     Số điện thoại
                   </p>
-                  <p className="text-sm font-medium">0987244992</p>
+                  <p className="text-sm font-medium">
+                    {userInfo?.studentInfo?.phone || "-"}
+                  </p>
                 </div>
               </div>
 
@@ -276,13 +293,19 @@ const ProfileDeanPage = () => {
                   <p className="text-sm text-slate-400 uppercase tracking-wider">
                     Địa chỉ thường trú
                   </p>
-                  <p className="text-sm font-medium">Thái Nguyên</p>
+                  <p className="text-sm font-medium">
+                    {userInfo?.studentInfo?.address || "-"}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {openChangePassword && (
+        <ChangePassword close={() => setOpenChangePassword(false)} />
+      )}
     </div>
   );
 };

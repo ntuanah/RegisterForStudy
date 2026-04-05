@@ -10,6 +10,8 @@ import { toast } from "react-toastify";
 const UserManagementPage = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [searchWord, setSearchWord] = useState("");
+  const [selectedRole, setSelectedRole] = useState("ALL");
 
   const fileInputRef = useRef(null);
 
@@ -35,13 +37,16 @@ const UserManagementPage = () => {
       if (data.code === 1000) {
         toast.success("Thêm sinh viên thành công!");
       } else {
-        toast.error(data.message || "Thêm sinh viên thất bại, vui lòng kiểm tra lại file!");
+        toast.error(
+          data.message ||
+            "Thêm sinh viên thất bại, vui lòng kiểm tra lại file!",
+        );
       }
     } catch (error) {
       console.error("Lỗi import:", error);
       toast.error(error.response?.data?.message || "Lỗi kết nối server!");
     } finally {
-      setIsImporting(false); 
+      setIsImporting(false);
     }
   };
 
@@ -203,8 +208,17 @@ const UserManagementPage = () => {
           </div>
         </div>
 
-        <UserFilterBar />
-        <UserManagementTable />
+        <UserFilterBar
+          searchWord={searchWord}
+          setSearchWord={setSearchWord}
+          selectedRole={selectedRole}
+          setSelectedRole={setSelectedRole}
+        />
+
+        <UserManagementTable
+          searchWord={searchWord}
+          selectedRole={selectedRole}
+        />
       </div>
     </div>
   );

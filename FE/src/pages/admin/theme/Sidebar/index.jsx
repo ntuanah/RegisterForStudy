@@ -1,9 +1,26 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { logoutAPI } from "../../../../service/authService";
 import { toast } from "react-toastify";
+import { getMyInfoAPI } from "../../../../service/userService";
+import { useEffect, useState } from "react";
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchMyInfo = async () => {
+      try {
+        const response = await getMyInfoAPI();
+        if (response.data.code === 1000) {
+          setUserInfo(response.data.result);
+        }
+      } catch (error) {
+        console.error("Lỗi lấy thông tin sidebar:", error);
+      }
+    };
+    fetchMyInfo();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -26,16 +43,18 @@ const Sidebar = () => {
     }
   };
 
+  const defaultAvatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+
   return (
     <div className=" bg-white shadow-xl border-e border-[#0A4174] flex flex-col h-screen sticky top-0">
       <div className="py-6 px-20 flex flex-col items-center text-center">
         <img
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1ngOY_Yq7YHqXKHGTe8sgBUczFjiM-63QZBVCPNGMdX9d1YGbcTN5fu-C2Hw6MUE8y_LsdreLUqu5EyR9aA7F3MFInMjXAvRnnfSv8jRPfWI28Rz6PgYs-8Vfqg6uS9kOZmKXOGsjImgiw6eOl9TJP-iC3ZCgRraxEBIG5dQQSTtYQWuc6BPHtPv0qBSBxTga31ICw70DBoScpOqgQbeNKofDCOloEnUsewieQ7coKLJqqMU3ZH9GcUktYNGlGC4pUmAd0tseCS8"
+          src={defaultAvatar}
           alt="avt"
           className="w-24 border-2 border-black rounded-full p-1 mb-4"
         />
         <div>
-          <p className="text-xl font-semibold">Nguyễn Tuấn Anh</p>
+          <p className="text-xl font-semibold">{userInfo?.fullName || "Đang tải..."}</p>
         </div>
       </div>
 
