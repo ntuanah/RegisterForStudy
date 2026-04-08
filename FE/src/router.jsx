@@ -30,6 +30,7 @@ import TrainingProgramManagement from "./pages/admin/trainingProgramManagement";
 import ScoreManagementPage from "./pages/admin/ScoreManagementPage";
 import MajorManagementPage from "./pages/admin/majorManagementPage";
 import CohortManagementPage from "./pages/admin/cohortManagementPage";
+import ProgramDefaultManagementPage from "./pages/admin/programDefaultManagementPage";
 
 const RouterCustom = () => {
   const userRouter = [
@@ -68,6 +69,7 @@ const RouterCustom = () => {
     {path: ROUTERS.ADMIN.SCOREMANAGEMENT, component: <ScoreManagementPage/>},
     {path: ROUTERS.ADMIN.MAJORMANAGEMENT, component: <MajorManagementPage />},
     {path: ROUTERS.ADMIN.COHORTMANAGEMENT, component: <CohortManagementPage />},
+    {path: ROUTERS.ADMIN.PROGRAMDEFAULTMANAGEMENT, component: <ProgramDefaultManagementPage />},
   ];
 
   return (

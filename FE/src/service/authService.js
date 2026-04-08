@@ -55,3 +55,7 @@ export const resetPasswordAPI = async (email, resetToken, newPassword, confirmPa
 export const logoutAPI = async () => {
     return await axiosClient.post('/auths/logout');
 };
+
+export const changePasswordAPI = async (data) => {
+  return await axiosClient.post(`/auths/change-password`, data);
+};

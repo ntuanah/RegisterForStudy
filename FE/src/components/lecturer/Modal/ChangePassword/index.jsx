@@ -1,4 +1,66 @@
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { changePasswordAPI } from "../../../../service/authService";
+
 const ChangePassword = ({ close }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const handleOnChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleChangePassword = async () => {
+    if (
+      !formData.oldPassword.trim() ||
+      !formData.newPassword.trim() ||
+      !formData.confirmPassword.trim()
+    ) {
+      return toast.warning("Vui lòng điền đầy đủ thông tin!");
+    }
+
+    if (formData.newPassword !== formData.confirmPassword) {
+      return toast.error("Mật khẩu mới và xác nhận mật khẩu không khớp!");
+    }
+
+    try {
+      setIsLoading(true);
+
+      const payload = {
+        oldPassword: formData.oldPassword,
+        newPassword: formData.newPassword,
+        confirmPassword: formData.confirmPassword,
+      };
+
+      const response = await changePasswordAPI(payload);
+      const { data } = response;
+
+      if (data.code === 1000) {
+        toast.success(data.message || "Đổi mật khẩu thành công!");
+        close(); 
+      } else {
+        toast.error(data.message || "Đổi mật khẩu thất bại!");
+      }
+    } catch (error) {
+      const errorData = error.response?.data;
+      
+      if (errorData?.code === 1006) {
+        toast.error("Mật khẩu cũ không chính xác!");
+      } else {
+        toast.error(errorData?.message || "Lỗi hệ thống khi đổi mật khẩu!");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white w-1/2 rounded-xl p-6 border border-[#0A4174]">
@@ -27,13 +89,18 @@ const ChangePassword = ({ close }) => {
           </button>
         </div>
 
-        <div className="space-y-10">
+        <div className="space-y-6">
           <div>
             <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
               Mật khẩu cũ
             </label>
+            {/* Đổi type="text" thành type="password" để ẩn ký tự */}
             <input
-              type="text"
+              type="password"
+              name="oldPassword"
+              value={formData.oldPassword}
+              onChange={handleOnChange}
+              placeholder="Nhập mật khẩu hiện tại"
               className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
             />
           </div>
@@ -43,14 +110,37 @@ const ChangePassword = ({ close }) => {
               Mật khẩu mới
             </label>
             <input
-              type="text"
+              type="password"
+              name="newPassword"
+              value={formData.newPassword}
+              onChange={handleOnChange}
+              placeholder="Nhập mật khẩu mới"
+              className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
+            />
+          </div>
+
+          {/* MỚI: Thêm ô Xác nhận mật khẩu */}
+          <div>
+            <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
+              Xác nhận mật khẩu mới
+            </label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleOnChange}
+              placeholder="Nhập lại mật khẩu mới"
               className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
             />
           </div>
         </div>
 
         <div className="flex justify-end mt-5">
-          <button className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+          <button
+            onClick={handleChangePassword}
+            disabled={isLoading}
+            className={`h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 flex items-center gap-2 transition-all duration-300 hover:-translate-y-1 ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer"}`}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18px"
@@ -66,7 +156,7 @@ const ChangePassword = ({ close }) => {
                 d="M4 21h16M5.666 13.187A2.28 2.28 0 0 0 5 14.797V18h3.223c.604 0 1.183-.24 1.61-.668l9.5-9.505a2.28 2.28 0 0 0 0-3.22l-.938-.94a2.277 2.277 0 0 0-3.222.001z"
               />
             </svg>
-            Đổi mật khẩu
+            {isLoading ? "Đang xử lý..." : "Đổi mật khẩu"}
           </button>
         </div>
       </div>
