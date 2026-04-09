@@ -4,7 +4,7 @@ import InformationUser from "../Modal/InformationUser";
 import { toast } from "react-toastify";
 import { getAllUsersAPI } from "../../../service/userService";
 
-const UserManagementTable = ({ searchWord, selectedRole }) => {
+const UserManagementTable = ({ searchWord, selectedRole, refreshTrigger }) => {
   const [editUserId, setEditUserId] = useState(null);
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +35,7 @@ const UserManagementTable = ({ searchWord, selectedRole }) => {
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchWord]);
+  }, [searchWord, refreshTrigger]);
 
   const filteredUsers = useMemo(() => {
     if (!selectedRole || selectedRole === "ALL") return users;
