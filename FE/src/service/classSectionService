@@ -27,3 +27,10 @@ export const deleteClassSectionAPI = async (id) => {
   return await axiosClient.delete(`/class-sections/${id}`);
 };
 
+export const getProgramSubjectsAPI = async (cohortId, majorId) => {
+  return await axiosClient.get(`/program-subjects/cohort/${cohortId}/major/${majorId}`);
+};
+
+export const updateClassSectionAPI = async (id, data) => {
+  return await axiosClient.put(`/class-sections/${id}`, data);
+};

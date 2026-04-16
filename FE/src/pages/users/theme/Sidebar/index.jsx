@@ -85,6 +85,17 @@ const Sidebar = () => {
         </NavLink>
 
         <NavLink
+          to="/expected-subject"
+          className={({ isActive }) =>
+            `border border-[#0A4174] rounded-full px-5 py-3 inline-block hover:bg-gray-200 hover:text-[#5483B3] transition-all duration-300 hover:-translate-y-1 ${
+              isActive ? "bg-[#5483B3] text-white" : ""
+            }`
+          }
+        >
+          Học kỳ dự kiến
+        </NavLink>
+
+        <NavLink
           to="/training-program"
           className={({ isActive }) =>
             `border border-[#0A4174] rounded-full px-5 py-3 inline-block hover:bg-gray-200 hover:text-[#5483B3] transition-all duration-300 hover:-translate-y-1 ${

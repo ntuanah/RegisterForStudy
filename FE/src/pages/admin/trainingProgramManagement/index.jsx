@@ -79,13 +79,11 @@ const TrainingProgramManagement = () => {
   };
 
   const handlePublishProgram = async (programId, isActive, programName) => {
-    // Nếu đã Publish rồi thì chặn lại không cho gọi API
     if (isTemplate === true) {
       toast.info(`Chương trình "${programName}" đã được Publish từ trước!`);
       return;
     }
 
-    // Nếu chưa Publish thì hỏi xác nhận
     const isConfirm = window.confirm(
       `Bạn có chắc chắn muốn Publish (Mở khóa) chương trình "${programName}" không?`,
     );
@@ -98,7 +96,7 @@ const TrainingProgramManagement = () => {
 
       if (data.code === 1000) {
         toast.success("Publish chương trình đào tạo thành công!");
-        fetchPrograms(); // Load lại danh sách để đổi icon sang Khóa Mở
+        fetchPrograms(); 
       } else {
         toast.error(data.message || "Publish thất bại!");
       }
@@ -246,7 +244,7 @@ const TrainingProgramManagement = () => {
                         <span className="font-semibold text-slate-500">
                           Trạng thái:
                         </span>
-                        {program.isActive ? (
+                        {program.isTemplate ? (
                           <span className="text-green-600 font-medium">
                             Đang hoạt động
                           </span>
@@ -281,7 +279,6 @@ const TrainingProgramManagement = () => {
                       }
                     >
                       {program.isTemplate === true ? (
-                        // Icon Khóa Mở (Đã Publish)
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="18px"
@@ -301,7 +298,6 @@ const TrainingProgramManagement = () => {
                           </g>
                         </svg>
                       ) : (
-                        // Icon Khóa Đóng (Chưa Publish)
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="18px"

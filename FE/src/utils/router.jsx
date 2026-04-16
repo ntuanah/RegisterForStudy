@@ -8,7 +8,8 @@ export const ROUTERS = {
     ANNOUNCEMENT: "/announcement",
     TRAINING_PROGRAM: "/training-program",
     PAY_TUITION: "/pay-tuition",
-    SCORE: "/score"
+    SCORE: "/score",
+    EXPECTEDSUBJECT: "expected-subject"
   },
 
   LECTURER: {
