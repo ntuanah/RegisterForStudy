@@ -1,0 +1,29 @@
+import axiosClient from "../utils/axiosClient";
+
+export const downloadClassSectionTemplateAPI = async () => {
+  return await axiosClient.get('/class-sections/template', {
+    responseType: 'blob',
+  });
+};
+
+export const importClassSectionsAPI = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  return await axiosClient.post(`/class-sections/import`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+};
+
+export const getOpenedSubjectsAPI = async () => {
+  return await axiosClient.get('/class-sections/opened-subjects');
+};
+
+export const getClassSectionsBySubjectAPI = async (subjectId) => {
+  return await axiosClient.get(`/class-sections/subject/${subjectId}`);
+};
+
+export const deleteClassSectionAPI = async (id) => {
+  return await axiosClient.delete(`/class-sections/${id}`);
+};
+
