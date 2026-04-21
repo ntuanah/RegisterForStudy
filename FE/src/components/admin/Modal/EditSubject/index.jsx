@@ -74,20 +74,52 @@ const EditSubject = ({ id, close, refresh }) => {
       }
     };
 
+    // const fetchAllSubjects = async () => {
+    //   try {
+    //     const response = await getAllSubjectsAPI();
+    //     const { data } = response;
+    //     if (data.code === 200) {
+    //       const filteredSubjects = data.result.filter(
+    //         (subject) => subject.id !== id,
+    //       );
+    //       setAllSubjects(filteredSubjects);
+    //     }
+    //   } catch (error) {
+    //     toast.error(
+    //       "Không thể tải danh sách môn học cho điều kiện tiên quyết!",
+    //     );
+    //   }
+    // };
+
     const fetchAllSubjects = async () => {
       try {
-        const response = await getAllSubjectsAPI();
-        const { data } = response;
-        if (data.code === 200) {
-          const filteredSubjects = data.result.filter(
-            (subject) => subject.id !== id,
-          );
+        const firstResponse = await getAllSubjectsAPI(0, 100); 
+        const { data } = firstResponse;
+
+        if (data.code === 200 || data.code === 1000) {
+          const totalPages = data.result.totalPages;
+          let allData = [...data.result.content]; 
+
+          if (totalPages > 1) {
+            const pageRequests = [];
+            for (let i = 1; i < totalPages; i++) {
+              pageRequests.push(getAllSubjectsAPI(i, 100)); 
+            }
+
+            const responses = await Promise.all(pageRequests);
+            
+            responses.forEach(res => {
+              if (res.data.code === 200 || res.data.code === 1000) {
+                allData = [...allData, ...res.data.result.content];
+              }
+            });
+          }
+
+          const filteredSubjects = allData.filter(subject => subject.id !== id);
           setAllSubjects(filteredSubjects);
         }
       } catch (error) {
-        toast.error(
-          "Không thể tải danh sách môn học cho điều kiện tiên quyết!",
-        );
+        toast.error("Không thể tải danh sách môn học cho điều kiện tiên quyết!");
       }
     };
 

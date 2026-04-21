@@ -1,11 +1,14 @@
 import axiosClient from '../utils/axiosClient';
 
-export const getAllSubjectsAPI = async () => {
-    return await axiosClient.get('/subjects');
+export const getAllSubjectsAPI = async (page = 0) => {
+    return await axiosClient.get(`/subjects?page=${page}`);
 };
 
-export const searchSubjectAPI = async (keyword = '') => {
-    const url = keyword ? `/subjects?keyword=${keyword}` : '/subjects';
+export const searchSubjectAPI = async (keyword = '', page = 0) => {
+    const url = keyword 
+        ? `/subjects?keyword=${encodeURIComponent(keyword)}&page=${page}` 
+        : `/subjects?page=${page}`;
+        
     return await axiosClient.get(url);
 };
 

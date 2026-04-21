@@ -89,3 +89,7 @@ export const importLecturerExcelAPI = async (file) => {
     },
   });
 };
+
+export const assignDepartmentHeadAPI = async (username) => {
+  return await axiosClient.post(`/auths/assign?username=${username}`);
+};

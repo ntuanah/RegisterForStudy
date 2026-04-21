@@ -15,8 +15,8 @@ export const importClassSectionsAPI = async (file) => {
   });
 };
 
-export const getOpenedSubjectsAPI = async () => {
-  return await axiosClient.get('/class-sections/opened-subjects');
+export const getOpenedSubjectsAPI = async (page = 0) => {
+  return await axiosClient.get(`/class-sections/opened-subjects?page=${page}`);
 };
 
 export const getClassSectionsBySubjectAPI = async (subjectId) => {

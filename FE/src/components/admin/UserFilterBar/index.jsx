@@ -8,7 +8,7 @@ const UserFilterBar = ({
     { value: "ALL", label: "Tất cả vai trò" },
     { value: "ROLE_USER", label: "Sinh viên" },
     { value: "ROLE_LECTURER", label: "Giảng viên" },
-    { value: "ROLE_DEPARTMENTHEAD", label: "Trưởng bộ môn" },
+    { value: "ROLE_HOD", label: "Trưởng bộ môn" },
     { value: "ROLE_DEAN", label: "Trưởng khoa" },
   ];
 

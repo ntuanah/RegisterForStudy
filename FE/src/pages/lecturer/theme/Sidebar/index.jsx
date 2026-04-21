@@ -116,7 +116,7 @@ const Sidebar = () => {
         {hasHODRole && (
           <button
             onClick={() => navigate("/department-head/profile")}
-            className="border border-[#e88a18] text-[#e88a18] rounded-full px-5 py-3 inline-block hover:bg-[#e88a18] hover:text-white transition-all duration-300 hover:-translate-y-1 text-center"
+            className="text-left border border-[#e88a18] text-[#e88a18] rounded-full px-5 py-3 inline-block hover:bg-orange-50 hover:text-[#e88a18] transition-all duration-300 hover:-translate-y-1 cursor-pointer"
           >
             Đổi sang Trưởng bộ môn
           </button>

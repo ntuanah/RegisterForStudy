@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { getUserByIdAPI, updateStudentProfileAPI } from "../../../../service/userService";
 import { toast } from "react-toastify";
+import { assignDepartmentHeadAPI } from "../../../../service/authService";
 
 const EditInformationUser = ({ close, id, refresh }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isAssigning, setIsAssigning] = useState(false);
   const [formData, setFormData] = useState({
+    username: "",
     fullName: "",
     role: "ROLE_USER",
     studentCode: "",
@@ -27,6 +30,7 @@ const EditInformationUser = ({ close, id, refresh }) => {
           const result = data.result;
 
           setFormData({
+            username: result.username || "",
             fullName: result.fullName || "",
             role: result.roles?.[0] || "ROLE_USER",
             studentCode: result.studentInfo?.studentCode || "",
@@ -55,6 +59,34 @@ const EditInformationUser = ({ close, id, refresh }) => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleAssignRole = async () => {
+    if (!formData.username) {
+      return toast.error("Không tìm thấy username để bổ nhiệm!");
+    }
+
+    const isConfirm = window.confirm(`Bạn có chắc chắn muốn bổ nhiệm ${formData.fullName} làm Trưởng phòng/Trưởng bộ môn không?`);
+    if (!isConfirm) return;
+
+    try {
+      setIsAssigning(true);
+      const response = await assignDepartmentHeadAPI(formData.username);
+      const { data } = response;
+
+      if (data.code === 1000 || data.code === 200) {
+        toast.success(data.message || "Bổ nhiệm thành công!");
+        setFormData(prev => ({ ...prev, role: "ROLE_DEPARTMENTHEAD" }));
+        refresh();
+      } else {
+        toast.error(data.message || "Bổ nhiệm thất bại!");
+      }
+    } catch (error) {
+      console.error("Lỗi bổ nhiệm:", error);
+      toast.error(error.response?.data?.message || "Lỗi kết nối khi bổ nhiệm!");
+    } finally {
+      setIsAssigning(false);
+    }
   };
 
   const handleUpdate = async () => {
@@ -184,18 +216,37 @@ const EditInformationUser = ({ close, id, refresh }) => {
                 <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
                   Vai trò
                 </label>
-                <select
-                  name="role"
-                  value={formData.role}
-                  onChange={handleOnChange}
-                  className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3] bg-white"
-                >
-                  <option value="ROLE_USER">Sinh viên</option>
-                  <option value="ROLE_LECTURER">Giảng viên</option>
-                  <option value="ROLE_DEPARTMENTHEAD">Trưởng bộ môn</option>
-                  <option value="ROLE_DEAN">Trưởng khoa</option>
-                  <option value="ROLE_ADMIN">Quản trị viên</option>
-                </select>
+                <div className="flex items-center gap-2">
+                  <select
+                    name="role"
+                    value={formData.role}
+                    disabled 
+                    className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none bg-gray-100 text-gray-500 cursor-not-allowed"
+                  >
+                    <option value="ROLE_USER">Sinh viên</option>
+                    <option value="ROLE_LECTURER">Giảng viên</option>
+                    <option value="ROLE_HOD">Trưởng bộ môn</option>
+                    <option value="ROLE_DEAN">Trưởng khoa</option>
+                    <option value="ROLE_ADMIN">Quản trị viên</option>
+                  </select>
+
+                  {formData.role === "ROLE_LECTURER" && (
+                    <button
+                      type="button"
+                      onClick={handleAssignRole}
+                      disabled={isAssigning}
+                      className="p-2 bg-blue-50 border border-[#5483B3] text-[#0A4174] rounded-lg hover:bg-blue-100 transition-colors flex-shrink-0"
+                    >
+                      {isAssigning ? (
+                        <div className="w-4 h-4 border-2 border-[#0A4174] border-t-transparent rounded-full animate-spin"></div>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                          <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 12h8m0 0h8m-8 0V4m0 8v8"/>
+                        </svg>
+                      )}
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div>

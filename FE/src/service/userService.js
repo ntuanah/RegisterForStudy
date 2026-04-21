@@ -1,10 +1,12 @@
 import axiosClient from "../utils/axiosClient";
 
-export const getAllUsersAPI = async (searchWord = "") => {
-  let url = `/users`;
+export const getAllUsersAPI = async (searchWord = "", page = 0) => {
+  let url = `/users?page=${page}`;
+
   if (searchWord && searchWord.trim() !== "") {
-    url += `?search=${searchWord}`;
+    url += `&search=${encodeURIComponent(searchWord)}`; 
   }
+  
   return await axiosClient.get(url);
 };
 
