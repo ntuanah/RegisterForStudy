@@ -3,24 +3,43 @@ import { logoutAPI } from "../../../../service/authService";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { getMyInfoAPI } from "../../../../service/userService";
+import { jwtDecode } from "jwt-decode";
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
+  const [roles, setRoles] = useState([]);
   
     useEffect(() => {
-      const fetchMyInfo = async () => {
-        try {
-          const response = await getMyInfoAPI();
-          if (response.data.code === 1000) {
-            setUserInfo(response.data.result);
-          }
-        } catch (error) {
-          console.error("Lỗi lấy thông tin sidebar:", error);
+    const fetchMyInfo = async () => {
+      try {
+        const response = await getMyInfoAPI();
+        if (response.data.code === 1000) {
+          setUserInfo(response.data.result);
         }
-      };
-      fetchMyInfo();
-    }, []);
+      } catch (error) {
+        console.error("Lỗi lấy thông tin sidebar:", error);
+      }
+    };
+
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        let userRoles = [];
+        if (Array.isArray(decodedToken.roles)) {
+          userRoles = decodedToken.roles;
+        } else if (typeof decodedToken.roles === "string") {
+          userRoles = decodedToken.roles.split(',').map(r => r.trim());
+        }
+        setRoles(userRoles);
+      } catch (error) { 
+        console.error("Lỗi parse token sidebar:", error);
+      }
+    }
+
+    fetchMyInfo();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -44,6 +63,8 @@ const Sidebar = () => {
   };
 
   const defaultAvatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+
+  const hasHODRole = roles.includes("ROLE_HOD") || roles.includes("HOD");
 
   return (
     <div className=" bg-white shadow-xl border-e border-[#0A4174] flex flex-col h-screen sticky top-0">
@@ -91,6 +112,15 @@ const Sidebar = () => {
         >
           Lịch dạy
         </NavLink>
+
+        {hasHODRole && (
+          <button
+            onClick={() => navigate("/department-head/profile")}
+            className="border border-[#e88a18] text-[#e88a18] rounded-full px-5 py-3 inline-block hover:bg-[#e88a18] hover:text-white transition-all duration-300 hover:-translate-y-1 text-center"
+          >
+            Đổi sang Trưởng bộ môn
+          </button>
+        )}
       </div>
 
       <div className="mt-auto pb-6 flex justify-center">

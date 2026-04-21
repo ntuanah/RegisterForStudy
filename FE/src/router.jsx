@@ -104,7 +104,7 @@ const RouterCustom = () => {
         </Route>
       </Route>
 
-      <Route element={<ProtectedRoute allowedRoles={["ROLE_DEPARTMENTHEAD", "ROLE_DEPARTMENT_HEAD"]} />}>
+      <Route element={<ProtectedRoute allowedRoles={["ROLE_HOD", "HOD"]} />}>
         <Route element={<MasterLayoutDepartmentHead />}>
           {departmentHeadRouter.map((item, key) => (
             <Route key={key} path={item.path} element={item.component} />

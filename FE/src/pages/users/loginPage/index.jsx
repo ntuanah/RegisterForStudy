@@ -39,10 +39,11 @@ const LoginPage = () => {
       try {
         const decodedToken = jwtDecode(tokenFromUrl);
         let userRoles = [];
+        
         if (Array.isArray(decodedToken.roles)) {
           userRoles = decodedToken.roles;
         } else if (typeof decodedToken.roles === "string") {
-          userRoles = [decodedToken.roles];
+          userRoles = decodedToken.roles.split(',').map(r => r.trim());
         }
 
         let redirectPath = ROUTERS.USER.HOME;
@@ -55,10 +56,8 @@ const LoginPage = () => {
         ) {
           redirectPath = ROUTERS.DEAN.PROFILE;
         } else if (
-          userRoles.includes("DEPARTMENT_HEAD") ||
-          userRoles.includes("ROLE_DEPARTMENT_HEAD") ||
-          userRoles.includes("ROLE_DEPARTMENTHEAD") ||
-          userRoles.includes("DEPARTMENTHEAD")
+          userRoles.includes("HOD") ||
+          userRoles.includes("ROLE_HOD")
         ) {
           redirectPath = ROUTERS.DEPARTMENTHEAD.PROFILE;
         } else if (
@@ -97,7 +96,12 @@ const LoginPage = () => {
         localStorage.setItem("accessToken", token);
 
         const decodedToken = jwtDecode(token);
-        const userRoles = decodedToken.roles || [];
+        let userRoles = [];
+        if (Array.isArray(decodedToken.roles)) {
+          userRoles = decodedToken.roles;
+        } else if (typeof decodedToken.roles === "string") {
+          userRoles = decodedToken.roles.split(',').map(r => r.trim());
+        }
 
         let redirectPath = ROUTERS.USER.HOME;
 
@@ -106,11 +110,14 @@ const LoginPage = () => {
         } else if (userRoles.includes("ROLE_DEAN")) {
           redirectPath = ROUTERS.DEAN.PROFILE;
         } else if (
-          userRoles.includes("DEPARTMENT_HEAD") ||
-          userRoles.includes("ROLE_DEPARTMENTHEAD")
+          userRoles.includes("HOD") ||
+          userRoles.includes("ROLE_HOD")
         ) {
           redirectPath = ROUTERS.DEPARTMENTHEAD.PROFILE;
-        } else if (userRoles.includes("LECTURER")) {
+        } else if (
+          userRoles.includes("LECTURER") ||
+          userRoles.includes("ROLE_LECTURER")
+        ) {
           redirectPath = ROUTERS.LECTURER.PROFILE;
         } else {
           redirectPath = ROUTERS.USER.PROFILE;

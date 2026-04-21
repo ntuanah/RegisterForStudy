@@ -28,11 +28,11 @@ const EditInformationUser = ({ close, id, refresh }) => {
 
           setFormData({
             fullName: result.fullName || "",
-            role: result.roles?.[0] || "ROLE_USER", // Lấy role đầu tiên trong mảng
+            role: result.roles?.[0] || "ROLE_USER",
             studentCode: result.studentInfo?.studentCode || "",
             majorName: result.studentInfo?.majorName || "",
             gender: result.studentInfo?.gender || "MALE",
-            dob: result.studentInfo?.dob || "", // Nếu BE chưa có thì mặc định rỗng
+            dob: result.studentInfo?.dob || "", 
             cccd: result.studentInfo?.cccd || "",
             emergencyContact: result.studentInfo?.emergencyContact || "",
             email: result.email || "",
@@ -71,7 +71,6 @@ const EditInformationUser = ({ close, id, refresh }) => {
     try {
       setIsLoading(true);
 
-      // Gửi toàn bộ dữ liệu đi. Nếu BE cần biến roles là mảng thì ép kiểu nó thành mảng
       const payload = {
         ...formData,
         roles: [formData.role],
@@ -82,8 +81,8 @@ const EditInformationUser = ({ close, id, refresh }) => {
 
       if (data.code === 1000) {
         toast.success("Cập nhật thông tin thành công!");
-        refresh(); // Load lại bảng
-        close(); // Đóng form
+        refresh(); 
+        close(); 
       } else {
         toast.error(data.message || "Cập nhật thất bại!");
       }

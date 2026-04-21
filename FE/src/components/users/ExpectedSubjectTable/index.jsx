@@ -1,22 +1,72 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getProgramSubjectsAPI } from "../../../service/classSectionService";
 import { toast } from "react-toastify";
+import { getMyInfoAPI } from "../../../service/userService";
 
-const ExpectedSubjectTable = ({ cohortId, majorId }) => {
+const ExpectedSubjectTable = () => {
   const [subjects, setSubjects] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [studentInfo, setStudentInfo] = useState({
+    cohortId: null,
+    majorId: null,
+  });
+
+  const fetchStudentInfo = async () => {
+    try {
+      console.log("1. Đang gọi API lấy thông tin cá nhân...");
+      const response = await getMyInfoAPI();
+      const { data } = response;
+
+      console.log("Kết quả API Info:", data);
+
+      if (data.code === 1000 || data.code === 200) {
+        const info = data.result?.studentInfo;
+        if (info && info.cohortId && info.majorId) {
+          console.log(
+            "-> Đã thấy cohortId:",
+            info.cohortId,
+            "và majorId:",
+            info.majorId,
+          );
+          setStudentInfo({
+            cohortId: info.cohortId,
+            majorId: info.majorId,
+          });
+        } else {
+          toast.error("Không tìm thấy Khóa và Ngành của sinh viên!");
+          setIsLoading(false);
+        }
+      } else {
+        toast.error(data.message || "Không thể lấy thông tin sinh viên");
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Lỗi fetchStudentInfo:", error);
+      toast.error("Lỗi kết nối khi lấy thông tin cá nhân!");
+      setIsLoading(false);
+    }
+  };
 
   const fetchSubjects = async () => {
-    // Nếu chưa có khóa hoặc ngành thì không gọi API
+    const { cohortId, majorId } = studentInfo;
+
     if (!cohortId || !majorId) return;
 
     try {
+      console.log(
+        "2. Đang gọi API lấy danh sách môn học với Khóa:",
+        cohortId,
+        "Ngành:",
+        majorId,
+      );
       setIsLoading(true);
       const response = await getProgramSubjectsAPI(cohortId, majorId);
       const { data } = response;
 
-      if (data.code === 1000) {
-        setSubjects(data.result || []);
+      console.log("Kết quả API Môn học:", data);
+
+      if (data.code === 1000 || data.code === 200) {
+        setSubjects(data.result?.content || []);
       } else {
         toast.error(data.message || "Lỗi lấy danh sách môn học");
         setSubjects([]);
@@ -31,8 +81,14 @@ const ExpectedSubjectTable = ({ cohortId, majorId }) => {
   };
 
   useEffect(() => {
-    fetchSubjects();
-  }, [cohortId, majorId]);
+    fetchStudentInfo();
+  }, []);
+
+  useEffect(() => {
+    if (studentInfo.cohortId && studentInfo.majorId) {
+      fetchSubjects();
+    }
+  }, [studentInfo.cohortId, studentInfo.majorId]);
 
   return (
     <div className="border border-slate-200 rounded-xl shadow-sm mt-5">
@@ -61,8 +117,20 @@ const ExpectedSubjectTable = ({ cohortId, majorId }) => {
         <tbody className="divide-y divide-slate-100 text-sm">
           {isLoading ? (
             <tr>
-              <td colSpan="5" className="px-6 py-4 text-center text-slate-500">
-                Đang tải dữ liệu...
+              <td colSpan="5" className="px-6 py-8 text-center text-slate-500">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-6 h-6 border-4 border-blue-200 border-t-[#0A4174] rounded-full animate-spin"></div>
+                  Đang tải chương trình đào tạo...
+                </div>
+              </td>
+            </tr>
+          ) : !studentInfo.cohortId || !studentInfo.majorId ? (
+            <tr>
+              <td
+                colSpan="5"
+                className="px-6 py-4 text-center text-slate-500 italic"
+              >
+                Không tìm thấy thông tin Khóa/Ngành của bạn.
               </td>
             </tr>
           ) : subjects.length === 0 ? (
@@ -71,7 +139,7 @@ const ExpectedSubjectTable = ({ cohortId, majorId }) => {
                 colSpan="5"
                 className="px-6 py-4 text-center text-slate-500 italic"
               >
-                Chưa có dữ liệu môn học cho Khóa/Ngành này.
+                Chưa có dữ liệu môn học cho Khóa/Ngành của bạn.
               </td>
             </tr>
           ) : (
@@ -81,15 +149,14 @@ const ExpectedSubjectTable = ({ cohortId, majorId }) => {
                 className="hover:bg-slate-50 transition-colors"
               >
                 <td className="px-6 py-4">{index + 1}</td>
-                <td className="px-6 py-4 font-bold text-slate-700">
+                <td className="px-6 py-4 font-bold text-[#0A4174]">
                   {subject.subjectCode}
                 </td>
                 <td className="px-6 py-4 font-medium">{subject.subjectName}</td>
-                <td className="px-6 py-4 text-center font-semibold text-[#0A4174]">
+                <td className="px-6 py-4 text-center font-semibold">
                   {subject.credits}
                 </td>
                 <td className="px-6 py-4">
-                  {/* Hiển thị Bắt buộc / Tự chọn với màu sắc phân biệt */}
                   <span
                     className={`px-3 py-1 rounded-full text-[11px] font-bold ${
                       subject.sectionTitle.toLowerCase().includes("bắt buộc")

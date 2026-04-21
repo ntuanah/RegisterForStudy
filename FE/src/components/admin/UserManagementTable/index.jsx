@@ -54,7 +54,7 @@ const UserManagementTable = ({ searchWord, selectedRole, refreshTrigger }) => {
         if (role === "ROLE_USER") return "Sinh viên";
         if (role === "ROLE_LECTURER") return "Giảng viên";
         if (role === "ROLE_DEAN") return "Trưởng khoa";
-        if (role === "ROLE_DEPARTMENTHEAD") return "Trưởng bộ môn";
+        if (role === "ROLE_HOD") return "Trưởng bộ môn";
         return role;
       })
       .join(", ");

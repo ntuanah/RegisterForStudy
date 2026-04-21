@@ -12,7 +12,13 @@ const ProtectedRoute = ({ allowedRoles }) => {
 
   try {
     const decodedToken = jwtDecode(token);
-    const userRoles = decodedToken.roles || []; 
+    let userRoles = []; 
+
+    if (Array.isArray(decodedToken.roles)) {
+      userRoles = decodedToken.roles;
+    } else if (typeof decodedToken.roles === "string") {
+      userRoles = decodedToken.roles.split(',').map(role => role.trim());
+    }
 
     const hasPermission = userRoles.some((role) => allowedRoles.includes(role));
 
@@ -21,14 +27,15 @@ const ProtectedRoute = ({ allowedRoles }) => {
     } else {
       toast.error("Bạn không có quyền truy cập trang này!");
       
-      if (userRoles.includes("ROLE_ADMIN")) return <Navigate to={ROUTERS.ADMIN.PROFILE} replace />;
-      if (userRoles.includes("ROLE_DEAN")) return <Navigate to={ROUTERS.DEAN.PROFILE} replace />;
-      if (userRoles.includes("ROLE_DEPARTMENT_HEAD") || userRoles.includes("ROLE_DEPARTMENTHEAD")) return <Navigate to={ROUTERS.DEPARTMENTHEAD.PROFILE} replace />;
-      if (userRoles.includes("ROLE_LECTURER")) return <Navigate to={ROUTERS.LECTURER.PROFILE} replace />;
+      if (userRoles.includes("ROLE_ADMIN") || userRoles.includes("ADMIN")) return <Navigate to={ROUTERS.ADMIN.PROFILE} replace />;
+      if (userRoles.includes("ROLE_DEAN") || userRoles.includes("DEAN")) return <Navigate to={ROUTERS.DEAN.PROFILE} replace />;
+      if (userRoles.includes("ROLE_HOD") || userRoles.includes("HOD") || userRoles.includes("ROLE_DEPARTMENTHEAD")) return <Navigate to={ROUTERS.DEPARTMENTHEAD.PROFILE} replace />;
+      if (userRoles.includes("ROLE_LECTURER") || userRoles.includes("LECTURER")) return <Navigate to={ROUTERS.LECTURER.PROFILE} replace />;
       
       return <Navigate to={ROUTERS.USER.HOME} replace />;
     }
   } catch (error) {
+    console.error("Lỗi xác thực Token:", error);
     localStorage.removeItem("accessToken");
     return <Navigate to={ROUTERS.USER.LOGIN} replace />;
   }
