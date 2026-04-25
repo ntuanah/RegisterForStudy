@@ -1,7 +1,10 @@
+import { useState } from "react";
 import MainContent from "./mainContent";
 import SidebarCourseList from "./SidebarCourseList";
 
 const ArrangeClassSchedulePage = () => {
+  const [selectedSubject, setSelectedSubject] = useState(null);
+
   return (
     <div>
       <div className="p-5 border-b border-gray-300 shadow-xl">
@@ -23,11 +26,14 @@ const ArrangeClassSchedulePage = () => {
 
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-3">
-            <SidebarCourseList />
+            <SidebarCourseList
+              selectedSubject={selectedSubject}
+              onSelectSubject={setSelectedSubject}
+            />
           </div>
 
           <div className="col-span-9">
-            <MainContent />
+            <MainContent selectedSubject={selectedSubject} />
           </div>
         </div>
       </div>

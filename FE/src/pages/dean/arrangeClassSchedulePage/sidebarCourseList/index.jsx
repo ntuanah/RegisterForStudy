@@ -1,6 +1,46 @@
+import { useEffect, useState } from "react";
 import CourseItem from "../../../../components/dean/CourseItem";
+import { getCurrentSemesterAPI } from "../../../../service/semesterService";
+import { getOpenedSubjectsInFacultyAPI } from "../../../../service/classSectionService";
+import { toast } from "react-toastify";
 
-const SidebarCourseList = () => {
+const SidebarCourseList = ({ selectedSubject, onSelectSubject }) => {
+  const [subjects, setSubjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const semesterRes = await getCurrentSemesterAPI();
+        const semesterData = semesterRes.data;
+
+        if (semesterData.code === 1000 && semesterData.result?.id) {
+          const currentSemesterId = semesterData.result.id;
+
+          const subjectsRes =
+            await getOpenedSubjectsInFacultyAPI(currentSemesterId);
+          const subjectsData = subjectsRes.data;
+
+          if (subjectsData.code === 1000) {
+            setSubjects(subjectsData.result || []);
+          } else {
+            toast.error("Không thể tải danh sách môn học!");
+          }
+        } else {
+          toast.error("Không tìm thấy học kỳ hiện tại!");
+        }
+      } catch (error) {
+        console.error("Lỗi tải SidebarCourseList:", error);
+        toast.error("Lỗi kết nối máy chủ!");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="p-5 rounded-xl bg-blue-50">
       <h3 className="font-bold mb-4 text-[#5483B3]">Các môn đã mở từ admin</h3>
@@ -24,16 +64,30 @@ const SidebarCourseList = () => {
         />
       </div>
 
-      <div className="flex flex-col gap-3 mt-4 max-h-[700px] overflow-y-auto pr-2">
-        <CourseItem />
-        <CourseItem />
-        <CourseItem />
-        <CourseItem />
-        <CourseItem />
-        <CourseItem />
-        <CourseItem />
-        <CourseItem />
-        <CourseItem />
+      <div className="flex flex-col gap-3 overflow-y-auto p-2 mt-5 custom-scrollbar flex-1">
+        {isLoading ? (
+          <div className="flex justify-center py-8">
+            <div className="w-6 h-6 border-2 border-[#5483B3] border-t-transparent rounded-full"></div>
+          </div>
+        ) : subjects.length === 0 ? (
+          <p className="text-center text-sm text-slate-500 py-5">
+            Chưa có môn học nào được mở.
+          </p>
+        ) : (
+          subjects.map((subject) => (
+            <div
+              key={subject.id}
+              onClick={() => onSelectSubject(subject)}
+              className={
+                selectedSubject?.id === subject.id
+                  ? "ring-1 ring-[#0A4174] rounded-xl"
+                  : ""
+              }
+            >
+              <CourseItem subject={subject} />
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
