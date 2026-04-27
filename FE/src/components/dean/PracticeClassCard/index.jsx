@@ -1,10 +1,35 @@
 import { useState } from "react";
 import SelectRoomTime from "../Modal/SelectRoomTime";
+import { deleteScheduleRoomAPI, deleteScheduleTimeAPI } from "../../../service/scheduleService";
+import { toast } from "react-toastify";
 
-const PracticeClassCard = ({ practiceClass, index }) => {
+const PracticeClassCard = ({ practiceClass, index, refresh }) => {
   const [openSelectRoomTime, setOpenSelectRoomTime] = useState(false);
+
+  const handleDeleteSchedule = async () => {
+    const scheduleId = practiceClass.schedules?.[0]?.id;
+    
+    if (!scheduleId) {
+      return toast.warning("Lớp thực hành này chưa có lịch để xóa!");
+    }
+
+    if (!window.confirm("Bạn có chắc chắn muốn hủy phân công thời gian và phòng của lớp Thực hành này không?")) return;
+
+    try {
+      await deleteScheduleTimeAPI(scheduleId);
+      await deleteScheduleRoomAPI(scheduleId);
+      
+      toast.success("Đã hủy phân công lịch học thành công!");
+      if (refresh) refresh(); 
+
+    } catch (error) {
+      console.error("Lỗi khi xóa lịch:", error);
+      toast.error("Đã xảy ra lỗi khi hủy lịch học!");
+    }
+  };
+
   return (
-    <div className="border border-[#0A4174] border-s-4 p-3 rounded-xl bg-slate-50 shadow-sm transition-all hover:border-blue-400">
+    <div className="border border-[#0A4174] border-s-4 p-3 rounded-xl bg-white shadow-sm transition-all">
       <div className="flex justify-between items-start">
         <div className="flex gap-4">
           <div className="bg-white shadow-sm p-3 rounded-xl text-[#5483B3] h-fit">
@@ -79,7 +104,7 @@ const PracticeClassCard = ({ practiceClass, index }) => {
             Chọn phòng giờ học
           </button>
 
-          <button className="h-fit text-red-500 font-medium border border-red-500 rounded-full p-3 bg-white hover:bg-gray-200 cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 whitespace-nowrap">
+          <button onClick={handleDeleteSchedule} className="h-fit text-red-500 font-medium border border-red-500 rounded-full p-3 bg-white hover:bg-gray-200 cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 whitespace-nowrap">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16px"
@@ -95,7 +120,11 @@ const PracticeClassCard = ({ practiceClass, index }) => {
         </div>
       </div>
       {openSelectRoomTime && (
-        <SelectRoomTime close={() => setOpenSelectRoomTime(false)} />
+        <SelectRoomTime
+          close={() => setOpenSelectRoomTime(false)}
+          scheduleId={practiceClass.schedules?.[0]?.id}
+          refresh={refresh}
+        />
       )}
     </div>
   );

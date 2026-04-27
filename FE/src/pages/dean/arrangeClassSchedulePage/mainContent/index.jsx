@@ -7,28 +7,28 @@ const MainContent = ({ selectedSubject }) => {
   const [classes, setClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchClasses = async () => {
-      if (!selectedSubject) return;
-      
-      try {
-        setIsLoading(true);
-        const response = await getClassSectionsBySubjectAPI(selectedSubject.id);
-        const { data } = response;
-        if (data.code === 1000) {
-          setClasses(data.result || []);
-        } else {
-          toast.error("Không lấy được danh sách lớp học phần!");
-          setClasses([]);
-        }
-      } catch (error) {
-        toast.error("Lỗi khi tải chi tiết lớp học phần!");
+  const fetchClasses = async () => {
+    if (!selectedSubject) return;
+    
+    try {
+      setIsLoading(true);
+      const response = await getClassSectionsBySubjectAPI(selectedSubject.id);
+      const { data } = response;
+      if (data.code === 1000 || data.code === 200) {
+        setClasses(data.result || []);
+      } else {
+        toast.error("Không lấy được danh sách lớp học phần!");
         setClasses([]);
-      } finally {
-        setIsLoading(false);
       }
-    };
+    } catch (error) {
+      toast.error("Lỗi khi tải chi tiết lớp học phần!");
+      setClasses([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchClasses();
   }, [selectedSubject]);
 
@@ -40,6 +40,7 @@ const MainContent = ({ selectedSubject }) => {
       </div>
     );
   }
+
   return (
     <div className="p-5 rounded-xl bg-blue-50 h-full max-h-[800px] flex flex-col">
       <div className=" pb-4 mb-4">
@@ -65,6 +66,7 @@ const MainContent = ({ selectedSubject }) => {
               key={parentClass.id} 
               theoryClass={parentClass} 
               index={index + 1} 
+              refresh={fetchClasses}
             />
           ))
         )}

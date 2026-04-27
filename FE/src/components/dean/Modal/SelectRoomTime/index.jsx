@@ -1,11 +1,71 @@
 import { useEffect, useMemo, useState } from "react";
 import { getAllRoomsAPI } from "../../../../service/roomService";
 import { toast } from "react-toastify";
+import {
+  getScheduleByIdAPI,
+  updateScheduleRoomAPI,
+  updateScheduleTimeAPI,
+} from "../../../../service/scheduleService";
 
-const SelectRoomTime = ({ close }) => {
+const DAYS_IN_WEEK = [
+  { value: 2, name: "Thứ 2" },
+  { value: 3, name: "Thứ 3" },
+  { value: 4, name: "Thứ 4" },
+  { value: 5, name: "Thứ 5" },
+  { value: 6, name: "Thứ 6" },
+  { value: 7, name: "Thứ 7" },
+  { value: 8, name: "Chủ nhật" },
+];
+
+const SelectRoomTime = ({ close, scheduleId, refresh }) => {
   const [activeTab, setActiveTab] = useState("A");
   const [rooms, setRooms] = useState([]);
   const [isLoadingRooms, setIsLoadingRooms] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [selectedPeriods, setSelectedPeriods] = useState([]);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
+
+  useEffect(() => {
+    const fetchScheduleDetails = async () => {
+      if (!scheduleId) return;
+      try {
+        const response = await getScheduleByIdAPI(scheduleId);
+        const { data } = response;
+
+        if (data.code === 1000 || data.code === 200) {
+          const schedule = data.result;
+
+          if (schedule.dayOfWeek) {
+            const dayObj = DAYS_IN_WEEK.find(
+              (d) => d.value === schedule.dayOfWeek,
+            );
+            if (dayObj) setSelectedDay(dayObj);
+          }
+
+          if (schedule.startPeriod && schedule.endPeriod) {
+            const periods = [];
+            for (let i = schedule.startPeriod; i <= schedule.endPeriod; i++) {
+              periods.push(i);
+            }
+            setSelectedPeriods(periods);
+          }
+
+          if (schedule.roomId) {
+            setSelectedRoomId(schedule.roomId);
+            if (schedule.roomName) {
+              const building = schedule.roomName.charAt(0).toUpperCase();
+              setActiveTab(building);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Lỗi lấy chi tiết lịch:", error);
+      }
+    };
+
+    fetchScheduleDetails();
+  }, [scheduleId]);
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -62,6 +122,72 @@ const SelectRoomTime = ({ close }) => {
       setActiveTab(buildingTabs[0]);
     }
   }, [buildingTabs, activeTab]);
+
+  const handleTogglePeriod = (period) => {
+    if (selectedPeriods.includes(period)) {
+      setSelectedPeriods(selectedPeriods.filter((p) => p !== period));
+    } else {
+      setSelectedPeriods([...selectedPeriods, period]);
+    }
+  };
+
+  const handleSaveSchedule = async () => {
+    if (!scheduleId) {
+      toast.error("Không tìm thấy ID Lịch học!");
+      return;
+    }
+
+    if (!selectedDay && selectedPeriods.length === 0 && !selectedRoomId) {
+      toast.warning("Vui lòng chọn Thời gian hoặc Phòng học trước khi lưu!");
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      let successCount = 0;
+
+      if (selectedDay && selectedPeriods.length > 0) {
+        const startPeriod = Math.min(...selectedPeriods);
+        const endPeriod = Math.max(...selectedPeriods);
+
+        const timePayload = {
+          dayOfWeek: selectedDay.value,
+          dayOfWeekName: selectedDay.name,
+          startPeriod: startPeriod,
+          endPeriod: endPeriod,
+        };
+
+        const timeRes = await updateScheduleTimeAPI(scheduleId, timePayload);
+        if (timeRes.data.code === 1000 || timeRes.data.code === 200) {
+          successCount++;
+        } else {
+          toast.error(timeRes.data.message || "Lỗi khi lưu thời gian!");
+        }
+      }
+
+      if (selectedRoomId) {
+        const roomPayload = { roomId: selectedRoomId };
+        const roomRes = await updateScheduleRoomAPI(scheduleId, roomPayload);
+        if (roomRes.data.code === 1000 || roomRes.data.code === 200) {
+          successCount++;
+        } else {
+          toast.error(roomRes.data.message || "Lỗi khi lưu phòng học!");
+        }
+      }
+
+      if (successCount > 0) {
+        toast.success("Cập nhật lịch học thành công!");
+        if (refresh) refresh();
+        close();
+      }
+    } catch (error) {
+      console.error("Lỗi khi lưu:", error);
+      toast.error(error.response?.data?.message || "Lỗi kết nối Server!");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white w-1/2 rounded-xl p-6 border border-[#0A4174] max-h-[85vh] flex flex-col">
@@ -98,19 +224,18 @@ const SelectRoomTime = ({ close }) => {
               </h3>
 
               <div className="flex gap-2 flex-wrap">
-                {[
-                  "Thứ 2",
-                  "Thứ 3",
-                  "Thứ 4",
-                  "Thứ 5",
-                  "Thứ 6",
-                  "Thứ 7",
-                ].map((day) => (
+                {DAYS_IN_WEEK.map((day) => (
                   <button
-                    key={day}
-                    className="border border-slate-300 px-8 py-2 rounded-lg font-semibold cursor-pointer hover:bg-slate-100 hover:border-[#0A4174] transition-colors"
+                    key={day.value}
+                    onClick={() => setSelectedDay(day)}
+                    className={`border px-8 py-2 rounded-lg font-semibold cursor-pointer transition-colors
+                      ${
+                        selectedDay?.value === day.value
+                          ? "bg-[#5483B3] border-[#0A4174] text-white shadow-md"
+                          : "border-slate-300 hover:bg-slate-100 hover:border-[#0A4174] text-slate-700"
+                      }`}
                   >
-                    {day}
+                    {day.name}
                   </button>
                 ))}
               </div>
@@ -121,15 +246,19 @@ const SelectRoomTime = ({ close }) => {
                 <h3 className="text-lg text-[#5483B3] font-semibold mb-4 flex items-center">
                   2. Chọn chọn tiết học
                 </h3>
-
-
               </div>
 
               <div className="grid grid-cols-4 lg:grid-cols-6 gap-2">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((period) => (
                   <button
                     key={period}
-                    className="border border-slate-300 px-3 py-2 rounded-lg font-semibold cursor-pointer hover:bg-slate-100 hover:border-[#0A4174] transition-colors"
+                    onClick={() => handleTogglePeriod(period)}
+                    className={`border px-3 py-2 rounded-lg font-semibold cursor-pointer transition-colors
+                      ${
+                        selectedPeriods.includes(period)
+                          ? "bg-[#5483B3] border-[#0A4174] text-white shadow-md"
+                          : "border-slate-300 hover:bg-slate-100 hover:border-[#0A4174] text-slate-700"
+                      }`}
                   >
                     Tiết {period}
                   </button>
@@ -184,29 +313,29 @@ const SelectRoomTime = ({ close }) => {
 
                             <div className="grid grid-cols-5 gap-4">
                               {groupedRooms[activeTab][floor].map((room) => {
+                                const isSelected = selectedRoomId === room.id;
                                 const isBusy = false; 
 
                                 return (
                                   <button
                                     key={room.id}
+                                    onClick={() => setSelectedRoomId(room.id)}
                                     className={`h-fit border rounded-xl px-3 py-3 text-center transition-all cursor-pointer
                                     ${
-                                      isBusy
-                                        ? "border-red-200 bg-red-50 hover:bg-red-100 opacity-70"
+                                      isSelected
+                                        ? "border-[#0A4174] bg-[#5483B3] shadow-lg transform -translate-y-1"
                                         : "border-slate-300 bg-white hover:border-[#0A4174] hover:shadow-md"
                                     }`}
                                   >
                                     <div
-                                      className={`text-lg font-black tracking-wider ${isBusy ? "text-red-500" : "text-[#0A4174]"}`}
+                                      className={`text-lg font-black tracking-wider ${isSelected ? "text-white" : "text-[#0A4174]"}`}
                                     >
                                       {room.name}
                                     </div>
                                     <div
-                                      className={`text-xs mt-1 font-medium ${isBusy ? "text-red-400" : "text-slate-500"}`}
+                                      className={`text-xs mt-1 font-medium ${isSelected ? "text-blue-100" : "text-slate-500"}`}
                                     >
-                                      {isBusy
-                                        ? "Đang bận"
-                                        : `${room.capacity} chỗ`}
+                                      {room.capacity} chỗ
                                     </div>
                                   </button>
                                 );
@@ -220,23 +349,32 @@ const SelectRoomTime = ({ close }) => {
             </div>
 
             <div className="flex justify-end ">
-              <button className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18px"
-                  height="18px"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="1.5"
-                    d="M16.25 21v-4.765a1.59 1.59 0 0 0-1.594-1.588H9.344a1.59 1.59 0 0 0-1.594 1.588V21m8.5-17.715v2.362a1.59 1.59 0 0 1-1.594 1.588H9.344A1.59 1.59 0 0 1 7.75 5.647V3m8.5.285A3.2 3.2 0 0 0 14.93 3H7.75m8.5.285c.344.156.661.374.934.645l2.382 2.375A3.17 3.17 0 0 1 20.5 8.55v9.272A3.18 3.18 0 0 1 17.313 21H6.688A3.18 3.18 0 0 1 3.5 17.823V6.176A3.18 3.18 0 0 1 6.688 3H7.75"
-                  />
-                </svg>
-                Lưu
+              <button
+                onClick={handleSaveSchedule}
+                disabled={isSaving}
+                className={`h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 flex items-center gap-2 transition-all duration-300 hover:-translate-y-1
+                  ${isSaving ? "bg-gray-400 cursor-not-allowed" : "bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer"}`}
+              >
+                {isSaving ? (
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18px"
+                    height="18px"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.5"
+                      d="M16.25 21v-4.765a1.59 1.59 0 0 0-1.594-1.588H9.344a1.59 1.59 0 0 0-1.594 1.588V21m8.5-17.715v2.362a1.59 1.59 0 0 1-1.594 1.588H9.344A1.59 1.59 0 0 1 7.75 5.647V3m8.5.285A3.2 3.2 0 0 0 14.93 3H7.75m8.5.285c.344.156.661.374.934.645l2.382 2.375A3.17 3.17 0 0 1 20.5 8.55v9.272A3.18 3.18 0 0 1 17.313 21H6.688A3.18 3.18 0 0 1 3.5 17.823V6.176A3.18 3.18 0 0 1 6.688 3H7.75"
+                    />
+                  </svg>
+                )}
+                {isSaving ? "Đang lưu..." : "Lưu"}
               </button>
             </div>
           </div>
