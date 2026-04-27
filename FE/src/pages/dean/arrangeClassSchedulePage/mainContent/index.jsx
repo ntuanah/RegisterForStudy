@@ -3,7 +3,7 @@ import TheoryClassCard from "../../../../components/dean/TheoryClassCard";
 import { getClassSectionsBySubjectAPI } from "../../../../service/classSectionService";
 import { toast } from "react-toastify";
 
-const MainContent = ({ selectedSubject }) => {
+const MainContent = ({ selectedSubject, refreshKey }) => {
   const [classes, setClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,7 +30,7 @@ const MainContent = ({ selectedSubject }) => {
 
   useEffect(() => {
     fetchClasses();
-  }, [selectedSubject]);
+  }, [selectedSubject, refreshKey]);
 
   if (!selectedSubject) {
     return (

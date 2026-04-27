@@ -22,3 +22,13 @@ export const updateStudentProfileAPI = async (id, data) => {
   return await axiosClient.put(`/students/${id}/profile`, data);
 };
 
+export const exportStudentsToPdfAPI = async () => {
+  return await axiosClient.get("/students/export-pdf", {
+    responseType: "blob", 
+  });
+};
+
+export const getMyProgramTreeAPI = async () => {
+  return await axiosClient.get("/students/my-program-tree");
+};
+

@@ -8,12 +8,14 @@ import {
   importLecturerExcelAPI,
 } from "../../../service/authService";
 import { toast } from "react-toastify";
+import { exportStudentsToPdfAPI } from "../../../service/userService";
 
 const UserManagementPage = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [isImportingStudent, setIsImportingStudent] = useState(false); 
+  const [isImportingStudent, setIsImportingStudent] = useState(false);
   const [isImportingLecturer, setIsImportingLecturer] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const [searchWord, setSearchWord] = useState("");
   const [selectedRole, setSelectedRole] = useState("ALL");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -32,6 +34,31 @@ const UserManagementPage = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleExportPdf = async () => {
+    try {
+      setIsExporting(true);
+      const response = await exportStudentsToPdfAPI();
+
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Danh_Sach_Sinh_Vien.pdf");
+      document.body.appendChild(link);
+      link.click();
+
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Xuất dữ liệu sinh viên thành công!");
+    } catch (error) {
+      console.error("Lỗi xuất PDF:", error);
+      toast.error("Có lỗi xảy ra khi xuất dữ liệu!");
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   // 1. Hàm kích hoạt chọn file
   const handleTriggerStudentFileInput = () => {
     if (studentFileInputRef.current) {
@@ -42,7 +69,7 @@ const UserManagementPage = () => {
   const handleStudentFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
-    event.target.value = null; 
+    event.target.value = null;
 
     try {
       setIsImportingStudent(true);
@@ -51,7 +78,7 @@ const UserManagementPage = () => {
 
       if (data.code === 1000) {
         toast.success("Thêm sinh viên thành công!");
-        setRefreshTrigger((prev) => prev + 1); 
+        setRefreshTrigger((prev) => prev + 1);
       } else {
         toast.error(
           data.message ||
@@ -83,7 +110,7 @@ const UserManagementPage = () => {
 
       if (data.code === 1000) {
         toast.success(data.message || "Xử lý file Excel giảng viên hoàn tất!");
-        setRefreshTrigger(prev => prev + 1);
+        setRefreshTrigger((prev) => prev + 1);
       } else {
         toast.error(
           data.message ||
@@ -172,23 +199,36 @@ const UserManagementPage = () => {
           </div>
 
           <div className="flex gap-6">
-            <button className="h-fit text-[#5483B3] font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-white hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18px"
-                height="18px"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="currentColor"
-                  d="M5.552 20.968a2.577 2.577 0 0 1-2.5-2.73c-.012-2.153 0-4.306 0-6.459a.5.5 0 0 1 1 0c0 2.2-.032 4.4 0 6.6c.016 1.107.848 1.589 1.838 1.589h12.463A1.55 1.55 0 0 0 19.825 19a3 3 0 0 0 .1-1.061v-6.16a.5.5 0 0 1 1 0c0 2.224.085 4.465 0 6.687a2.567 2.567 0 0 1-2.67 2.5Z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M12.337 3.176a.46.46 0 0 0-.311-.138q-.021.002-.043-.006c-.022-.008-.027 0-.041.006a.46.46 0 0 0-.312.138L7.961 6.845a.5.5 0 0 0 .707.707l2.816-2.815v10.742a.5.5 0 0 0 1 0V4.737L15.3 7.552a.5.5 0 0 0 .707-.707Z"
-                />
-              </svg>
-              Xuất dữ liệu
+            <button
+              onClick={handleExportPdf}
+              disabled={isExporting}
+              className={`h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
+                ${
+                  isExporting
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-white text-[#5483B3] hover:bg-gray-200 cursor-pointer hover:-translate-y-1"
+                }`}
+            >
+              {isExporting ? (
+                <div className="w-4 h-4 border-2 border-[#5483B3] border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18px"
+                  height="18px"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M5.552 20.968a2.577 2.577 0 0 1-2.5-2.73c-.012-2.153 0-4.306 0-6.459a.5.5 0 0 1 1 0c0 2.2-.032 4.4 0 6.6c.016 1.107.848 1.589 1.838 1.589h12.463A1.55 1.55 0 0 0 19.825 19a3 3 0 0 0 .1-1.061v-6.16a.5.5 0 0 1 1 0c0 2.224.085 4.465 0 6.687a2.567 2.567 0 0 1-2.67 2.5Z"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M12.337 3.176a.46.46 0 0 0-.311-.138q-.021.002-.043-.006c-.022-.008-.027 0-.041.006a.46.46 0 0 0-.312.138L7.961 6.845a.5.5 0 0 0 .707.707l2.816-2.815v10.742a.5.5 0 0 0 1 0V4.737L15.3 7.552a.5.5 0 0 0 .707-.707Z"
+                  />
+                </svg>
+              )}
+              {isExporting ? "Đang xuất..." : "Xuất dữ liệu"}
             </button>
 
             <input

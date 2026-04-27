@@ -19,3 +19,8 @@ export const deleteScheduleTimeAPI = async (scheduleId) => {
 export const deleteScheduleRoomAPI = async (scheduleId) => {
   return await axiosClient.delete(`/schedules/${scheduleId}/room`);
 };
+
+export const autoAssignScheduleAPI = async (semesterId) => {
+  return await axiosClient.post(`/schedules/semester/${semesterId}/auto-assign`);
+};
+
