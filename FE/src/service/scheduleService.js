@@ -24,3 +24,7 @@ export const autoAssignScheduleAPI = async (semesterId) => {
   return await axiosClient.post(`/schedules/semester/${semesterId}/auto-assign`);
 };
 
+export const getPendingLecturerSubjectsAPI = async (semesterId) => {
+  return await axiosClient.get(`/schedules/hod/pending-lecturers?semesterId=${semesterId}`);
+};
+
