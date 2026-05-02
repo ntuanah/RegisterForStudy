@@ -28,3 +28,14 @@ export const getPendingLecturerSubjectsAPI = async (semesterId) => {
   return await axiosClient.get(`/schedules/hod/pending-lecturers?semesterId=${semesterId}`);
 };
 
+export const getSuggestedLecturersAPI = async (scheduleId) => {
+  return await axiosClient.get(`/schedules/${scheduleId}/suggest-lecturers`);
+};
+
+export const assignLecturerAPI = async (scheduleId, data) => {
+  return await axiosClient.patch(`/schedules/${scheduleId}/lecturer`, data);
+};
+
+export const removeLecturerAPI = async (scheduleId) => {
+  return await axiosClient.delete(`/schedules/${scheduleId}/lecturer`);
+};
