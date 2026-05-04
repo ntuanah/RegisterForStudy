@@ -83,6 +83,23 @@ const ClassSectionSubTable = ({ subjectId }) => {
     }
   };
 
+  const formatScheduleInfo = (cls) => {
+    const schedule = cls.schedules?.[0];
+
+    if (!schedule) {
+      return "Chưa xếp lịch";
+    }
+
+    const lecturer = schedule.lecturerName || "Chưa xếp GV";
+    const room = schedule.roomName || "Chưa xếp phòng";
+    const day = schedule.dayOfWeekName || "Chưa xếp thứ";
+    const time = (schedule.startPeriod && schedule.endPeriod) 
+      ? `Tiết ${schedule.startPeriod}-${schedule.endPeriod}`
+      : "Chưa xếp giờ";
+
+    return `${lecturer}, ${room}, ${day}, ${time}`;
+  };
+
   if (isLoading) {
     return (
       <div className="p-8 text-center text-sm text-slate-500 bg-slate-50">
@@ -136,7 +153,7 @@ const ClassSectionSubTable = ({ subjectId }) => {
                     />
                   ) : (
                     <span className="font-bold text-slate-800 text-lg">
-                      {parentClass.sectionCode}
+                      {parentClass.sectionCode} - {formatScheduleInfo(parentClass)}
                     </span>
                   )}
                 </div>
@@ -295,7 +312,7 @@ const ClassSectionSubTable = ({ subjectId }) => {
                               />
                             ) : (
                               <div className="font-black text-[#5483B3]">
-                                {child.sectionCode}
+                                {child.sectionCode} - {formatScheduleInfo(child)}
                               </div>
                             )}
 

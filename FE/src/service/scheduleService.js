@@ -39,3 +39,17 @@ export const assignLecturerAPI = async (scheduleId, data) => {
 export const removeLecturerAPI = async (scheduleId) => {
   return await axiosClient.delete(`/schedules/${scheduleId}/lecturer`);
 };
+
+export const clearAutoAssignScheduleAPI = async (semesterId) => {
+  return await axiosClient.delete(`/schedules/semester/${semesterId}/auto-assign`);
+};
+
+export const initScheduleAPI = async () => {
+  return await axiosClient.post(`/schedules`);
+};
+
+export const exportSemesterSchedulePdfAPI = async (semesterId) => {
+  return await axiosClient.get(`/schedules/semester/${semesterId}/export-pdf`, {
+    responseType: "blob", 
+  });
+};

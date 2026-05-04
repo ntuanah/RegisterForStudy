@@ -3,12 +3,14 @@ import MainContent from "./mainContent";
 import SidebarCourseList from "./SidebarCourseList";
 import { getCurrentSemesterAPI } from "../../../service/semesterService";
 import { toast } from "react-toastify";
-import { autoAssignScheduleAPI } from "../../../service/scheduleService";
+import { autoAssignScheduleAPI, clearAutoAssignScheduleAPI } from "../../../service/scheduleService";
 
 const ArrangeClassSchedulePage = () => {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [isAutoAssigning, setIsAutoAssigning] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+
   const handleAutoAssign = async () => {
     if (
       !window.confirm(
@@ -60,6 +62,38 @@ const ArrangeClassSchedulePage = () => {
     }
   };
 
+  const handleClearAutoAssign = async () => {
+    if (!window.confirm("Hệ thống sẽ XOÁ TOÀN BỘ lịch và phòng đã xếp trong học kỳ này. Bạn có chắc chắn không?")) {
+      return;
+    }
+
+    try {
+      setIsClearing(true);
+      
+      const semesterRes = await getCurrentSemesterAPI();
+      if (semesterRes.data.code !== 1000 || !semesterRes.data.result?.id) {
+        toast.error("Không tìm thấy thông tin học kỳ hiện tại!");
+        return;
+      }
+      
+      const currentSemesterId = semesterRes.data.result.id;
+      
+      const clearRes = await clearAutoAssignScheduleAPI(currentSemesterId);
+      
+      if (clearRes.data.code === 1000 || clearRes.data.code === 200) {
+        toast.success("Xóa kết quả xếp lịch thành công!");
+        setRefreshKey((prev) => prev + 1); 
+      } else {
+        toast.error(clearRes.data.message || "Lỗi khi xóa lịch!");
+      }
+    } catch (error) {
+      console.error("Lỗi Clear Auto Assign:", error);
+      toast.error("Đã xảy ra lỗi kết nối khi xóa lịch!");
+    } finally {
+      setIsClearing(false);
+    }
+  };
+
   return (
     <div>
       <div className="p-5 border-b border-gray-300 shadow-xl">
@@ -79,7 +113,28 @@ const ArrangeClassSchedulePage = () => {
               Sắp xếp lịch và phòng học cho các học phần.
             </p>
           </div>
-          <div>
+          <div className="flex gap-4">
+            <button
+              onClick={handleClearAutoAssign}
+              disabled={isClearing || isAutoAssigning}
+              className={`h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2 shadow-sm
+                ${isClearing 
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed border-gray-300" 
+                  : "bg-white text-[#5483B3] hover:bg-gray-200 cursor-pointer hover:-translate-y-1"}`}
+            >
+              {isClearing ? (
+                <div className="w-5 h-5 border-2 border-[#5483B3] border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24">
+                  <g fill="none">
+                    <path d="M22.274 11.545L14.03 3.303l-8.24 8.242l8.242 8.243z" />
+                    <path stroke="currentColor" strokeLinecap="square" strokeWidth="2" d="m5.788 11.545l8.243-8.242l8.243 8.242l-8.243 8.243m-8.243-8.243l8.243 8.243m-8.243-8.243l-2 2a3 3 0 0 0 0 4.243l3.374 3.374h5.495m1.374-1.374l-1.374 1.374m0 0H19" />
+                  </g>
+                </svg>
+              )}
+              <span>{isClearing ? "Đang xóa..." : "Xoá xếp lịch tự động"}</span>
+            </button>
+            
             <button
               onClick={handleAutoAssign}
               disabled={isAutoAssigning}
@@ -124,7 +179,10 @@ const ArrangeClassSchedulePage = () => {
           </div>
 
           <div className="col-span-9">
-            <MainContent selectedSubject={selectedSubject} refreshKey={refreshKey}/>
+            <MainContent
+              selectedSubject={selectedSubject}
+              refreshKey={refreshKey}
+            />
           </div>
         </div>
       </div>
