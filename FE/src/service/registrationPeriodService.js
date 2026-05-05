@@ -15,3 +15,4 @@ export const updateRegistrationPeriodAPI = async (id, data) => {
 export const deleteRegistrationPeriodAPI = async (id) => {
   return await axiosClient.delete(`/registration-periods/${id}`);
 };
+

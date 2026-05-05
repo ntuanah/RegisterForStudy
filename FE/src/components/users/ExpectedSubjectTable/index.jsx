@@ -107,7 +107,7 @@ const ExpectedSubjectTable = () => {
             <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-30">
               Số tín
             </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50">
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-60">
               Yêu cầu
             </th>
           </tr>
