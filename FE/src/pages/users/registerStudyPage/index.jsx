@@ -24,7 +24,6 @@ const RegisterStudyPage = () => {
         </div>
 
         <CourseList />
-        <CourseList />
 
         <RegisterResult />
       </div>
