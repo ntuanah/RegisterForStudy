@@ -46,7 +46,7 @@ const TrainingProgramPage = () => {
           </h1>
           {programData && (
              <div className="flex gap-4 mt-3">
-               <span className="bg-blue-50 text-[#5483B3] font-semibold px-4 py-1.5 rounded-md border border-blue-100">
+               <span className="bg-blue-50 text-[#5483B3] font-semibold px-4 py-1.5 rounded-full border border-blue-100">
                  Thời gian: {programData.durationYears} năm
                </span>
                {programData.minTotalCredits && (

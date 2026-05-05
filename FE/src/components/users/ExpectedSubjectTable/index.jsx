@@ -13,7 +13,6 @@ const ExpectedSubjectTable = () => {
 
   const fetchStudentInfo = async () => {
     try {
-      console.log("1. Đang gọi API lấy thông tin cá nhân...");
       const response = await getMyInfoAPI();
       const { data } = response;
 
@@ -108,7 +107,7 @@ const ExpectedSubjectTable = () => {
             <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-30">
               Số tín
             </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-30">
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50">
               Yêu cầu
             </th>
           </tr>
@@ -149,18 +148,18 @@ const ExpectedSubjectTable = () => {
                 className="hover:bg-slate-50 transition-colors"
               >
                 <td className="px-6 py-4">{index + 1}</td>
-                <td className="px-6 py-4 font-bold text-[#0A4174]">
+                <td className="px-6 py-4 ">
                   {subject.subjectCode}
                 </td>
                 <td className="px-6 py-4 font-medium">{subject.subjectName}</td>
-                <td className="px-6 py-4 text-center font-semibold">
+                <td className="px-6 py-4 ">
                   {subject.credits}
                 </td>
                 <td className="px-6 py-4">
                   <span
                     className={`px-3 py-1 rounded-full text-[11px] font-bold ${
                       subject.sectionTitle.toLowerCase().includes("bắt buộc")
-                        ? "bg-blue-100 text-blue-700"
+                        ? "bg-blue-100 text-[#5483B3]"
                         : "bg-orange-100 text-orange-700"
                     }`}
                   >

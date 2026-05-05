@@ -53,3 +53,7 @@ export const exportSemesterSchedulePdfAPI = async (semesterId) => {
     responseType: "blob", 
   });
 };
+
+export const getLecturerScheduleAPI = async (lecturerCode, semesterId, page = 1, size = 12) => {
+  return await axiosClient.get(`/schedules/lecturer/${lecturerCode}?semesterId=${semesterId}&page=${page - 1}&size=${size}`);
+};

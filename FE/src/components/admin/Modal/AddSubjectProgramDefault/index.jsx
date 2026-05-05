@@ -17,7 +17,7 @@ const AddSubjectProgramDefault = ({ close, sectionId, refresh }) => {
     const fetchSubjects = async () => {
       try {
         setIsFetching(true);
-        const response = await getAllSubjectsAPI();
+        const response = await getAllSubjectsAPI(0, 1000);
 
         if (response.data.code === 1000 || response.data.code === 200) {
           const rawData = response.data.result;

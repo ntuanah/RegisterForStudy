@@ -1,7 +1,7 @@
 import axiosClient from '../utils/axiosClient';
 
-export const getAllSubjectsAPI = async (page = 0) => {
-    return await axiosClient.get(`/subjects?page=${page}`);
+export const getAllSubjectsAPI = async (page = 0, size = 10) => {
+    return await axiosClient.get(`/subjects?page=${page}&size=${size}`);
 };
 
 export const searchSubjectAPI = async (keyword = '', page = 0) => {
