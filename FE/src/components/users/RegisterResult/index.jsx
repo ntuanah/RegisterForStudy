@@ -107,7 +107,7 @@ const RegisterResult = ({ refreshTrigger }) => {
                     <td className="px-6 py-4">{formatComponentType(section.subjectComponentType)}</td>
                     <td className="px-6 py-4 ">{section.sectionCode}</td>
                     <td className="px-6 py-4 ">{section.subjectName}</td>
-                    <td className="px-6 py-4 text-center">-</td>
+                    <td className="px-6 py-4 text-center">{section.credit}</td>
                     <td className="px-6 py-4 text-slate-700">{formatLecturers(section.schedules)}</td>
                     <td className="px-6 py-4 text-slate-600">{formatSchedules(section.schedules)}</td>
                     <td className="px-6 py-4 text-right flex justify-end">

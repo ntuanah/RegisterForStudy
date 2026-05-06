@@ -65,7 +65,7 @@ const RegisterStudyPage = () => {
           <div className="bg-blue-50 border border-[#5483B3] p-10 rounded-2xl shadow-lg max-w-2xl w-full text-center space-y-6">
             
             <div className="space-y-2">
-              <h2 className="text-2xl font-black text-[#5483B3] uppercase">
+              <h2 className="text-2xl font-black text-[#5483B3]">
                 Chưa đến thời hạn đăng ký
               </h2>
               <p className="text-slate-600 font-medium ">
