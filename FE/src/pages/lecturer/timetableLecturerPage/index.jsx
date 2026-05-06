@@ -87,9 +87,9 @@ const TimetableLecturerPage = () => {
         </h2>
       </div>
 
-      <div className="p-8">
-        <div className="border border-slate-200 rounded-xl shadow-sm mt-5">
-          <table className="w-full text-left border-collapse">
+      <div className="p-4 md:p-8">
+        <div className="border border-slate-200 rounded-xl shadow-sm mt-5 overflow-x-auto">
+          <table className="w-full min-w-[1000px] text-left border-collapse">
             <thead>
               <tr className="bg-blue-50">
                 <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400">

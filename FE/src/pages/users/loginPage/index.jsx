@@ -152,10 +152,10 @@ const LoginPage = () => {
 
   return (
     <div
-      className="min-h-screen flex justify-between items-center bg-cover bg-center px-45"
+      className="min-h-screen flex justify-center lg:justify-between items-center bg-cover bg-center px-4 lg:px-45"
       style={{ backgroundImage: `url(${BG})` }}
     >
-      <div>
+      <div className="hidden lg:block">
         <img src={Logo} alt="" className="w-100" />
         <p className="text-8xl text-[#5483B3] text-shadow-2xs font-bold">
           Chào mừng
@@ -169,7 +169,7 @@ const LoginPage = () => {
           dễ dàng theo dõi, quản lý và chủ động hơn trong suốt quá trình học.
         </p>
       </div>
-      <div className="w-[550px] bg-white/10 rounded-3xl p-10 shadow-2xl border border-white/30">
+      <div className="w-full max-w-[550px] bg-white/10 rounded-3xl p-6 sm:p-10 shadow-2xl border border-white/30">
         <div className="flex items-center mb-6">
           <img src={Logo} alt="Logo" className="w-30 border-e me-2 pe-2" />
           <p className="text-center text-[#0A4174] font-bold text-2xl">

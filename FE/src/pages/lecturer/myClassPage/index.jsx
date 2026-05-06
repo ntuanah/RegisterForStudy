@@ -101,7 +101,7 @@ const MyClassPage = () => {
               Không có lớp học nào được phân công trong học kỳ này.
             </div>
           ) : (
-            <div className="p-10 grid grid-cols-4 gap-6">
+            <div className="p-4 md:p-10 grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
               {classes.map((cls) => (
                 <MyClassCard key={cls.id} classData={cls} />
               ))}
