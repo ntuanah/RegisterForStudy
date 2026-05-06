@@ -4,7 +4,7 @@ import { getCurrentSemesterAPI } from "../../../service/semesterService";
 import { getMyInfoAPI } from "../../../service/userService";
 import { getProgramSubjectsAPI } from "../../../service/classSectionService";
 
-const CourseList = () => {
+const CourseList = ({ onRegisterSuccess }) => {
   const [openSubjectId, setOpenSubjectId] = useState(null);
 
   const [subjects, setSubjects] = useState([]);
@@ -178,6 +178,7 @@ const CourseList = () => {
                           <CourseDetail
                             subjectId={subject.subjectId}
                             semesterId={semesterId}
+                            onRegisterSuccess={onRegisterSuccess}
                           />
                         </td>
                       </tr>

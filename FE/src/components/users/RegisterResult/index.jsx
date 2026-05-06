@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { cancelEnrollmentAPI, getMyTimetableAPI } from "../../../service/registrationService";
 import { toast } from "react-toastify";
 
-const RegisterResult = () => {
+const RegisterResult = ({ refreshTrigger }) => {
   const [registeredClasses, setRegisteredClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeletingId, setIsDeletingId] = useState(null);
@@ -23,7 +23,7 @@ const RegisterResult = () => {
 
   useEffect(() => {
     fetchMyTimetable();
-  }, []);
+  }, [refreshTrigger]);
 
   const handleCancelEnrollment = async (classSectionId) => {
     if (!window.confirm("Bạn có chắc chắn muốn hủy đăng ký lớp học phần này?")) return;

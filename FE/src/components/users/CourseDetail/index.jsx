@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getClassSectionsBySubjectAPI } from "../../../service/classSectionService";
+import { toast } from "react-toastify";
+import { enrollClassAPI } from "../../../service/registrationService";
 
-const CourseDetail = ({ subjectId, semesterId }) => {
+const CourseDetail = ({ subjectId, semesterId, onRegisterSuccess }) => {
   const [classSections, setClassSections] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [selectedTheory, setSelectedTheory] = useState(null);
   const [selectedPractice, setSelectedPractice] = useState(null);
@@ -45,22 +48,50 @@ const CourseDetail = ({ subjectId, semesterId }) => {
     return names.length > 0 ? names.join(", ") : "Chưa phân công";
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!selectedTheory) {
       return toast.warning("Vui lòng chọn 1 lớp Lý thuyết!");
     }
+
     const theoryClass = classSections.find((c) => c.id === selectedTheory);
     if (theoryClass?.children?.length > 0 && !selectedPractice) {
-      return toast.warning("Vui lòng chọn 1 nhóm Thực hành đi kèm!");
+      return toast.warning("Vui lòng chọn lớp Thực hành!");
     }
 
-    toast.success("Giả lập Đăng ký thành công (Chờ nối API Enroll)!");
-    console.log(
-      "Lý thuyết ID:",
-      selectedTheory,
-      "Thực hành ID:",
-      selectedPractice,
-    );
+    try {
+      setIsSubmitting(true);
+
+      const payload = {
+        theoryClassId: selectedTheory,
+        labClassId: selectedPractice || null,
+      };
+
+      const res = await enrollClassAPI(payload);
+
+
+      if (res.data.code === 1000) {
+        toast.success("Đăng ký lớp học phần thành công!");
+        const reloadRes = await getClassSectionsBySubjectAPI(
+          subjectId,
+          semesterId,
+        );
+        if (reloadRes.data.code === 1000)
+          setClassSections(reloadRes.data.result || []);
+
+        setSelectedTheory(null);
+        setSelectedPractice(null);
+
+        if (onRegisterSuccess) onRegisterSuccess();
+      } else {
+        toast.error(res.data.message || "Đăng ký thất bại!");
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Lỗi hệ thống khi đăng ký môn học!",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -109,14 +140,21 @@ const CourseDetail = ({ subjectId, semesterId }) => {
                 </tr>
               ) : classSections.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="px-6 py-8 text-center text-slate-500 italic">
+                  <td
+                    colSpan="7"
+                    className="px-6 py-8 text-center text-slate-500 italic"
+                  >
                     Chưa có lớp học phần nào được mở cho môn này.
                   </td>
                 </tr>
               ) : (
                 classSections.map((section) => (
                   <React.Fragment key={section.id}>
-                    <tr className={selectedTheory === section.id ? "bg-blue-50/50" : ""}>
+                    <tr
+                      className={
+                        selectedTheory === section.id ? "bg-blue-50/50" : ""
+                      }
+                    >
                       <td className="px-6 py-4">
                         <input
                           type="radio"
@@ -124,54 +162,83 @@ const CourseDetail = ({ subjectId, semesterId }) => {
                           checked={selectedTheory === section.id}
                           onChange={() => {
                             setSelectedTheory(section.id);
-                            setSelectedPractice(null); 
+                            setSelectedPractice(null);
                           }}
                           className="cursor-pointer"
                         />
                       </td>
                       <td className="px-6 py-4">Lý thuyết</td>
                       <td className="px-6 py-4 ">{section.sectionCode}</td>
-                      <td className="px-6 py-4 text-center">{section.capacity}</td>
+                      <td className="px-6 py-4 text-center">
+                        {section.capacity}
+                      </td>
                       <td className="px-6 py-4 text-center text-red-600">
                         {section.capacity - section.enrolledCount}
                       </td>
-                      <td className="px-6 py-4">{formatLecturers(section.schedules)}</td>
-                      <td className="px-6 py-4">{formatSchedules(section.schedules)}</td>
+                      <td className="px-6 py-4">
+                        {formatLecturers(section.schedules)}
+                      </td>
+                      <td className="px-6 py-4">
+                        {formatSchedules(section.schedules)}
+                      </td>
                     </tr>
 
-                    {selectedTheory === section.id && section.children && section.children.length > 0 && (
-                      <>
-                        <tr className="bg-slate-50">
-                          <td colSpan="7" className="px-6 py-2 font-semibold text-slate-600">
-                            Lớp thực hành:
-                          </td>
-                        </tr>
-                        {section.children.map((child) => (
-                          <tr key={child.id} className={selectedPractice === child.id ? "bg-blue-50" : ""}>
-                            <td className="px-6 py-4 pl-10">
-                              <input
-                                type="radio"
-                                name={`practice-${section.id}`}
-                                checked={selectedPractice === child.id}
-                                onChange={() => setSelectedPractice(child.id)}
-                                className="cursor-pointer"
-                              />
+                    {selectedTheory === section.id &&
+                      section.children &&
+                      section.children.length > 0 && (
+                        <>
+                          <tr className="bg-slate-50">
+                            <td
+                              colSpan="7"
+                              className="px-6 py-2 font-semibold text-slate-600"
+                            >
+                              Lớp thực hành:
                             </td>
-                            <td className="px-6 py-4">Thực hành</td>
-                            <td className="px-6 py-4 ">{child.sectionCode}</td>
-                            <td className="px-6 py-4 text-center">{child.capacity}</td>
-                            <td className="px-6 py-4 text-center text-red-600 ">
-                              {child.capacity - child.enrolledCount}
-                            </td>
-                            <td className="px-6 py-4">{formatLecturers(child.schedules)}</td>
-                            <td className="px-6 py-4">{formatSchedules(child.schedules)}</td>
                           </tr>
-                        ))}
-                        <tr>
-                          <td colSpan="9" className="py-4 bg-slate-50 border-b border-slate-200"></td>
-                        </tr>
-                      </>
-                    )}
+                          {section.children.map((child) => (
+                            <tr
+                              key={child.id}
+                              className={
+                                selectedPractice === child.id
+                                  ? "bg-blue-50"
+                                  : ""
+                              }
+                            >
+                              <td className="px-6 py-4 pl-10">
+                                <input
+                                  type="radio"
+                                  name={`practice-${section.id}`}
+                                  checked={selectedPractice === child.id}
+                                  onChange={() => setSelectedPractice(child.id)}
+                                  className="cursor-pointer"
+                                />
+                              </td>
+                              <td className="px-6 py-4">Thực hành</td>
+                              <td className="px-6 py-4 ">
+                                {child.sectionCode}
+                              </td>
+                              <td className="px-6 py-4 text-center">
+                                {child.capacity}
+                              </td>
+                              <td className="px-6 py-4 text-center text-red-600 ">
+                                {child.capacity - child.enrolledCount}
+                              </td>
+                              <td className="px-6 py-4">
+                                {formatLecturers(child.schedules)}
+                              </td>
+                              <td className="px-6 py-4">
+                                {formatSchedules(child.schedules)}
+                              </td>
+                            </tr>
+                          ))}
+                          <tr>
+                            <td
+                              colSpan="9"
+                              className="py-4 bg-slate-50 border-b border-slate-200"
+                            ></td>
+                          </tr>
+                        </>
+                      )}
                   </React.Fragment>
                 ))
               )}
@@ -181,23 +248,31 @@ const CourseDetail = ({ subjectId, semesterId }) => {
       </div>
 
       <div className="mt-4 flex justify-end">
-        <button className="text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 whitespace-nowrap">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18px"
-            height="18px"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="1.5"
-              d="M4 21h16M5.666 13.187A2.28 2.28 0 0 0 5 14.797V18h3.223c.604 0 1.183-.24 1.61-.668l9.5-9.505a2.28 2.28 0 0 0 0-3.22l-.938-.94a2.277 2.277 0 0 0-3.222.001z"
-            />
-          </svg>
-          Đăng ký
+        <button
+          onClick={handleRegister}
+          disabled={isSubmitting}
+          className="text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 whitespace-nowrap disabled:bg-gray-400 disabled:border-gray-400 disabled:cursor-not-allowed disabled:transform-none"
+        >
+          {isSubmitting ? (
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18px"
+              height="18px"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                d="M4 21h16M5.666 13.187A2.28 2.28 0 0 0 5 14.797V18h3.223c.604 0 1.183-.24 1.61-.668l9.5-9.505a2.28 2.28 0 0 0 0-3.22l-.938-.94a2.277 2.277 0 0 0-3.222.001z"
+              />
+            </svg>
+          )}
+          {isSubmitting ? "Đang đăng ký..." : "Đăng ký"}
         </button>
       </div>
     </div>

@@ -7,3 +7,11 @@ export const getMyTimetableAPI = async () => {
 export const cancelEnrollmentAPI = async (classSectionId) => {
   return await axiosClient.delete(`/registration/enroll/${classSectionId}`);
 };
+
+export const enrollClassAPI = async (payload) => {
+  return await axiosClient.post(`/registration/enroll`, payload);
+};
+
+export const getRegistrationStatusAPI = async () => {
+  return await axiosClient.get(`/registration/status`);
+};
