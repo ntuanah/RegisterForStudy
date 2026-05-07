@@ -3,7 +3,10 @@ import MainContent from "./mainContent";
 import SidebarCourseList from "./SidebarCourseList";
 import { getCurrentSemesterAPI } from "../../../service/semesterService";
 import { toast } from "react-toastify";
-import { autoAssignScheduleAPI, clearAutoAssignScheduleAPI } from "../../../service/scheduleService";
+import {
+  autoAssignScheduleAPI,
+  clearAutoAssignScheduleAPI,
+} from "../../../service/scheduleService";
 
 const ArrangeClassSchedulePage = () => {
   const [selectedSubject, setSelectedSubject] = useState(null);
@@ -63,26 +66,30 @@ const ArrangeClassSchedulePage = () => {
   };
 
   const handleClearAutoAssign = async () => {
-    if (!window.confirm("Hệ thống sẽ XOÁ TOÀN BỘ lịch và phòng đã xếp trong học kỳ này. Bạn có chắc chắn không?")) {
+    if (
+      !window.confirm(
+        "Hệ thống sẽ XOÁ TOÀN BỘ lịch và phòng đã xếp trong học kỳ này. Bạn có chắc chắn không?",
+      )
+    ) {
       return;
     }
 
     try {
       setIsClearing(true);
-      
+
       const semesterRes = await getCurrentSemesterAPI();
       if (semesterRes.data.code !== 1000 || !semesterRes.data.result?.id) {
         toast.error("Không tìm thấy thông tin học kỳ hiện tại!");
         return;
       }
-      
+
       const currentSemesterId = semesterRes.data.result.id;
-      
+
       const clearRes = await clearAutoAssignScheduleAPI(currentSemesterId);
-      
+
       if (clearRes.data.code === 1000 || clearRes.data.code === 200) {
         toast.success("Xóa kết quả xếp lịch thành công!");
-        setRefreshKey((prev) => prev + 1); 
+        setRefreshKey((prev) => prev + 1);
       } else {
         toast.error(clearRes.data.message || "Lỗi khi xóa lịch!");
       }
@@ -103,9 +110,9 @@ const ArrangeClassSchedulePage = () => {
         </h2>
       </div>
 
-      <div className="p-8">
-        <div className="flex justify-between">
-          <div className="mb-5">
+      <div className="p-4 md:p-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+          <div className="">
             <h1 className="text-3xl font-black text-slate-900">
               Sắp xếp lịch phòng học
             </h1>
@@ -113,28 +120,40 @@ const ArrangeClassSchedulePage = () => {
               Sắp xếp lịch và phòng học cho các học phần.
             </p>
           </div>
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             <button
               onClick={handleClearAutoAssign}
               disabled={isClearing || isAutoAssigning}
               className={`h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2 shadow-sm
-                ${isClearing 
-                  ? "bg-gray-200 text-gray-500 cursor-not-allowed border-gray-300" 
-                  : "bg-white text-[#5483B3] hover:bg-gray-200 cursor-pointer hover:-translate-y-1"}`}
+                ${
+                  isClearing
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed border-gray-300"
+                    : "bg-white text-[#5483B3] hover:bg-gray-200 cursor-pointer hover:-translate-y-1"
+                }`}
             >
               {isClearing ? (
                 <div className="w-5 h-5 border-2 border-[#5483B3] border-t-transparent rounded-full animate-spin"></div>
               ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18px"
+                  height="18px"
+                  viewBox="0 0 24 24"
+                >
                   <g fill="none">
                     <path d="M22.274 11.545L14.03 3.303l-8.24 8.242l8.242 8.243z" />
-                    <path stroke="currentColor" strokeLinecap="square" strokeWidth="2" d="m5.788 11.545l8.243-8.242l8.243 8.242l-8.243 8.243m-8.243-8.243l8.243 8.243m-8.243-8.243l-2 2a3 3 0 0 0 0 4.243l3.374 3.374h5.495m1.374-1.374l-1.374 1.374m0 0H19" />
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="square"
+                      strokeWidth="2"
+                      d="m5.788 11.545l8.243-8.242l8.243 8.242l-8.243 8.243m-8.243-8.243l8.243 8.243m-8.243-8.243l-2 2a3 3 0 0 0 0 4.243l3.374 3.374h5.495m1.374-1.374l-1.374 1.374m0 0H19"
+                    />
                   </g>
                 </svg>
               )}
               <span>{isClearing ? "Đang xóa..." : "Xoá xếp lịch tự động"}</span>
             </button>
-            
+
             <button
               onClick={handleAutoAssign}
               disabled={isAutoAssigning}
@@ -170,20 +189,22 @@ const ArrangeClassSchedulePage = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-3">
-            <SidebarCourseList
-              selectedSubject={selectedSubject}
-              onSelectSubject={setSelectedSubject}
-            />
-          </div>
+        <div className="overflow-x-auto pb-4 custom-scrollbar">
+          <div className="min-w-[1100px] grid grid-cols-12 gap-6">
+            <div className="col-span-3">
+              <SidebarCourseList
+                selectedSubject={selectedSubject}
+                onSelectSubject={setSelectedSubject}
+              />
+            </div>
 
-          <div className="col-span-9">
-            <MainContent
-              selectedSubject={selectedSubject}
-              refreshKey={refreshKey}
-            />
-          </div>
+            <div className="col-span-9">
+              <MainContent
+                selectedSubject={selectedSubject}
+                refreshKey={refreshKey}
+              />
+            </div>
+          </div> 
         </div>
       </div>
     </div>

@@ -69,17 +69,17 @@ const RegisterResult = ({ refreshTrigger }) => {
       </h3>
 
       <div className="overflow-x-auto rounded-lg border border-slate-200">
-        <table className="w-full text-[10px] text-left border-collapse">
+        <table className="w-full min-w-[1000px] text-[10px] text-left border-collapse">
           <thead className="bg-blue-50 text-slate-400">
             <tr>
-              <th className="px-6 py-2 font-bold">STT</th>
-              <th className="px-6 py-2 font-bold">Loại</th>
-              <th className="px-6 py-2 font-bold">Mã LHP</th>
-              <th className="px-6 py-2 font-bold">Tên LHP</th>
-              <th className="px-6 py-2 font-bold">STC</th>
-              <th className="px-6 py-2 font-bold">GV</th>
-              <th className="px-6 py-2 font-bold">Lịch học</th>
-              <th className="px-6 py-2 font-bold">Thao tác</th>
+              <th className="px-6 py-2 font-bold whitespace-nowrap">STT</th>
+              <th className="px-6 py-2 font-bold whitespace-nowrap">Loại</th>
+              <th className="px-6 py-2 font-bold whitespace-nowrap">Mã LHP</th>
+              <th className="px-6 py-2 font-bold whitespace-nowrap">Tên LHP</th>
+              <th className="px-6 py-2 font-bold whitespace-nowrap">STC</th>
+              <th className="px-6 py-2 font-bold whitespace-nowrap">GV</th>
+              <th className="px-6 py-2 font-bold whitespace-nowrap">Lịch học</th>
+              <th className="px-6 py-2 font-bold whitespace-nowrap">Thao tác</th>
             </tr>
           </thead>
 

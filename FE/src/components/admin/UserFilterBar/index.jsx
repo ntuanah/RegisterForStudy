@@ -13,8 +13,8 @@ const UserFilterBar = ({
   ];
 
   return (
-    <div className="flex gap-4 mb-6">
-      <div className="flex-1 flex items-center border border-[#0A4174] rounded-full px-3 py-3 hover:bg-blue-50 cursor-text">
+    <div className="flex flex-col lg:flex-row gap-4 mb-6">
+      <div className="w-full lg:flex-1 flex items-center border border-[#0A4174] rounded-full px-3 py-3 hover:bg-blue-50 cursor-text">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="18px"
@@ -35,12 +35,12 @@ const UserFilterBar = ({
         />
       </div>
 
-      <div className="flex gap-3 flex-wrap">
+      <div className="flex gap-2 sm:gap-3 flex-wrap">
         {roles.map((role) => (
           <button
             key={role.value}
             onClick={() => setSelectedRole(role.value)}
-            className={`font-medium border border-[#0A4174] rounded-full px-8 py-2.5 cursor-pointer transition-all duration-300 hover:-translate-y-1 ${
+            className={`text-sm sm:text-base font-medium border border-[#0A4174] rounded-full px-4 py-2 sm:px-8 sm:py-2.5 cursor-pointer transition-all duration-300 hover:-translate-y-1 ${
               selectedRole === role.value
                 ? "bg-[#5483B3] text-white"
                 : "bg-white text-[#5483B3] hover:bg-gray-100"

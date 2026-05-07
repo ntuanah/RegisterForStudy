@@ -90,24 +90,24 @@ const ExpectedSubjectTable = () => {
   }, [studentInfo.cohortId, studentInfo.majorId]);
 
   return (
-    <div className="border border-slate-200 rounded-xl shadow-sm mt-5">
-      <table className="w-full text-left border-collapse">
+    <div className="border border-slate-200 rounded-xl shadow-sm mt-5 overflow-x-auto">
+      <table className="w-full min-w-[800px] text-left border-collapse">
         <thead>
           <tr className="bg-blue-50">
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-5">
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-5 whitespace-nowrap">
               STT
             </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-25">
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-25 whitespace-nowrap">
               Mã môn
             </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400">
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
               Tên môn
             </th>
 
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-30">
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-30 whitespace-nowrap">
               Số tín
             </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-60">
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-60 whitespace-nowrap">
               Yêu cầu
             </th>
           </tr>

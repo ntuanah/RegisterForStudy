@@ -187,22 +187,22 @@ const UserManagementPage = () => {
         </h2>
       </div>
 
-      <div className="p-8">
-        <div className="mb-8 flex justify-between">
+      <div className="p-4 md:p-8">
+        <div className="mb-6 md:mb-8 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-black text-slate-900">
+            <h1 className="text-2xl md:text-3xl font-black text-slate-900">
               Quản lý người dùng
             </h1>
-            <p className="text-slate-500 mt-1">
+            <p className="text-sm md:text-base text-slate-500 mt-1">
               Quản lý tài khoản và thông tin người dùng.
             </p>
           </div>
 
-          <div className="flex gap-6">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 md:gap-4 w-full xl:w-auto">
             <button
               onClick={handleExportPdf}
               disabled={isExporting}
-              className={`h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
+              className={`w-full sm:w-auto justify-center h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
                 ${
                   isExporting
                     ? "bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -242,7 +242,7 @@ const UserManagementPage = () => {
             <button
               onClick={handleTriggerStudentFileInput}
               disabled={isAnyImporting}
-              className={`h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
+              className={`w-full sm:w-auto justify-center h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
                 ${
                   isAnyImporting
                     ? "bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -282,7 +282,7 @@ const UserManagementPage = () => {
             <button
               onClick={handleTriggerLecturerFileInput}
               disabled={isAnyImporting}
-              className={`h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
+              className={`w-full sm:w-auto justify-center h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
                 ${
                   isAnyImporting
                     ? "bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -311,7 +311,7 @@ const UserManagementPage = () => {
               {isImportingLecturer ? "Đang xử lý..." : "Thêm giảng viên"}
             </button>
 
-            <div className="relative" ref={dropdownRef}>
+            <div className="relative w-full sm:w-auto" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 disabled={isDownloading}
@@ -362,7 +362,7 @@ const UserManagementPage = () => {
               </button>
 
               {isDropdownOpen && !isDownloading && (
-                <div className="absolute right-0 mt-2 w-56 bg-blue-50 border border-[#0A4174] rounded-xl shadow-lg z-10 overflow-hidden transform origin-top transition-all">
+                <div className="absolute right-0 mt-2 w-full sm:w-56 bg-blue-50 border border-[#0A4174] rounded-xl shadow-lg z-10 overflow-hidden transform origin-top transition-all">
                   <button
                     onClick={handleDownloadTemplate}
                     className="w-full text-left px-5 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-[#5483B3] transition-colors border-b border-gray-100 flex items-center gap-2 cursor-pointer"

@@ -83,24 +83,24 @@ const CourseList = ({ onRegisterSuccess }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
         <div className="p-0">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full min-w-[800px] text-left border-collapse">
             <thead>
               <tr className="bg-blue-50">
-                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-20">
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-20 whitespace-nowrap">
                   STT
                 </th>
-                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-32">
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-32 whitespace-nowrap">
                   Mã học phần
                 </th>
-                <th className="px-6 py-2 text-[10px] font-bold text-slate-400">
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
                   Tên học phần
                 </th>
-                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-24">
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-24 whitespace-nowrap">
                   STC
                 </th>
-                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-32">
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-32 whitespace-nowrap">
                   Thao tác
                 </th>
               </tr>

@@ -59,10 +59,10 @@ const AddCohort = ({ close, refresh }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white w-1/2 rounded-xl p-6 border border-[#0A4174]">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
+      <div className="bg-white w-full max-w-[500px] rounded-xl p-5 md:p-6 border border-[#0A4174]">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Thêm khoá</h2>
+          <h2 className="text-lg md:text-xl font-bold">Thêm khoá</h2>
 
           <button
             onClick={close}
@@ -86,7 +86,7 @@ const AddCohort = ({ close, refresh }) => {
           </button>
         </div>
 
-        <div className="space-y-10">
+        <div className="space-y-5 md:space-y-8">
           <div>
             <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
               Tên khoá

@@ -16,18 +16,18 @@ const MajorManagementPage = () => {
         </h2>
       </div>
 
-      <div className="p-8">
-        <div className="mb-8 flex justify-between">
+      <div className="p-4 md:p-8">
+        <div className="mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-black text-slate-900">
+            <h1 className="text-2xl md:text-3xl font-black text-slate-900">
               Quản lý ngành học
             </h1>
-            <p className="text-slate-500 mt-1">
+            <p className="text-sm md:text-base text-slate-500 mt-1">
               Quản lý thông tin của các ngành học.
             </p>
           </div>
 
-          <div className="">
+          <div className="w-full md:w-auto">
             <button
               onClick={() => setOpenAddMajor(true)}
               className=" text-white font-medium border border-[#0A4174] rounded-full px-10 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2"
@@ -52,7 +52,7 @@ const MajorManagementPage = () => {
           </div>
         </div>
 
-        <div className="flex-1 flex items-center border border-[#0A4174] rounded-full px-3 py-3 hover:bg-blue-50 cursor-pointer">
+        <div className="mb-6 flex-1 flex items-center border border-[#0A4174] rounded-full px-3 py-3 hover:bg-blue-50 cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18px"

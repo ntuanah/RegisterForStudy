@@ -89,28 +89,28 @@ const UserManagementTable = ({ searchWord, selectedRole, refreshTrigger }) => {
   return (
     <div className="border border-slate-200 rounded-xl shadow-sm mt-5">
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+        <table className="w-full min-w-[800px] text-left border-collapse">
           <thead>
             <tr className="bg-blue-50">
-              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-5">
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-5 whitespace-nowrap">
                 STT
               </th>
-              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-15">
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-15 whitespace-nowrap">
                 Mã người dùng
               </th>
-              <th className="px-6 py-2 text-[10px] font-bold text-slate-400">
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
                 Tên người dùng
               </th>
-              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50">
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-5 whitespace-nowrap">
                 Email
               </th>
-              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50">
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50 whitespace-nowrap">
                 Vai trò
               </th>
-              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-44">
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-44 whitespace-nowrap">
                 Trạng thái
               </th>
-              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-30">
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-30 whitespace-nowrap">
                 Thao tác
               </th>
             </tr>

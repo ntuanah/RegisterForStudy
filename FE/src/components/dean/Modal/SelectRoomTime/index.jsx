@@ -189,10 +189,10 @@ const SelectRoomTime = ({ close, scheduleId, refresh }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white w-1/2 rounded-xl p-6 border border-[#0A4174] max-h-[85vh] flex flex-col">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-2">
+      <div className="bg-white w-[95%] md:w-3/4 lg:w-1/2 rounded-xl p-4 md:p-6 border border-[#0A4174] max-h-[85vh] flex flex-col">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Chọn phòng, giờ học</h2>
+          <h2 className="text-lg md:text-xl font-bold">Chọn phòng, giờ học</h2>
 
           <button
             onClick={close}
@@ -216,8 +216,8 @@ const SelectRoomTime = ({ close, scheduleId, refresh }) => {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="flex flex-col gap-2">
+        <div className="flex-1 overflow-y-auto p-2 md:p-6">
+          <div className="flex flex-col gap-6 md:gap-8">
             <div>
               <h3 className="text-lg text-[#5483B3] font-semibold mb-4 flex items-center">
                 1. Chọn ngày trong tuần
@@ -228,7 +228,7 @@ const SelectRoomTime = ({ close, scheduleId, refresh }) => {
                   <button
                     key={day.value}
                     onClick={() => setSelectedDay(day)}
-                    className={`border px-8 py-2 rounded-lg font-semibold cursor-pointer transition-colors
+                    className={`border px-4 md:px-8 py-2 rounded-lg font-semibold cursor-pointer transition-colors
                       ${
                         selectedDay?.value === day.value
                           ? "bg-[#5483B3] border-[#0A4174] text-white shadow-md"
@@ -248,7 +248,7 @@ const SelectRoomTime = ({ close, scheduleId, refresh }) => {
                 </h3>
               </div>
 
-              <div className="grid grid-cols-4 lg:grid-cols-6 gap-2">
+              <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((period) => (
                   <button
                     key={period}
@@ -281,7 +281,7 @@ const SelectRoomTime = ({ close, scheduleId, refresh }) => {
                 </p>
               ) : (
                 <>
-                  <div className="flex gap-4 mb-6 border-b border-slate-200 pb-3 overflow-x-auto">
+                  <div className="flex gap-2 md:gap-4 mb-6 border-b border-slate-200 pb-3 overflow-x-auto custom-scrollbar">
                     {buildingTabs.map((building) => (
                       <button
                         key={building}
@@ -305,13 +305,13 @@ const SelectRoomTime = ({ close, scheduleId, refresh }) => {
                         .map((floor) => (
                           <div
                             key={floor}
-                            className="mb-6 bg-blue-50 p-4 rounded-xl border border-[#0A4174]"
+                            className="mb-4 md:mb-6 bg-blue-50 p-3 md:p-4 rounded-xl border border-[#0A4174]"
                           >
                             <h4 className="text-[#0A4174] font-black text-lg mb-4 pb-2">
                               Tầng {floor}
                             </h4>
 
-                            <div className="grid grid-cols-5 gap-4">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
                               {groupedRooms[activeTab][floor].map((room) => {
                                 const isSelected = selectedRoomId === room.id;
                                 const isBusy = false; 
@@ -348,7 +348,7 @@ const SelectRoomTime = ({ close, scheduleId, refresh }) => {
               )}
             </div>
 
-            <div className="flex justify-end ">
+            <div className="flex justify-end mt-2 md:mt-0">
               <button
                 onClick={handleSaveSchedule}
                 disabled={isSaving}

@@ -80,46 +80,46 @@ const TimetablePage = () => {
         </h2>
       </div>
 
-      <div className="p-8">
+      <div className="p-4 md:p-8">
 
-        <div className="border border-slate-200 rounded-xl shadow-sm mt-5">
-          <table className="w-full text-left border-collapse">
+        <div className="border border-slate-200 rounded-xl shadow-sm mt-5 overflow-x-auto custom-scrollbar">
+          <table className="w-full min-w-[1000px] text-left border-collapse">
             <thead>
               <tr className="bg-blue-50">
-                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400 w-16">
+                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400 w-1 whitespace-nowrap">
                   Tiết
                 </td>
-                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400">
+                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
                   <div className="flex flex-col items-center gap-1">
                     <h2>Thứ 2</h2> 
                   </div>
                 </td>
-                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400">
+                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
                   <div className="flex flex-col items-center gap-1">
                     <h2>Thứ 3</h2> 
                   </div>
                 </td>
-                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400">
+                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
                   <div className="flex flex-col items-center gap-1">
                     <h2>Thứ 4</h2>  
                   </div>
                 </td>
-                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400">
+                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
                   <div className="flex flex-col items-center gap-1">
                     <h2>Thứ 5</h2> 
                   </div>
                 </td>
-                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400">
+                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
                   <div className="flex flex-col items-center gap-1">
                     <h2>Thứ 6</h2> 
                   </div>
                 </td>
-                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400">
+                <td className="border-e border-slate-100 px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
                   <div className="flex flex-col items-center gap-1">
                     <h2>Thứ 7</h2> 
                   </div>
                 </td>
-                <td className="px-6 py-2 text-[10px] font-bold text-slate-400">
+                <td className="px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
                   <div className="flex flex-col items-center gap-1">
                     <h2>Chủ nhật</h2> 
                   </div>
