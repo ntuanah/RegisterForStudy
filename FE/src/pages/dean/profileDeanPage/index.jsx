@@ -28,13 +28,13 @@ const ProfileDeanPage = () => {
       <div className="p-5 border-b border-gray-300 shadow-xl">
         <h2 className="text-2xl font-bold flex items-center gap-2">
           <span className="w-2 h-6 bg-[#0A4174] rounded-full inline-block"></span>
-          Hồ sơ trưởng khoa
+          Hồ sơ giảng viên
         </h2>
       </div>
 
-      <div className="p-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-black text-slate-900">
+      <div className="p-4 md:p-8">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl font-black text-slate-900">
             Thông tin cá nhân
           </h1>
           <p className="text-slate-500 mt-1">
@@ -47,11 +47,11 @@ const ProfileDeanPage = () => {
             <div className="absolute inset-0 opacity-10"></div>
           </div>
 
-          <div className="px-8 pb-8 -mt-12 relative flex items-end justify-between gap-6">
-            <div className="size-32 rounded-2xl bg-white p-1 shadow-lg">
+          <div className="px-4 md:px-8 pb-6 md:pb-8 -mt-12 md:-mt-16 relative flex flex-col md:flex-row items-center md:items-end justify-between gap-4 md:gap-6 text-center md:text-left">
+            <div className="size-24 md:size-32 rounded-2xl bg-white p-1 shadow-lg z-10">
               <img
                 className="w-full h-full rounded-xl border border-slate-100"
-                src={defaultAvatar}
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1ngOY_Yq7YHqXKHGTe8sgBUczFjiM-63QZBVCPNGMdX9d1YGbcTN5fu-C2Hw6MUE8y_LsdreLUqu5EyR9aA7F3MFInMjXAvRnnfSv8jRPfWI28Rz6PgYs-8Vfqg6uS9kOZmKXOGsjImgiw6eOl9TJP-iC3ZCgRraxEBIG5dQQSTtYQWuc6BPHtPv0qBSBxTga31ICw70DBoScpOqgQbeNKofDCOloEnUsewieQ7coKLJqqMU3ZH9GcUktYNGlGC4pUmAd0tseCS8"
                 alt=""
               />
             </div>
@@ -64,7 +64,7 @@ const ProfileDeanPage = () => {
               </div>
             </div>
 
-            <button onClick={() => setOpenChangePassword(true)} className=" text-white font-medium border border-[#0A4174] rounded-full px-10 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2">
+            <button onClick={() => setOpenChangePassword(true)} className=" w-full md:w-auto text-white font-medium border border-[#0A4174] rounded-full px-6 py-2.5 md:px-10 md:py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="18px"
@@ -86,7 +86,7 @@ const ProfileDeanPage = () => {
         </div>
       </div>
 
-      <div className="max-w-8xl mx-auto p-8">
+      <div className="max-w-8xl mx-auto px-4 md:px-8 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2 bg-blue-50 rounded-2xl shadow-sm border border-slate-200 overflow-hidden p-5">
             <div className="">
@@ -132,7 +132,7 @@ const ProfileDeanPage = () => {
               </h3>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-8 gap-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 md:gap-y-6">
               <div>
                 <label
                   className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1"
@@ -181,7 +181,7 @@ const ProfileDeanPage = () => {
                 <p className="text-sm font-medium">-</p>
               </div>
 
-              <div className="col-span-2">
+              <div className="col-span-1 sm:col-span-2">
                 <label
                   className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1"
                   htmlFor="fullName"
@@ -213,7 +213,7 @@ const ProfileDeanPage = () => {
 
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="text-slate-400">
+                <div className="text-slate-400 shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20px"
@@ -231,7 +231,7 @@ const ProfileDeanPage = () => {
                   </svg>
                 </div>
 
-                <div>
+                <div className="break-all">
                   <p className="text-sm text-slate-400 uppercase tracking-wider">
                     Email sinh viên
                   </p>

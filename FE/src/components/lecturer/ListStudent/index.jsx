@@ -1,7 +1,7 @@
 const ListStudent = ({ close }) => {
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white w-3/4 rounded-xl p-6 border border-[#0A4174]">
+      <div className="bg-white w-[95%] lg:w-3/4 rounded-xl p-4 md:p-6 border border-[#0A4174]">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Danh sách sinh viên</h2>
 
@@ -27,29 +27,29 @@ const ListStudent = ({ close }) => {
           </button>
         </div>
 
-        <div className="max-h-[500px] overflow-y-auto">
-          <table className="w-full text-left  border-collapse">
+        <div className="max-h-[500px] overflow-y-auto overflow-x-auto">
+          <table className="w-full min-w-[900px] text-left border-collapse">
             <thead>
               <tr className="bg-blue-50">
-                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-20">
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-20 whitespace-nowrap">
                   STT
                 </th>
-                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-32">
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-32 whitespace-nowrap">
                   Mã sinh viên
                 </th>
-                <th className="px-6 py-2 text-[10px] font-bold text-slate-400">
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
                   Tên sinh viên
                 </th>
-                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-24">
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-24 whitespace-nowrap">
                   Lớp
                 </th>
-                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-35">
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-35 whitespace-nowrap">
                   Điểm quá trình
                 </th>
-                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-24">
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-24 whitespace-nowrap">
                   Điểm thi
                 </th>
-                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-55">
+                <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-55 whitespace-nowrap">
                   Thao tác
                 </th>
               </tr>

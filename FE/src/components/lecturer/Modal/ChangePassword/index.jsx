@@ -62,10 +62,10 @@ const ChangePassword = ({ close }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white w-1/2 rounded-xl p-6 border border-[#0A4174]">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
+      <div className="bg-white w-full max-w-[500px] rounded-xl p-5 md:p-6 border border-[#0A4174]">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Đổi mật khẩu</h2>
+          <h2 className="text-lg md:text-xl font-bold">Đổi mật khẩu</h2>
 
           <button
             onClick={close}
@@ -89,12 +89,11 @@ const ChangePassword = ({ close }) => {
           </button>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           <div>
             <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
               Mật khẩu cũ
             </label>
-            {/* Đổi type="text" thành type="password" để ẩn ký tự */}
             <input
               type="password"
               name="oldPassword"
@@ -119,7 +118,6 @@ const ChangePassword = ({ close }) => {
             />
           </div>
 
-          {/* MỚI: Thêm ô Xác nhận mật khẩu */}
           <div>
             <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
               Xác nhận mật khẩu mới
@@ -139,7 +137,7 @@ const ChangePassword = ({ close }) => {
           <button
             onClick={handleChangePassword}
             disabled={isLoading}
-            className={`h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 flex items-center gap-2 transition-all duration-300 hover:-translate-y-1 ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer"}`}
+            className={`w-full md:w-auto h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-1 ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer"}`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

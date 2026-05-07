@@ -90,10 +90,10 @@ const ForgotPassword = ({ close }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white w-[500px] rounded-2xl p-6 border border-[#0A4174] shadow-lg">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
+      <div className="bg-white w-full max-w-[500px]] rounded-2xl p-6 border border-[#0A4174] shadow-lg">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-[#0A4174]">Quên mật khẩu</h2>
+          <h2 className="text-lg md:text-xl font-bold text-[#0A4174]">Quên mật khẩu</h2>
 
           <button
             onClick={close}
@@ -147,7 +147,7 @@ const ForgotPassword = ({ close }) => {
               <button
                 onClick={handleSendEmail}
                 disabled={isLoading}
-                className={`h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 flex items-center gap-2 transition-all duration-300 
+                className={`h-fit text-white font-medium border border-[#0A4174] rounded-full px-4 py-2.5 md:px-5 md:py-3 text-sm md:text-base flex items-center gap-2 transition-all duration-300 
                   ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer hover:-translate-y-1"}`}
               >
                 {!isLoading && (
@@ -188,10 +188,10 @@ const ForgotPassword = ({ close }) => {
               />
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-2">
               <button
                 onClick={() => setStep(1)}
-                className="h-fit text-[#5483B3] font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-white hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2"
+                className="h-fit text-[#5483B3] font-medium border border-[#0A4174] rounded-full px-3 py-2.5 md:px-5 md:py-3 text-sm md:text-base bg-white hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-1 md:gap-2 w-[48%] md:w-auto"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -288,10 +288,10 @@ const ForgotPassword = ({ close }) => {
               />
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-2">
               <button
                 onClick={() => setStep(2)}
-                className="h-fit text-[#5483B3] font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-white hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2"
+                className="h-fit text-[#5483B3] font-medium border border-[#0A4174] rounded-full px-3 py-2.5 md:px-5 md:py-3 text-sm md:text-base bg-white hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-1 md:gap-2 w-[48%] md:w-auto"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
