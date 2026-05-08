@@ -157,10 +157,10 @@ const RegistrationPeriodCard = ({
   const isReadOnly = !isCreate && !isEditing;
 
   return (
-    <div className="bg-blue-50 rounded-xl p-6 shadow-sm border border-[#0A4174]">
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-4 w-full">
-          <h2 className="text-lg font-semibold whitespace-nowrap">
+    <div className="bg-blue-50 rounded-xl p-4 md:p-6 shadow-sm border border-[#0A4174]">
+      <div className="mb-4 flex items-start md:items-center justify-between gap-4">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-4 w-full">
+          <h2 className="text-base md:text-lg font-semibold whitespace-nowrap">
             {isCreate ? "Tạo đợt mới:" : `Đợt ${index}:`}
           </h2>
           <input
@@ -169,11 +169,11 @@ const RegistrationPeriodCard = ({
             onChange={(e) => setName(e.target.value)}
             readOnly={isReadOnly}
             placeholder={isCreate ? "Nhập tên đợt đăng ký" : ""}
-            className="w-[500px] border border-gray-300 rounded-xl px-4 py-2 text-lg outline-none focus:ring-2 focus:ring-[#5483B3] bg-white text-slate-800"
+            className="w-full md:w-[500px] border border-gray-300 rounded-xl px-4 py-2 text-base md:text-lg outline-none focus:ring-2 focus:ring-[#5483B3] bg-white text-slate-800"
           />
         </div>
 
-        <div>
+        <div className = "shrink-0 flex items-center justify-center">
           {isCreate ? (
             <svg
               onClick={onCancel}
@@ -245,7 +245,7 @@ const RegistrationPeriodCard = ({
         />
       </div>
 
-      <div className="flex justify-end gap-4 mt-6">
+      <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
         {!isCreate && !isEditing && (
           <>
             <button
@@ -342,14 +342,14 @@ const RegistrationPeriodCard = ({
 
       {showCohorts && (
         <div className="mt-8 pt-6 border-t border-[#0A4174]">
-          <div className="flex justify-between items-center mb-6 pl-8">
-            <h3 className="text-xl font-bold text-[#0A4174]">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 pl-0 md:pl-8 gap-4">
+            <h3 className="text-lg md:text-xl font-bold text-[#0A4174]">
               Các đợt đăng ký theo khóa
             </h3>
             <button
               onClick={() => setIsAddingCohort(true)}
               disabled={isAddingCohort}
-              className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-[#0A4174] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 disabled:bg-gray-400 disabled:border-gray-400 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto justify-center h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-[#0A4174] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 disabled:bg-gray-400 disabled:border-gray-400 disabled:cursor-not-allowed"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

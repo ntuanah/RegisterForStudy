@@ -118,10 +118,10 @@ const LinkProgram = ({ close, programId }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 py-10 overflow-y-auto">
-      <div className="bg-white w-1/2 rounded-xl p-6 border border-[#0A4174] my-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold">Gắn khóa học</h2>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 py-10 overflow-y-auto px-4">
+      <div className="bg-white w-full max-w-[700px] rounded-xl p-5 md:p-6 border border-[#0A4174] my-auto">
+        <div className="flex justify-between items-center mb-5 md:mb-6">
+          <h2 className="text-lg md:text-xl font-bold">Gắn khóa học</h2>
 
           <button
             onClick={close}
@@ -133,8 +133,8 @@ const LinkProgram = ({ close, programId }) => {
 
         <div className="bg-slate-50 p-4 rounded-xl border border-[#0A4174] mb-6">
           <h3 className="text-sm font-bold text-[#0A4174] mb-4 uppercase">Thêm khóa mới</h3>
-          <div className="flex gap-4 items-end">
-            <div className="flex-1">
+          <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
+            <div className="w-full md:flex-1">
               <label className="block text-xs font-medium text-slate-500 mb-1">Chọn khoá học</label>
               <select
                 name="cohortId"
@@ -157,7 +157,7 @@ const LinkProgram = ({ close, programId }) => {
               </select>
             </div>
 
-            <div className="flex-1">
+            <div className="w-full md:flex-1">
               <label className="block text-xs font-medium text-slate-500 mb-1">Ngày áp dụng</label>
               <input
                 type="date"
@@ -171,7 +171,7 @@ const LinkProgram = ({ close, programId }) => {
             <button
               onClick={handleAssign}
               disabled={isLoading || isFetching || cohorts.length === 0}
-              className={`h-[38px] text-white hover:text-[#0A4174] border border-[#0A4174] font-medium rounded-lg px-4 flex items-center gap-2 transition-all duration-300 ${
+              className={`w-full md:w-auto justify-center h-[38px] text-white hover:text-[#0A4174] border border-[#0A4174] font-medium rounded-lg px-4 flex items-center gap-2 transition-all duration-300 ${
                 isLoading || isFetching || cohorts.length === 0
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-[#5483B3] hover:bg-white cursor-pointer"
@@ -186,14 +186,14 @@ const LinkProgram = ({ close, programId }) => {
         <div>
           <h3 className="text-sm font-bold text-[#0A4174] mb-3 uppercase">Danh sách khóa đã gắn</h3>
           
-          <div className="max-h-[300px] overflow-y-auto custom-scrollbar border border-[#0A4174] rounded-lg">
-            <table className="w-full text-left border-collapse text-sm">
+          <div className="max-h-[300px] overflow-auto custom-scrollbar border border-[#0A4174] rounded-lg">
+            <table className="w-full min-w-[500px] text-left border-collapse text-sm">
               <thead className="bg-blue-50 sticky">
                 <tr>
-                  <th className="px-4 py-2 font-semibold text-slate-600">Khóa</th>
-                  <th className="px-4 py-2 font-semibold text-slate-600">Năm bắt đầu</th>
-                  <th className="px-4 py-2 font-semibold text-slate-600">Ngày áp dụng</th>
-                  <th className="px-4 py-2 font-semibold text-slate-600 text-center w-20">Gỡ</th>
+                  <th className="px-4 py-2 font-semibold text-slate-600 whitespace-nowrap">Khóa</th>
+                  <th className="px-4 py-2 font-semibold text-slate-600 whitespace-nowrap">Năm bắt đầu</th>
+                  <th className="px-4 py-2 font-semibold text-slate-600 whitespace-nowrap">Ngày áp dụng</th>
+                  <th className="px-4 py-2 font-semibold text-slate-600 text-center w-20 whitespace-nowrap">Gỡ</th>
                 </tr>
               </thead>
               <tbody>

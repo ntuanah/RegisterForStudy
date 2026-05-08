@@ -62,31 +62,31 @@ const ExpectedSemesterTable = ({ refreshTrigger }) => {
   return (
     <div className="border border-slate-200 rounded-xl shadow-sm mt-5">
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+        <table className="w-full min-w-[800px] text-left border-collapse">
           <thead>
             <tr className="bg-blue-50">
-              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-12 ">
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-12 whitespace-nowrap">
                 STT
               </th>
-              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-24 ">
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-24 whitespace-nowrap">
                 Mã môn
               </th>
-              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 ">
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
                 Tên môn học
               </th>
-              <th className="px-4 py-2 text-[10px] font-bold text-slate-400 w-20 text-center ">
+              <th className="px-4 py-2 text-[10px] font-bold text-slate-400 w-20 text-center whitespace-nowrap">
                 Số tín chỉ
               </th>
-              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50 ">
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50 whitespace-nowrap">
                 Bộ môn
               </th>
-              <th className="px-4 py-2 text-[10px] font-bold text-slate-400 w-20 text-center ">
+              <th className="px-4 py-2 text-[10px] font-bold text-slate-400 w-20 text-center whitespace-nowrap">
                 Lý thuyết
               </th>
-              <th className="px-4 py-2 text-[10px] font-bold text-slate-400 w-20 text-center ">
+              <th className="px-4 py-2 text-[10px] font-bold text-slate-400 w-20 text-center whitespace-nowrap">
                 Thực hành
               </th>
-              <th className="px-4 py-2 text-[10px] font-bold text-slate-400 w-16 text-center ">
+              <th className="px-4 py-2 text-[10px] font-bold text-slate-400 w-16 text-center whitespace-nowrap">
                 Hệ số
               </th>
             </tr>

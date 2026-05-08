@@ -200,22 +200,22 @@ const ExpectedSemesterPage = () => {
         </h2>
       </div>
 
-      <div className="p-8">
-        <div className="mb-8 flex justify-between">
+      <div className="p-4 md:p-8">
+        <div className="mb-6 md:mb-8 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-black text-slate-900">
+            <h1 className="text-2xl md:text-3xl font-black text-slate-900">
               Học kỳ dự kiến
             </h1>
-            <p className="text-slate-500 mt-1">
+            <p className="text-sm md:text-base text-slate-500 mt-1">
               Quản lý thông tin cho học kỳ dự kiến.
             </p>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 w-full xl:w-auto">
             <button
               onClick={handleInitSchedule}
               disabled={isAnyActionRunning}
-              className={`h-fit font-medium border border-[#0A4174] rounded-full p-3 transition-all duration-300 flex items-center gap-2
+              className={`w-full sm:w-auto justify-center h-fit font-medium border border-[#0A4174] rounded-full p-3 transition-all duration-300 flex items-center gap-2
                 ${
                   isInitializing
                     ? "bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -249,7 +249,7 @@ const ExpectedSemesterPage = () => {
             <button
               onClick={handleApproveClasses}
               disabled={isAnyActionRunning}
-              className={`h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
+              className={`w-full sm:w-auto justify-center h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
                 ${
                   isApproving
                     ? "bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -286,7 +286,7 @@ const ExpectedSemesterPage = () => {
             <button
               onClick={handleImportClick}
               disabled={isImporting || isDownloading}
-              className={`h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
+              className={`w-full sm:w-auto justify-center h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
                 ${
                   isImporting || isDownloading
                     ? "bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -312,7 +312,7 @@ const ExpectedSemesterPage = () => {
             <button
               onClick={handleExportPDF}
               disabled={isAnyActionRunning}
-              className={`h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
+              className={`w-full sm:w-auto justify-center h-fit font-medium border border-[#0A4174] rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2
                 ${
                   isExporting
                     ? "bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -352,7 +352,7 @@ const ExpectedSemesterPage = () => {
             <button
               onClick={handleDownloadTemplate}
               disabled={isDownloading}
-              className={`h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 flex items-center gap-2 transition-all duration-300 
+              className={`w-full sm:w-auto justify-center h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 flex items-center gap-2 transition-all duration-300 
                 ${
                   isDownloading
                     ? "bg-gray-400 cursor-not-allowed opacity-80"

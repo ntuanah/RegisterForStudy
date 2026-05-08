@@ -78,7 +78,7 @@ const TrainingProgramManagement = () => {
     }
   };
 
-  const handlePublishProgram = async (programId, isActive, programName) => {
+  const handlePublishProgram = async (programId, isTemplate, programName) => {
     if (isTemplate === true) {
       toast.info(`Chương trình "${programName}" đã được Publish từ trước!`);
       return;
@@ -138,13 +138,14 @@ const TrainingProgramManagement = () => {
           Quản lý chương trình đào tạo
         </h2>
       </div>
-      <div className="p-8">
-        <div className="mb-8 flex justify-between">
-          <div>
-            <h1 className="text-3xl font-black text-slate-900">
+
+      <div className="p-4 md:p-8">
+        <div className="mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="w-full md:w-auto">
+            <h1 className="text-2xl md:text-3xl font-black text-slate-900">
               Quản lý chương trình đào tạo
             </h1>
-            <p className="text-slate-500 mt-1">
+            <p className="text-sm md:text-base text-slate-500 mt-1">
               Quản lý chương trình đào tạo và thông tin chương trình đào tạo.
             </p>
           </div>
@@ -152,7 +153,7 @@ const TrainingProgramManagement = () => {
           <div>
             <button
               onClick={() => setOpenAddTrainingProgram(true)}
-              className="h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2"
+              className="w-full md:w-auto justify-center h-fit text-white font-medium border border-[#0A4174] rounded-full px-5 py-3 bg-[#5483B3] hover:bg-gray-200 hover:text-[#5483B3] cursor-pointer transition-all duration-300 hover:-translate-y-1 flex items-center gap-2"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -210,12 +211,12 @@ const TrainingProgramManagement = () => {
             programs.map((program, index) => (
               <div
                 key={program.id}
-                className="border border-[#5483B3] rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow bg-white"
+                className="border border-[#5483B3] rounded-xl p-4 md:p-5 shadow-sm hover:shadow-md transition-shadow bg-white"
               >
-                <div className="flex justify-between items-start">
+                <div className="flex flex-col lg:flex-row justify-between items-start gap-4">
                   <div
                     onClick={() => toggleProgram(program.id)}
-                    className="cursor-pointer flex-1"
+                    className="cursor-pointer w-full lg:flex-1"
                   >
                     <h3 className="text-lg font-bold text-[#0A4174] hover:text-[#5483B3] transition-colors">
                       {index + 1}. {program.name} ({program.code})
@@ -257,7 +258,7 @@ const TrainingProgramManagement = () => {
                     </div>
                   </div>
 
-                  <div className="flex gap-3">
+                  <div className="flex flex-row justify-end gap-2 md:gap-3 w-full lg:w-auto mt-2 lg:mt-0 border-t lg:border-none border-slate-100 pt-3 lg:pt-0">
                     <button
                       onClick={() =>
                         handlePublishProgram(

@@ -80,10 +80,10 @@ const AddTrainingProgram = ({ close, refresh }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white w-1/2 rounded-xl p-6 border border-[#0A4174]">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Thêm chương trình đào tạo</h2>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
+      <div className="bg-white w-full max-w-[600px] max-h-[95vh] overflow-y-auto custom-scrollbar rounded-xl p-5 md:p-6 border border-[#0A4174]">
+        <div className="flex justify-between items-center mb-4 md:mb-6">
+          <h2 className="text-lg md:text-xl font-bold">Thêm chương trình đào tạo</h2>
 
           <button
             onClick={close}
@@ -107,8 +107,8 @@ const AddTrainingProgram = ({ close, refresh }) => {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <div className="col-span-1 md:col-span-2">
             <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
               Tên chương trình đào tạo
             </label>
@@ -185,7 +185,7 @@ const AddTrainingProgram = ({ close, refresh }) => {
           </div>
         </div>
 
-        <div className="flex justify-end mt-8">
+        <div className="flex justify-end mt-6 md:mt-8">
           <button
             onClick={handleAdd}
             disabled={isLoading}

@@ -114,10 +114,10 @@ const PeriodCohortCard = ({
   const isReadOnly = !isCreate && !isEditing;
 
   return (
-    <div className="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-4 w-full">
-          <h2 className="text-md font-semibold whitespace-nowrap text-[#0A4174]">
+    <div className="bg-white rounded-xl p-4 md:p-5 shadow-sm border border-slate-200">
+      <div className="mb-4 flex items-start md:items-center justify-between gap-4">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-3 w-full">
+          <h2 className="text-sm md:text-md font-semibold whitespace-nowrap text-[#0A4174]">
             {isCreate ? "Tạo đợt khóa mới:" : `Đợt khóa ${index}:`}
           </h2>
 
@@ -125,7 +125,7 @@ const PeriodCohortCard = ({
             value={cohortId}
             onChange={(e) => setCohortId(e.target.value)}
             disabled={!isCreate}
-            className="w-[400px] border border-gray-300 rounded-xl px-4 py-2 text-md outline-none focus:ring-2 focus:ring-[#5483B3] bg-white text-slate-800 disabled:bg-gray-50 font-semibold"
+            className="w-full md:w-[400px] border border-gray-300 rounded-xl px-3 md:px-4 py-2 text-sm md:text-md outline-none focus:ring-2 focus:ring-[#5483B3] bg-white text-slate-800 disabled:bg-gray-50 font-semibold"
           >
             <option value="">-- Chọn Khóa --</option>
             {cohortsList.map((cohort) => (
@@ -142,7 +142,7 @@ const PeriodCohortCard = ({
           </select>
         </div>
 
-        <div>
+        <div className = "shrink-0 flex items-center justify-center">
           {isCreate ? (
             <svg
               onClick={onCancel}
@@ -188,7 +188,7 @@ const PeriodCohortCard = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-4">
         <div>
           <label className="block text-sm font-medium text-slate-500 mb-2">
             Thời gian bắt đầu
@@ -215,7 +215,7 @@ const PeriodCohortCard = ({
         </div>
       </div>
 
-      <div className="flex justify-end gap-3 mt-4">
+      <div className="flex flex-col sm:flex-row justify-end gap-3 mt-4">
         {!isCreate && !isEditing && (
           <button
             onClick={() => setIsEditing(true)}

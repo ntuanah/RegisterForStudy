@@ -96,10 +96,10 @@ const AddSubjectTrainingProgram = ({ close, sectionId, refresh }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white w-1/2 rounded-xl p-6 border border-[#0A4174]">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
+      <div className="bg-white w-full max-w-[500px] max-h-[95vh] overflow-y-auto custom-scrollbar rounded-xl p-5 md:p-6 border border-[#0A4174]">
+        <div className="flex justify-between items-center mb-4 md:mb-6">
+          <h2 className="text-lg md:text-xl font-bold">
             Thêm môn học vào chương trình đào tạo
           </h2>
 
@@ -125,7 +125,7 @@ const AddSubjectTrainingProgram = ({ close, sectionId, refresh }) => {
           </button>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <div>
             <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
               Chọn Môn học
@@ -151,7 +151,7 @@ const AddSubjectTrainingProgram = ({ close, sectionId, refresh }) => {
             </select>
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
                 Kỳ học dự kiến
