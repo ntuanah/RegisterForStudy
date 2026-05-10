@@ -34,6 +34,8 @@ import ProgramDefaultManagementPage from "./pages/admin/programDefaultManagement
 import ExpectedSemesterPage from "./pages/admin/expectedSemesterPage";
 import ExpectedSubjectPage from "./pages/users/expectedSubjectPage";
 import PayTuitionManagementPage from "./pages/admin/payTuitionManagementPage";
+import SuccessfulPaymentPage from "./pages/users/successfulPaymentPage";
+import PaymentFailedPage from "./pages/users/paymentFailedPage";
 
 const RouterCustom = () => {
   const userRouter = [
@@ -46,6 +48,8 @@ const RouterCustom = () => {
     { path: ROUTERS.USER.PAY_TUITION, component: <PayTuitionPage /> },
     { path: ROUTERS.USER.SCORE, component: <ScorePage /> },
     { path: ROUTERS.USER.EXPECTEDSUBJECT, component: <ExpectedSubjectPage /> },
+    {path: ROUTERS.USER.SUCCESSFULPAYMENT, component: <SuccessfulPaymentPage />},
+    {path: ROUTERS.USER.PAYMENTFAILED, component: <PaymentFailedPage />},
   ];
 
   const lecturerRouter = [
@@ -76,6 +80,7 @@ const RouterCustom = () => {
     {path: ROUTERS.ADMIN.PROGRAMDEFAULTMANAGEMENT, component: <ProgramDefaultManagementPage />},
     {path: ROUTERS.ADMIN.EXPECTEDSEMESTER, component: <ExpectedSemesterPage />},
     {path: ROUTERS.ADMIN.PAYTUITIONMANAGEMENT, component: <PayTuitionManagementPage />},
+    
   ];
 
   return (

@@ -9,7 +9,9 @@ export const ROUTERS = {
     TRAINING_PROGRAM: "/training-program",
     PAY_TUITION: "/pay-tuition",
     SCORE: "/score",
-    EXPECTEDSUBJECT: "expected-subject"
+    EXPECTEDSUBJECT: "expected-subject",
+    SUCCESSFULPAYMENT: "/payment-success",
+    PAYMENTFAILED: "/payment-failed",
   },
 
   LECTURER: {
@@ -39,6 +41,7 @@ export const ROUTERS = {
     MAJORMANAGEMENT: "/admin/major-management",
     COHORTMANAGEMENT: "/admin/cohort-management",
     EXPECTEDSEMESTER: "/admin/expected-semester",
-    PAYTUITIONMANAGEMENT: "/admin/pay-tuition-management"
+    PAYTUITIONMANAGEMENT: "/admin/pay-tuition-management",
+    
   }
 };

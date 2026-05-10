@@ -10,31 +10,6 @@ const PayTuitionPage = () => {
         </h2>
       </div>
       <div className="p-10 space-y-5">
-        <div className="flex gap-5">
-          <div className="w-48">
-            <select
-              name=""
-              id=""
-              className="w-full px-5 py-3 rounded-xl border border-[#0A4174] shadow-sm bg-white font-semibold text-slate-700 focus:outline-none cursor-pointer"
-            >
-              <option>Học kỳ 1</option>
-              <option>Học kỳ 2</option>
-            </select>
-          </div>
-
-          <div className="w-48">
-            <select
-              name=""
-              id=""
-              className="w-full px-5 py-3 rounded-xl border border-[#0A4174] shadow-sm bg-white font-semibold text-slate-700 focus:outline-none cursor-pointer"
-            >
-              <option>2022-2023</option>
-              <option>2023-2024</option>
-              <option>2024-2025</option>
-              <option>2025-2026</option>
-            </select>
-          </div>
-        </div>
 
         <PayTuition />
       </div>

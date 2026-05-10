@@ -11,3 +11,15 @@ export const generateTuitionInvoicesAPI = async (registrationPeriodId) => {
 export const getAdminTuitionInvoicesAPI = async (page, size) => {
   return await axiosClient.get(`/tuitions/admin/invoices?page=${page}&size=${size}`);
 };
+
+export const getMyInvoicesAPI = async () => {
+  return await axiosClient.get(`/tuitions/my-invoices`);
+};
+
+export const getInvoiceDetailsAPI = async (invoiceId) => {
+  return await axiosClient.get(`/tuitions/invoices/${invoiceId}/details`);
+};
+
+export const processPaymentVNPayAPI = async (payload) => {
+  return await axiosClient.post(`/tuitions/payments/vnpay`, payload);
+};
