@@ -39,5 +39,6 @@ export const ROUTERS = {
     MAJORMANAGEMENT: "/admin/major-management",
     COHORTMANAGEMENT: "/admin/cohort-management",
     EXPECTEDSEMESTER: "/admin/expected-semester",
+    PAYTUITIONMANAGEMENT: "/admin/pay-tuition-management"
   }
 };

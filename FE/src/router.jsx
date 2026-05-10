@@ -19,7 +19,7 @@ import MyClassPage from "./pages/lecturer/myClassPage";
 import TimetableLecturerPage from "./pages/lecturer/timetableLecturerPage";
 import ProfileLecturerPage from "./pages/lecturer/profileLecturerPage";
 import ProfileDeanPage from "./pages/dean/profileDeanPage";
-import ArrangeClassSchedulePage from "./pages/dean/ArrangeClassSchedulePage";
+import ArrangeClassSchedulePage from "./pages/dean/arrangeClassSchedulePage";
 import ProfileDepartmentHeadPage from "./pages/departmentHead/profileDepartmentHeadPage";
 import AssignInstructorsPage from "./pages/departmentHead/ assignInstructorsPage";
 import ProfileAdminPage from "./pages/admin/profileAdminPage";
@@ -33,6 +33,7 @@ import CohortManagementPage from "./pages/admin/cohortManagementPage";
 import ProgramDefaultManagementPage from "./pages/admin/programDefaultManagementPage";
 import ExpectedSemesterPage from "./pages/admin/expectedSemesterPage";
 import ExpectedSubjectPage from "./pages/users/expectedSubjectPage";
+import PayTuitionManagementPage from "./pages/admin/payTuitionManagementPage";
 
 const RouterCustom = () => {
   const userRouter = [
@@ -74,6 +75,7 @@ const RouterCustom = () => {
     {path: ROUTERS.ADMIN.COHORTMANAGEMENT, component: <CohortManagementPage />},
     {path: ROUTERS.ADMIN.PROGRAMDEFAULTMANAGEMENT, component: <ProgramDefaultManagementPage />},
     {path: ROUTERS.ADMIN.EXPECTEDSEMESTER, component: <ExpectedSemesterPage />},
+    {path: ROUTERS.ADMIN.PAYTUITIONMANAGEMENT, component: <PayTuitionManagementPage />},
   ];
 
   return (

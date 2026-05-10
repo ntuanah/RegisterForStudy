@@ -205,6 +205,18 @@ const Sidebar = ({ isOpen, close }) => {
         >
           Cấu hình học kỳ
         </NavLink>
+
+        <NavLink
+          to="/admin/pay-tuition-management"
+          onClick={close}
+          className={({ isActive }) =>
+            `border border-[#0A4174] rounded-full px-5 py-3 inline-block hover:bg-gray-200 hover:text-[#5483B3] transition-all duration-300 hover:-translate-y-1 ${
+              isActive ? "bg-[#5483B3] text-white" : ""
+            }`
+          }
+        >
+          Quản lý đóng học phí
+        </NavLink>
       </div>
 
       <div className="mt-auto pb-6 pt-4 flex justify-center">
