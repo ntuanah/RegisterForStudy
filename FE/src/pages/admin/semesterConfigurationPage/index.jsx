@@ -5,6 +5,7 @@ import AddOpenSubject from "../../../components/admin/Modal/AddOpenSubject";
 import { getCurrentSemesterAPI } from "../../../service/semesterService";
 import { getRegistrationPeriodsAPI } from "../../../service/registrationPeriodService";
 import { toast } from "react-toastify";
+import { clearRedisAPI, syncRedisAPI } from "../../../service/registrationService";
 
 const SemesterConfigurationPage = () => {
   const [currentSemester, setCurrentSemester] = useState(null);
@@ -15,6 +16,8 @@ const SemesterConfigurationPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,6 +89,56 @@ const SemesterConfigurationPage = () => {
     setRefreshTrigger((prev) => prev + 1);
   };
 
+  const handleSyncRedis = async () => {
+    if (!currentSemester) {
+      toast.warning("Chưa xác định được học kỳ hiện tại!");
+      return;
+    }
+
+    const confirmMsg = `Bạn có chắc chắn muốn đồng bộ sĩ số của học kỳ [${currentSemester.name}] lên Redis không?`;
+    if (!window.confirm(confirmMsg)) return;
+
+    try {
+      setIsSyncing(true);
+      const res = await syncRedisAPI(currentSemester.id);
+
+      if (res.data.code === 1000) {
+        toast.success("Đồng bộ dữ liệu lên Redis thành công!");
+      } else {
+        toast.error(res.data.message || "Đồng bộ thất bại!");
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Lỗi hệ thống khi đồng bộ Redis!",
+      );
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleClearRedis = async () => {
+    const confirmMsg =
+      "CẢNH BÁO: Hành động này sẽ dọn dẹp TOÀN BỘ dữ liệu đăng ký tín chỉ trên Redis. Bạn có chắc chắn không?";
+    if (!window.confirm(confirmMsg)) return;
+
+    try {
+      setIsClearing(true);
+      const res = await clearRedisAPI();
+
+      if (res.data.code === 1000) {
+        toast.success("Đã dọn dẹp toàn bộ dữ liệu trên Redis thành công!");
+      } else {
+        toast.error(res.data.message || "Dọn dẹp thất bại!");
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Lỗi hệ thống khi dọn dẹp Redis!",
+      );
+    } finally {
+      setIsClearing(false);
+    }
+  };
+
   return (
     <div>
       <div className="p-5 border-b border-gray-300 shadow-xl">
@@ -104,7 +157,79 @@ const SemesterConfigurationPage = () => {
               </h2>
             </div>
 
-            <div className="w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 w-full xl:w-auto">
+              <button
+                type="button"
+                onClick={handleSyncRedis}
+                disabled={isSyncing || !currentSemester}
+                className="w-full sm:w-auto justify-center h-fit font-medium border border-[#0A4174] rounded-full p-3 transition-all duration-300 flex items-center gap-2 text-[#5483B3] bg-white hover:bg-gray-200 cursor-pointer hover:-translate-y-1 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+              >
+                {isSyncing ? (
+                  <div className="w-4 h-4 border-2 border-[#5483B3] border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18px"
+                    height="18px"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M11 19H7q-.425 0-.712.288T6 20t.288.713T7 21h10q.425 0 .713-.288T18 20t-.288-.712T17 19h-4v-7.2l.9.9q.275.275.7.275t.7-.275t.275-.7t-.275-.7l-2.6-2.6q-.3-.3-.7-.3t-.7.3l-2.6 2.6q-.275.275-.275.7t.275.7t.7.275t.7-.275l.9-.9zm-7-3q-.825 0-1.412-.587T2 14V5q0-.825.588-1.412T4 3h16q.825 0 1.413.588T22 5v9q0 .825-.587 1.413T20 16h-4q-.425 0-.712-.288T15 15t.288-.712T16 14h4V5H4v9h4q.425 0 .713.288T9 15t-.288.713T8 16z"
+                    />
+                  </svg>
+                )}
+                <span>
+                  {isSyncing ? "Đang đồng bộ..." : "Đồng bộ dữ liệu redis"}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleClearRedis}
+                disabled={isClearing}
+                className="w-full sm:w-auto justify-center h-fit font-medium border border-[#0A4174] rounded-full p-3 transition-all duration-300 flex items-center gap-2 text-[#5483B3] bg-white hover:bg-gray-200 cursor-pointer hover:-translate-y-1 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+              >
+                {isClearing ? (
+                  <div className="w-4 h-4 border-2 border-[#5483B3] border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18px"
+                    height="18px"
+                    viewBox="0 0 24 24"
+                  >
+                    <g fill="none" stroke="currentColor">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.5"
+                        d="m21 3l-8 8.5m-3.554-.415c-2.48.952-4.463.789-6.446.003c.5 6.443 3.504 8.92 7.509 9.912c0 0 3.017-2.134 3.452-7.193c.047-.548.07-.821-.043-1.13c-.114-.309-.338-.53-.785-.973c-.736-.728-1.103-1.092-1.54-1.184c-.437-.09-1.007.128-2.147.565"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.5"
+                        d="M4.5 16.446S7 16.93 9.5 15"
+                      />
+                      <path
+                        strokeWidth="1.5"
+                        d="M8.5 7.25a1.25 1.25 0 1 1-2.5 0a1.25 1.25 0 0 1 2.5 0Z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M11 4v.1"
+                      />
+                    </g>
+                  </svg>
+                )}
+                <span>
+                  {isClearing ? "Đang dọn dẹp..." : "Dọn dẹp dữ liệu redis"}
+                </span>
+              </button>
+
               <button
                 onClick={() => setIsAddingNew(true)}
                 disabled={isAddingNew || !currentSemester}

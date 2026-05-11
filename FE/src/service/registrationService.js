@@ -15,3 +15,11 @@ export const enrollClassAPI = async (payload) => {
 export const getRegistrationStatusAPI = async () => {
   return await axiosClient.get(`/registration/status`);
 };
+
+export const syncRedisAPI = async (semesterId) => {
+  return await axiosClient.post(`/admin/registration/sync-redis/${semesterId}`);
+};
+
+export const clearRedisAPI = async () => {
+  return await axiosClient.delete(`/registration/clear-redis`);
+};
