@@ -10,6 +10,8 @@ const ExpectedSubjectTable = () => {
     cohortId: null,
     majorId: null,
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchStudentInfo = async () => {
     try {
@@ -57,23 +59,32 @@ const ExpectedSubjectTable = () => {
         cohortId,
         "Ngành:",
         majorId,
+        "Trang:",
+        currentPage,
       );
       setIsLoading(true);
-      const response = await getProgramSubjectsAPI(cohortId, majorId);
+      const response = await getProgramSubjectsAPI(
+        cohortId,
+        majorId,
+        currentPage,
+      );
       const { data } = response;
 
       console.log("Kết quả API Môn học:", data);
 
       if (data.code === 1000 || data.code === 200) {
         setSubjects(data.result?.content || []);
+        setTotalPages(data.result?.totalPages || 1);
       } else {
         toast.error(data.message || "Lỗi lấy danh sách môn học");
         setSubjects([]);
+        setTotalPages(1);
       }
     } catch (error) {
       console.error("Lỗi fetchSubjects:", error);
       toast.error("Không thể tải danh sách môn học!");
       setSubjects([]);
+      setTotalPages(1);
     } finally {
       setIsLoading(false);
     }
@@ -87,90 +98,222 @@ const ExpectedSubjectTable = () => {
     if (studentInfo.cohortId && studentInfo.majorId) {
       fetchSubjects();
     }
-  }, [studentInfo.cohortId, studentInfo.majorId]);
+  }, [studentInfo.cohortId, studentInfo.majorId, currentPage]);
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        pageNumbers.push(1, 2, 3, 4, "...", totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pageNumbers.push(
+          1,
+          "...",
+          totalPages - 3,
+          totalPages - 2,
+          totalPages - 1,
+          totalPages,
+        );
+      } else {
+        pageNumbers.push(
+          1,
+          "...",
+          currentPage - 1,
+          currentPage,
+          currentPage + 1,
+          "...",
+          totalPages,
+        );
+      }
+    }
+    return pageNumbers;
+  };
 
   return (
-    <div className="border border-slate-200 rounded-xl shadow-sm mt-5 overflow-x-auto">
-      <table className="w-full min-w-[800px] text-left border-collapse">
-        <thead>
-          <tr className="bg-blue-50">
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-5 whitespace-nowrap">
-              STT
-            </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-25 whitespace-nowrap">
-              Mã môn
-            </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
-              Tên môn
-            </th>
+    <div className="border border-slate-200 rounded-xl shadow-sm mt-5 ">
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[800px] text-left border-collapse">
+          <thead>
+            <tr className="bg-blue-50">
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-5 whitespace-nowrap">
+                STT
+              </th>
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-25 whitespace-nowrap">
+                Mã môn
+              </th>
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
+                Tên môn
+              </th>
 
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-30 whitespace-nowrap">
-              Số tín
-            </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-60 whitespace-nowrap">
-              Yêu cầu
-            </th>
-          </tr>
-        </thead>
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-30 whitespace-nowrap">
+                Số tín
+              </th>
+              <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-60 whitespace-nowrap">
+                Yêu cầu
+              </th>
+            </tr>
+          </thead>
 
-        <tbody className="divide-y divide-slate-100 text-sm">
-          {isLoading ? (
-            <tr>
-              <td colSpan="5" className="px-6 py-8 text-center text-slate-500">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-6 h-6 border-4 border-blue-200 border-t-[#0A4174] rounded-full animate-spin"></div>
-                  Đang tải chương trình đào tạo...
-                </div>
-              </td>
-            </tr>
-          ) : !studentInfo.cohortId || !studentInfo.majorId ? (
-            <tr>
-              <td
-                colSpan="5"
-                className="px-6 py-4 text-center text-slate-500 italic"
-              >
-                Không tìm thấy thông tin Khóa/Ngành của bạn.
-              </td>
-            </tr>
-          ) : subjects.length === 0 ? (
-            <tr>
-              <td
-                colSpan="5"
-                className="px-6 py-4 text-center text-slate-500 italic"
-              >
-                Chưa có dữ liệu môn học cho Khóa/Ngành của bạn.
-              </td>
-            </tr>
-          ) : (
-            subjects.map((subject, index) => (
-              <tr
-                key={subject.id}
-                className="hover:bg-slate-50 transition-colors"
-              >
-                <td className="px-6 py-4">{index + 1}</td>
-                <td className="px-6 py-4 ">
-                  {subject.subjectCode}
-                </td>
-                <td className="px-6 py-4 font-medium">{subject.subjectName}</td>
-                <td className="px-6 py-4 ">
-                  {subject.credits}
-                </td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`px-3 py-1 rounded-full text-[11px] font-bold ${
-                      subject.sectionTitle.toLowerCase().includes("bắt buộc")
-                        ? "bg-blue-100 text-[#5483B3]"
-                        : "bg-orange-100 text-orange-700"
-                    }`}
-                  >
-                    {subject.sectionTitle}
-                  </span>
+          <tbody className="divide-y divide-slate-100 text-sm">
+            {isLoading ? (
+              <tr>
+                <td
+                  colSpan="5"
+                  className="px-6 py-8 text-center text-slate-500"
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-6 h-6 border-4 border-blue-200 border-t-[#0A4174] rounded-full animate-spin"></div>
+                    Đang tải chương trình đào tạo...
+                  </div>
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : !studentInfo.cohortId || !studentInfo.majorId ? (
+              <tr>
+                <td
+                  colSpan="5"
+                  className="px-6 py-4 text-center text-slate-500 italic"
+                >
+                  Không tìm thấy thông tin Khóa/Ngành của bạn.
+                </td>
+              </tr>
+            ) : subjects.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="5"
+                  className="px-6 py-4 text-center text-slate-500 italic"
+                >
+                  Chưa có dữ liệu môn học cho Khóa/Ngành của bạn.
+                </td>
+              </tr>
+            ) : (
+              subjects.map((subject, index) => (
+                <tr
+                  key={subject.id}
+                  className="hover:bg-slate-50 transition-colors"
+                >
+                  <td className="px-6 py-4">{index + 1}</td>
+                  <td className="px-6 py-4 ">{subject.subjectCode}</td>
+                  <td className="px-6 py-4 font-medium">
+                    {subject.subjectName}
+                  </td>
+                  <td className="px-6 py-4 ">{subject.credits}</td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`px-3 py-1 rounded-full text-[11px] font-bold ${
+                        subject.sectionTitle.toLowerCase().includes("bắt buộc")
+                          ? "bg-blue-100 text-[#5483B3]"
+                          : "bg-orange-100 text-orange-700"
+                      }`}
+                    >
+                      {subject.sectionTitle}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {totalPages > 1 && (
+        <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between bg-blue-50 rounded-b-xl">
+          <span className="text-sm text-slate-500">
+            Trang{" "}
+            <span className="font-bold text-[#5483B3]">{currentPage}</span> /{" "}
+            {totalPages}
+          </span>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`p-2 rounded-lg border flex items-center justify-center transition-colors
+                ${
+                  currentPage === 1
+                    ? "border-slate-200 text-slate-300 bg-white cursor-not-allowed"
+                    : "border-[#0A4174] text-[#5483B3] bg-white hover:bg-slate-100 hover:border-[#0A4174] cursor-pointer"
+                }`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2.5"
+                  d="m15 18l-6-6l6-6"
+                />
+              </svg>
+            </button>
+
+            {getPageNumbers().map((num, index) =>
+              num === "..." ? (
+                <span
+                  key={`dots-${index}`}
+                  className="px-2 text-slate-500 font-bold tracking-widest"
+                >
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={`page-${num}`}
+                  onClick={() => handlePageChange(num)}
+                  className={`w-9 h-9 rounded-lg border text-sm font-bold transition-all flex items-center justify-center
+                    ${
+                      currentPage === num
+                        ? "bg-[#5483B3] text-white border-[#0A4174] shadow-md cursor-default"
+                        : "border-slate-300 text-slate-600 bg-white hover:bg-blue-50 hover:text-[#5483B3] hover:border-[#5483B3] cursor-pointer"
+                    }`}
+                >
+                  {num}
+                </button>
+              ),
+            )}
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`p-2 rounded-lg border flex items-center justify-center transition-colors
+                ${
+                  currentPage === totalPages
+                    ? "border-slate-200 text-slate-300 bg-white cursor-not-allowed"
+                    : "border-[#0A4174] text-[#5483B3] bg-white hover:bg-slate-100 hover:border-[#0A4174] cursor-pointer"
+                }`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2.5"
+                  d="m9 18l6-6l-6-6"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

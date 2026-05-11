@@ -74,11 +74,37 @@ const MyClassPage = () => {
   };
 
   const getPageNumbers = () => {
-    const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(i);
+    const pageNumbers = [];
+
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        pageNumbers.push(1, 2, 3, 4, "...", totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pageNumbers.push(
+          1,
+          "...",
+          totalPages - 3,
+          totalPages - 2,
+          totalPages - 1,
+          totalPages,
+        );
+      } else {
+        pageNumbers.push(
+          1,
+          "...",
+          currentPage - 1,
+          currentPage,
+          currentPage + 1,
+          "...",
+          totalPages,
+        );
+      }
     }
-    return pages;
+    return pageNumbers;
   };
 
   return (
@@ -109,14 +135,14 @@ const MyClassPage = () => {
           )}
 
           {totalPages > 1 && (
-            <div className="px-10 py-4 flex items-center justify-between">
+            <div className="px-10 py-4 flex flex-wrap items-center justify-between gap-4">
               <span className="text-sm text-slate-500">
                 Trang{" "}
                 <span className="font-bold text-[#5483B3]">{currentPage}</span>{" "}
                 / {totalPages}
               </span>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
@@ -144,20 +170,29 @@ const MyClassPage = () => {
                   </svg>
                 </button>
 
-                {getPageNumbers().map((num) => (
-                  <button
-                    key={num}
-                    onClick={() => handlePageChange(num)}
-                    className={`w-9 h-9 rounded-lg border text-sm font-bold transition-all flex items-center justify-center
-                      ${
-                        currentPage === num
-                          ? "bg-[#5483B3] text-white border-[#0A4174] shadow-md cursor-default"
-                          : "border-slate-300 text-slate-600 bg-white hover:bg-blue-50 hover:text-[#5483B3] hover:border-[#5483B3] cursor-pointer"
-                      }`}
-                  >
-                    {num}
-                  </button>
-                ))}
+                {getPageNumbers().map((num, index) =>
+                  num === "..." ? (
+                    <span
+                      key={`dots-${index}`}
+                      className="px-2 text-slate-500 font-bold tracking-widest"
+                    >
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={`page-${num}`}
+                      onClick={() => handlePageChange(num)}
+                      className={`w-9 h-9 rounded-lg border text-sm font-bold transition-all flex items-center justify-center
+                        ${
+                          currentPage === num
+                            ? "bg-[#5483B3] text-white border-[#0A4174] shadow-md cursor-default"
+                            : "border-slate-300 text-slate-600 bg-white hover:bg-blue-50 hover:text-[#5483B3] hover:border-[#5483B3] cursor-pointer"
+                        }`}
+                    >
+                      {num}
+                    </button>
+                  ),
+                )}
 
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}

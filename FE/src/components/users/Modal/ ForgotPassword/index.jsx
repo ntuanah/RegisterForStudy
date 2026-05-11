@@ -91,7 +91,7 @@ const ForgotPassword = ({ close }) => {
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
-      <div className="bg-white w-full max-w-[500px]] rounded-2xl p-6 border border-[#0A4174] shadow-lg">
+      <div className="bg-white w-full max-w-[500px] rounded-2xl p-6 border border-[#0A4174] shadow-lg">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg md:text-xl font-bold text-[#0A4174]">Quên mật khẩu</h2>
 

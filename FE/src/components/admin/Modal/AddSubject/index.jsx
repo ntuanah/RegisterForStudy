@@ -1,18 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { addSubjectAPI } from "../../../../service/subjectService";
+import { getAllMajorsAPI } from "../../../../service/majorService";
 
 const AddSubject = ({ close, onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [majors, setMajors] = useState([]);
+
   const [formData, setFormData] = useState({
     code: "",
     name: "",
     credits: "",
-    coffe: "",
+    coffee: "",
     departmentName: "",
     theoryPeriod: "",
     practicePeriod: "",
   });
+
+  useEffect(() => {
+    const fetchMajors = async () => {
+      try {
+        const response = await getAllMajorsAPI();
+        const { data } = response;
+        if (data.code === 1000 || data.code === 200) {
+          setMajors(data.result || []);
+        } else {
+          toast.error("Không thể lấy danh sách Khoa/Ngành!");
+        }
+      } catch (error) {
+        console.error("Lỗi fetchMajors:", error);
+        toast.error("Lỗi kết nối khi lấy danh sách Khoa/Ngành!");
+      }
+    };
+
+    fetchMajors();
+  }, []);
 
   const handleOnChange = (e) => {
     setFormData({
@@ -22,14 +44,24 @@ const AddSubject = ({ close, onSuccess }) => {
   };
 
   const handleSubmit = async () => {
-    if (
-      !formData.code?.trim() ||
-      !formData.name?.trim() ||
-      formData.credits === "" ||
-      formData.coffe === "" ||
-      !formData.departmentName?.trim()
-    ) {
-      toast.warning("Vui lòng nhập đầy đủ thông tin bắt buộc!");
+    if (!formData.code?.trim()) {
+      toast.warning("Vui lòng nhập Mã môn!");
+      return;
+    }
+    if (!formData.name?.trim()) {
+      toast.warning("Vui lòng nhập Tên môn!");
+      return;
+    }
+    if (!formData.credits || String(formData.credits).trim() === "") {
+      toast.warning("Vui lòng nhập Số tín chỉ!");
+      return;
+    }
+    if (!formData.coffee || String(formData.coffee).trim() === "") {
+      toast.warning("Vui lòng nhập Hệ số!");
+      return;
+    }
+    if (!formData.departmentName?.trim()) {
+      toast.warning("Vui lòng chọn Khoa / Ngành!");
       return;
     }
 
@@ -41,7 +73,7 @@ const AddSubject = ({ close, onSuccess }) => {
         name: formData.name.trim(),
         departmentName: formData.departmentName.trim(),
         credits: parseInt(formData.credits, 10),
-        coffe: parseFloat(String(formData.coffe).replace(",", ".")),
+        coffee: parseFloat(String(formData.coffee).replace(",", ".")),
         theoryPeriod: parseInt(formData.theoryPeriod, 10) || 0,
         practicePeriod: parseInt(formData.practicePeriod, 10) || 0,
       };
@@ -141,8 +173,8 @@ const AddSubject = ({ close, onSuccess }) => {
             </label>
             <input
               type="text"
-              name="coffe"
-              value={formData.coffe}
+              name="coffee"
+              value={formData.coffee}
               onChange={handleOnChange}
               placeholder="VD: 1.8"
               className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
@@ -153,14 +185,19 @@ const AddSubject = ({ close, onSuccess }) => {
             <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
               Khoa
             </label>
-            <input
-              type="text"
+            <select
               name="departmentName"
               value={formData.departmentName}
               onChange={handleOnChange}
-              placeholder="VD: Khoa Công nghệ thông tin"
-              className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
-            />
+              className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3] bg-white cursor-pointer"
+            >
+              <option value="">-- Chọn Khoa / Ngành --</option>
+              {majors.map((major) => (
+                <option key={major.id} value={major.name}>
+                  {major.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>

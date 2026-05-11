@@ -80,8 +80,21 @@ const UserManagementTable = ({ searchWord, selectedRole, refreshTrigger }) => {
 
   const getPageNumbers = () => {
     const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(i);
+    
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        pageNumbers.push(1, 2, 3, 4, "...", totalPages);
+      } 
+      else if (currentPage >= totalPages - 2) {
+        pageNumbers.push(1, "...", totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } 
+      else {
+        pageNumbers.push(1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages);
+      }
     }
     return pageNumbers;
   };
@@ -234,36 +247,30 @@ const UserManagementTable = ({ searchWord, selectedRole, refreshTrigger }) => {
                     : "border-[#0A4174] text-[#5483B3] bg-white hover:bg-slate-100 hover:border-[#0A4174] cursor-pointer"
                 }`}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2.5"
-                  d="m15 18l-6-6l6-6"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="m15 18l-6-6l6-6" />
               </svg>
             </button>
 
-            {getPageNumbers().map((num) => (
-              <button
-                key={num}
-                onClick={() => handlePageChange(num)}
-                className={`w-9 h-9 rounded-lg border text-sm font-bold transition-all flex items-center justify-center
-                  ${
-                    currentPage === num
-                      ? "bg-[#5483B3] text-white border-[#0A4174] shadow-md cursor-default"
-                      : "border-slate-300 text-slate-600 bg-white hover:bg-blue-50 hover:text-[#5483B3] hover:border-[#5483B3] cursor-pointer"
-                  }`}
-              >
-                {num}
-              </button>
+            {getPageNumbers().map((num, index) => (
+              num === "..." ? (
+                <span key={`dots-${index}`} className="px-2 text-slate-500 font-bold tracking-widest">
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={`page-${num}`}
+                  onClick={() => handlePageChange(num)}
+                  className={`w-9 h-9 rounded-lg border text-sm font-bold transition-all flex items-center justify-center
+                    ${
+                      currentPage === num
+                        ? "bg-[#5483B3] text-white border-[#0A4174] shadow-md cursor-default"
+                        : "border-slate-300 text-slate-600 bg-white hover:bg-blue-50 hover:text-[#5483B3] hover:border-[#5483B3] cursor-pointer"
+                    }`}
+                >
+                  {num}
+                </button>
+              )
             ))}
 
             <button
@@ -276,20 +283,8 @@ const UserManagementTable = ({ searchWord, selectedRole, refreshTrigger }) => {
                     : "border-[#0A4174] text-[#5483B3] bg-white hover:bg-slate-100 hover:border-[#0A4174] cursor-pointer"
                 }`}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2.5"
-                  d="m9 18l6-6l-6-6"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="m9 18l6-6l-6-6" />
               </svg>
             </button>
           </div>
