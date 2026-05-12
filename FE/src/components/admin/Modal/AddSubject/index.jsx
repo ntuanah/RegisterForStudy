@@ -11,10 +11,8 @@ const AddSubject = ({ close, onSuccess }) => {
     code: "",
     name: "",
     credits: "",
-    coffee: "",
+    coefficient: "", 
     departmentName: "",
-    theoryPeriod: "",
-    practicePeriod: "",
   });
 
   useEffect(() => {
@@ -56,7 +54,7 @@ const AddSubject = ({ close, onSuccess }) => {
       toast.warning("Vui lòng nhập Số tín chỉ!");
       return;
     }
-    if (!formData.coffee || String(formData.coffee).trim() === "") {
+    if (!formData.coefficient || String(formData.coefficient).trim() === "") {
       toast.warning("Vui lòng nhập Hệ số!");
       return;
     }
@@ -73,9 +71,7 @@ const AddSubject = ({ close, onSuccess }) => {
         name: formData.name.trim(),
         departmentName: formData.departmentName.trim(),
         credits: parseInt(formData.credits, 10),
-        coffee: parseFloat(String(formData.coffee).replace(",", ".")),
-        theoryPeriod: parseInt(formData.theoryPeriod, 10) || 0,
-        practicePeriod: parseInt(formData.practicePeriod, 10) || 0,
+        coefficient: parseFloat(String(formData.coefficient).replace(",", ".")),
       };
 
       const { data } = await addSubjectAPI(payload);
@@ -173,8 +169,8 @@ const AddSubject = ({ close, onSuccess }) => {
             </label>
             <input
               type="text"
-              name="coffee"
-              value={formData.coffee}
+              name="coefficient"
+              value={formData.coefficient}
               onChange={handleOnChange}
               placeholder="VD: 1.8"
               className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
@@ -198,34 +194,6 @@ const AddSubject = ({ close, onSuccess }) => {
                 </option>
               ))}
             </select>
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
-              Số tiết lý thuyết
-            </label>
-            <input
-              type="number"
-              name="theoryPeriod"
-              value={formData.theoryPeriod}
-              onChange={handleOnChange}
-              placeholder="VD: 30"
-              className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
-              Số tiết thực hành
-            </label>
-            <input
-              type="number"
-              name="practicePeriod"
-              value={formData.practicePeriod}
-              onChange={handleOnChange}
-              placeholder="VD: 15"
-              className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
-            />
           </div>
         </div>
 

@@ -48,8 +48,7 @@ const EditSubject = ({ id, close, refresh }) => {
     credits: "",
     coefficient: "",
     departmentName: "",
-    theoryPeriod: 15,
-    practicePeriod: 15,
+    totalPeriods: "", 
   });
 
   useEffect(() => {
@@ -65,8 +64,7 @@ const EditSubject = ({ id, close, refresh }) => {
             credits: result.credits || "",
             coefficient: result.coefficient || "",
             departmentName: result.departmentName || "",
-            theoryPeriod: result.theoryPeriod || 0,
-            practicePeriod: result.practicePeriod || 0,
+            totalPeriods: result.totalPeriods || "",
           });
         }
       } catch (error) {
@@ -197,8 +195,6 @@ const EditSubject = ({ id, close, refresh }) => {
         name: formData.name,
         credits: parseInt(formData.credits, 10),
         departmentName: formData.departmentName,
-        theoryPeriod: parseInt(formData.theoryPeriod, 10),
-        practicePeriod: parseInt(formData.practicePeriod, 10),
         coefficient: parseFloat(String(formData.coefficient).replace(",", ".")),
       };
 
@@ -310,10 +306,9 @@ const EditSubject = ({ id, close, refresh }) => {
           subjectId: id,
           type: comp.type,
           requiredRoomTypeId: comp.requiredRoomTypeId,
-          sessionsPerWeek: parseInt(comp.sessionsPerWeek, 10),
-          periodsPerSession: parseInt(comp.periodsPerSession, 10),
-          totalPeriods: parseInt(comp.totalPeriods, 10),
-          weightPercent: parseFloat(comp.weightPercent),
+          sessionsPerWeek: parseInt(comp.sessionsPerWeek, 10) || 0,
+          periodsPerSession: parseInt(comp.periodsPerSession, 10) || 0,
+          weightPercent: parseFloat(comp.weightPercent) || 0,
         };
 
         if (comp.id) {
@@ -326,8 +321,39 @@ const EditSubject = ({ id, close, refresh }) => {
       await Promise.all([...deletePromises, ...savePromises]);
 
       toast.success("Lưu cấu hình thành công!");
-      
       setDeletedComponentIds([]);
+
+      try {
+        const subjectRes = await getSubjectByIdAPI(id);
+        if (subjectRes.data.code === 200) {
+          setFormData((prev) => ({
+            ...prev,
+            totalPeriods: subjectRes.data.result.totalPeriods || "",
+          }));
+        }
+
+        const compRes = await getSubjectComponentsAPI(id);
+        if (compRes.data.code === 1000 || compRes.data.code === 200) {
+          const fetchedComponents = compRes.data.result || [];
+          if (fetchedComponents.length > 0) {
+            setComponents(
+              fetchedComponents.map((comp) => ({
+                id: comp.id,
+                type: comp.type,
+                requiredRoomTypeId: comp.requiredRoomTypeId,
+                sessionsPerWeek: comp.sessionsPerWeek,
+                periodsPerSession: comp.periodsPerSession,
+                totalPeriods: comp.totalPeriods,
+                weightPercent: comp.weightPercent,
+              }))
+            );
+          } else {
+            setComponents([]);
+          }
+        }
+      } catch (error) {
+        console.error("Lỗi khi tải lại dữ liệu:", error);
+      }
 
     } catch (error) {
       toast.error(error.response?.data?.message || "Lỗi khi lưu cấu hình!");
@@ -432,29 +458,17 @@ const EditSubject = ({ id, close, refresh }) => {
               />
             </div>
 
-            <div>
+            <div className="col-span-2">
               <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
-                Số tiết LT
+                Tổng số tiết
               </label>
               <input
                 type="number"
-                name="theoryPeriod"
-                value={formData.theoryPeriod}
-                onChange={handleOnChange}
-                className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">
-                Số tiết BT/TH
-              </label>
-              <input
-                type="number"
-                name="practicePeriod"
-                value={formData.practicePeriod}
-                onChange={handleOnChange}
-                className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#5483B3]"
+                name="totalPeriods"
+                value={formData.totalPeriods}
+                readOnly
+                disabled
+                className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 outline-none bg-gray-100 text-slate-500 cursor-not-allowed"
               />
             </div>
           </div>
