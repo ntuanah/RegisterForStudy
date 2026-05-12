@@ -66,7 +66,7 @@ const SubjectTable = ({ keyword, refresh }) => {
 
         if (data.code === 200) {
           toast.success("Xóa môn học thành công!");
-          fetchSubjects(keyword);
+          fetchSubjects(keyword, currentPage);
         } else {
           toast.error(data.message || "Xóa thất bại!");
         }
