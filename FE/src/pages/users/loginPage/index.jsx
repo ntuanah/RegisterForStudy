@@ -29,53 +29,6 @@ const LoginPage = () => {
     });
   };
 
-  useEffect(() => {
-    const tokenFromUrl = searchParams.get("accessToken");
-
-    if (tokenFromUrl) {
-      localStorage.setItem("accessToken", tokenFromUrl);
-      toast.success("Đăng nhập thành công!");
-
-      try {
-        const decodedToken = jwtDecode(tokenFromUrl);
-        let userRoles = [];
-        
-        if (Array.isArray(decodedToken.roles)) {
-          userRoles = decodedToken.roles;
-        } else if (typeof decodedToken.roles === "string") {
-          userRoles = decodedToken.roles.split(',').map(r => r.trim());
-        }
-
-        let redirectPath = ROUTERS.USER.HOME;
-
-        if (userRoles.includes("ROLE_ADMIN") || userRoles.includes("ADMIN")) {
-          redirectPath = ROUTERS.ADMIN.PROFILE;
-        } else if (
-          userRoles.includes("ROLE_DEAN") ||
-          userRoles.includes("DEAN")
-        ) {
-          redirectPath = ROUTERS.DEAN.PROFILE;
-        } else if (
-          userRoles.includes("HOD") ||
-          userRoles.includes("ROLE_HOD")
-        ) {
-          redirectPath = ROUTERS.DEPARTMENTHEAD.PROFILE;
-        } else if (
-          userRoles.includes("ROLE_LECTURER") ||
-          userRoles.includes("LECTURER")
-        ) {
-          redirectPath = ROUTERS.LECTURER.PROFILE;
-        } else {
-          redirectPath = ROUTERS.USER.PROFILE;
-        }
-
-        navigate(redirectPath);
-      } catch (error) {
-        toast.error("Lỗi xác thực token từ Teams!");
-        localStorage.removeItem("accessToken");
-      }
-    }
-  }, [searchParams, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();

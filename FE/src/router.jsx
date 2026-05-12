@@ -36,6 +36,7 @@ import ExpectedSubjectPage from "./pages/users/expectedSubjectPage";
 import PayTuitionManagementPage from "./pages/admin/payTuitionManagementPage";
 import SuccessfulPaymentPage from "./pages/users/successfulPaymentPage";
 import PaymentFailedPage from "./pages/users/paymentFailedPage";
+import OAuth2RedirectHandler from "./pages/users/OAuth2RedirectHandler";
 
 const RouterCustom = () => {
   const userRouter = [
@@ -86,6 +87,8 @@ const RouterCustom = () => {
   return (
     <Routes>
       <Route path={ROUTERS.USER.LOGIN} element={<LoginPage />} />
+
+      <Route path={ROUTERS.USER.OAUTH2_REDIRECT} element={<OAuth2RedirectHandler />} />
 
       <Route element={<ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_STUDENT"]} />}>
         <Route element={<MasterLayout />}>

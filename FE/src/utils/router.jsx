@@ -2,6 +2,7 @@ export const ROUTERS = {
   USER: {
     HOME: "/",
     LOGIN: "/login",
+    OAUTH2_REDIRECT: "/oauth2/redirect",
     PROFILE: "/profile",
     REGISTER: "/registerstudy",
     TIMETABLE: "/timetable",
