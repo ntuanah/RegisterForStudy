@@ -155,14 +155,6 @@ const TrainingProgramPage = () => {
               </button>
             </div>
             <div className="space-y-4 md:space-y-6">
-              <div>
-                <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
-                  Đánh giá tổng quan
-                </label>
-                <div className="w-full text-sm border border-gray-300 rounded-lg px-4 py-3 bg-gray-50 text-slate-700 outline-none leading-relaxed">
-                  {recommendationData.explanation}
-                </div>
-              </div>
 
               <div>
                 <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
