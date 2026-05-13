@@ -9,7 +9,7 @@ const TimetableLecturerPage = () => {
   const [currentSemester, setCurrentSemester] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const periods = Array.from({ length: 15 }, (_, i) => i + 1); 
+  const periods = Array.from({ length: 18 }, (_, i) => i + 1); 
   const days = [2, 3, 4, 5, 6, 7, 8]; 
 
   useEffect(() => {

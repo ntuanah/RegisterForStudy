@@ -7,12 +7,14 @@ import {
   autoAssignScheduleAPI,
   clearAutoAssignScheduleAPI,
 } from "../../../service/scheduleService";
+import UnassignedClassesList from "../../../components/admin/UnassignedClassesList";
 
 const ArrangeClassSchedulePage = () => {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [isAutoAssigning, setIsAutoAssigning] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [showUnassigned, setShowUnassigned] = useState(false);
 
   const handleAutoAssign = async () => {
     if (
@@ -121,6 +123,27 @@ const ArrangeClassSchedulePage = () => {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <button 
+              onClick={() => setShowUnassigned(!showUnassigned)}
+              className={`h-fit font-medium border rounded-full px-5 py-3 transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-sm hover:-translate-y-1
+                ${showUnassigned 
+                  ? "bg-red-50 text-red-500 border-red-500 hover:bg-red-100" 
+                  : "bg-white text-[#5483B3] border-[#0A4174] hover:bg-gray-100"
+                }`}
+            >
+              {showUnassigned ? (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 6L6 18M6 6l12 12"/></svg>
+                  Đóng danh sách
+                </>
+              ) : (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 3h16a1 1 0 0 1 1 1v1.586a1 1 0 0 1-.293.707l-6.414 6.414a1 1 0 0 0-.293.707v6.305a1 1 0 0 1-1.243.97l-2-.5a1 1 0 0 1-.757-.97v-5.805a1 1 0 0 0-.293-.707L3.293 6.293A1 1 0 0 1 3 5.586V4a1 1 0 0 1 1-1"/></svg>
+                  Các lớp chưa được xếp lịch
+                </>
+              )}
+            </button>
+
             <button
               onClick={handleClearAutoAssign}
               disabled={isClearing || isAutoAssigning}
@@ -190,21 +213,27 @@ const ArrangeClassSchedulePage = () => {
         </div>
 
         <div className="overflow-x-auto pb-4 custom-scrollbar">
-          <div className="min-w-[1100px] grid grid-cols-12 gap-6">
-            <div className="col-span-3">
-              <SidebarCourseList
-                selectedSubject={selectedSubject}
-                onSelectSubject={setSelectedSubject}
-              />
+          {showUnassigned ? (
+            <div className="min-w-[1100px]">
+              <UnassignedClassesList />
             </div>
+          ) : (
+            <div className="min-w-[1100px] grid grid-cols-12 gap-6">
+              <div className="col-span-3">
+                <SidebarCourseList
+                  selectedSubject={selectedSubject}
+                  onSelectSubject={setSelectedSubject}
+                />
+              </div>
 
-            <div className="col-span-9">
-              <MainContent
-                selectedSubject={selectedSubject}
-                refreshKey={refreshKey}
-              />
+              <div className="col-span-9">
+                <MainContent
+                  selectedSubject={selectedSubject}
+                  refreshKey={refreshKey}
+                />
+              </div>
             </div>
-          </div> 
+          )}
         </div>
       </div>
     </div>

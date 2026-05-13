@@ -84,29 +84,30 @@ const SidebarCourseList = ({ selectedSubject, onSelectSubject }) => {
           type="text"
           placeholder="Tìm kiếm môn học"
           className="flex-1 outline-none text-sm"
+          value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
         />
       </div>
 
-      <div className="flex flex-col gap-3 overflow-y-auto p-2 mt-5 custom-scrollbar flex-1">
+      <div className="flex flex-col gap-3 overflow-y-auto p-2 mt-5 custom-scrollbar flex-1 max-h-[750px]">
         {isLoading ? (
           <div className="flex justify-center py-8">
-            <div className="w-6 h-6 border-2 border-[#5483B3] border-t-transparent rounded-full"></div>
+            <div className="w-6 h-6 border-2 border-[#5483B3] border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : subjects.length === 0 ? (
           <p className="text-center text-sm text-slate-500 py-5">
-            Chưa có môn học nào được mở.
+            {keyword ? `Không tìm thấy môn học nào khớp với "${keyword}"` : "Chưa có môn học nào được mở."}
           </p>
         ) : (
           subjects.map((subject) => (
             <div
               key={subject.id}
               onClick={() => onSelectSubject(subject)}
-              className={
+              className={`transition-all cursor-pointer ${
                 selectedSubject?.id === subject.id
-                  ? "ring-1 ring-[#0A4174] rounded-xl"
+                  ? "ring-2 ring-[#0A4174] rounded-xl shadow-md"
                   : ""
-              }
+              }`}
             >
               <CourseItem subject={subject} />
             </div>

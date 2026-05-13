@@ -36,7 +36,15 @@ export const updateClassSectionAPI = async (id, data) => {
 };
 
 export const getOpenedSubjectsInFacultyAPI = async (semesterId, searchWord = "") => {
-  return await axiosClient.get(`/class-sections/semester/${semesterId}/subjects-in-faculty?search=${encodeURIComponent(searchWord)}`);
+  if (searchWord && searchWord.trim() !== "") {
+    return await axiosClient.get(
+      `/class-sections/semester/${semesterId}/subjects-in-faculty/search?keyword=${encodeURIComponent(searchWord)}`
+    );
+  } else {
+    return await axiosClient.get(
+      `/class-sections/semester/${semesterId}/subjects-in-faculty`
+    );
+  }
 };
 
 export const approvePendingClassSectionsAPI = async (semesterId) => {

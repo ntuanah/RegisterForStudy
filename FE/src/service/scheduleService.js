@@ -57,3 +57,7 @@ export const exportSemesterSchedulePdfAPI = async (semesterId) => {
 export const getLecturerScheduleAPI = async (lecturerCode, semesterId, page = 1, size = 12) => {
   return await axiosClient.get(`/schedules/lecturer/${lecturerCode}?semesterId=${semesterId}&page=${page - 1}&size=${size}`);
 };
+
+export const getUnassignedSchedulesAPI = async (semesterId, page = 0) => {
+  return await axiosClient.get(`/schedules/semester/${semesterId}/unassigned?page=${page}`);
+};

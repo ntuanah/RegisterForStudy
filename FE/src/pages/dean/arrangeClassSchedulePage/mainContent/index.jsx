@@ -42,7 +42,7 @@ const MainContent = ({ selectedSubject, refreshKey }) => {
   }
 
   return (
-    <div className="p-5 rounded-xl bg-blue-50 h-full max-h-[800px] flex flex-col">
+    <div className="p-5 rounded-xl bg-blue-50 h-full max-h-[900px] flex flex-col">
       <div className=" pb-4 mb-4">
         <h4 className="font-black text-2xl text-[#5483B3]">{selectedSubject.name}</h4>
         <div className="flex gap-4 mt-2 text-sm text-slate-600 font-medium">
