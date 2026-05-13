@@ -7,40 +7,62 @@ import { toast } from "react-toastify";
 const SidebarCourseList = ({ selectedSubject, onSelectSubject }) => {
   const [subjects, setSubjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [currentSemesterId, setCurrentSemesterId] = useState(null);
+  const [keyword, setKeyword] = useState("");
+
+  const fetchSubjects = async (semesterId, searchWord) => {
+    try {
+      setIsLoading(true);
+      const subjectsRes = await getOpenedSubjectsInFacultyAPI(semesterId, searchWord);
+      const subjectsData = subjectsRes.data;
+
+      if (subjectsData.code === 1000) {
+        setSubjects(subjectsData.result || []);
+      } else {
+        toast.error("Không thể tải danh sách môn học!");
+      }
+    } catch (error) {
+      console.error("Lỗi tải SidebarCourseList:", error);
+      toast.error("Lỗi kết nối máy chủ!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchSemester = async () => {
       try {
         setIsLoading(true);
         const semesterRes = await getCurrentSemesterAPI();
         const semesterData = semesterRes.data;
 
         if (semesterData.code === 1000 && semesterData.result?.id) {
-          const currentSemesterId = semesterData.result.id;
-
-          const subjectsRes =
-            await getOpenedSubjectsInFacultyAPI(currentSemesterId);
-          const subjectsData = subjectsRes.data;
-
-          if (subjectsData.code === 1000) {
-            setSubjects(subjectsData.result || []);
-          } else {
-            toast.error("Không thể tải danh sách môn học!");
-          }
+          const fetchedSemesterId = semesterData.result.id;
+          setCurrentSemesterId(fetchedSemesterId);
+          fetchSubjects(fetchedSemesterId, "");
         } else {
           toast.error("Không tìm thấy học kỳ hiện tại!");
+          setIsLoading(false);
         }
       } catch (error) {
-        console.error("Lỗi tải SidebarCourseList:", error);
+        console.error("Lỗi lấy học kỳ:", error);
         toast.error("Lỗi kết nối máy chủ!");
-      } finally {
         setIsLoading(false);
       }
     };
 
-    fetchData();
+    fetchSemester();
   }, []);
+
+  useEffect(() => {
+    if (!currentSemesterId) return;
+
+    const delayDebounceFn = setTimeout(() => {
+      fetchSubjects(currentSemesterId, keyword);
+    }, 500); 
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [keyword, currentSemesterId]);
 
   return (
     <div className="p-5 rounded-xl bg-blue-50">
@@ -60,8 +82,9 @@ const SidebarCourseList = ({ selectedSubject, onSelectSubject }) => {
         </svg>
         <input
           type="text"
-          placeholder="Tìm kiếm nội dung bất kỳ"
+          placeholder="Tìm kiếm môn học"
           className="flex-1 outline-none text-sm"
+          onChange={(e) => setKeyword(e.target.value)}
         />
       </div>
 

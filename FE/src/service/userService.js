@@ -1,13 +1,15 @@
 import axiosClient from "../utils/axiosClient";
 
-export const getAllUsersAPI = async (searchWord = "", page = 0) => {
-  let url = `/users?page=${page}`;
-
-  if (searchWord && searchWord.trim() !== "") {
-    url += `&search=${encodeURIComponent(searchWord)}`; 
+export const getAllUsersAPI = (searchWord, page, role) => {
+  if (role && role !== "ALL") {
+    return axiosClient.get(
+      `/users/get-by-role?role=${role}&search=${searchWord}&page=${page}`
+    );
+  } else {
+    return axiosClient.get(
+      `/users?search=${searchWord}&page=${page}`
+    );
   }
-  
-  return await axiosClient.get(url);
 };
 
 export const getMyInfoAPI = async () => {

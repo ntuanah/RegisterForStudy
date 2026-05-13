@@ -35,8 +35,8 @@ export const updateClassSectionAPI = async (id, data) => {
   return await axiosClient.put(`/class-sections/${id}`, data);
 };
 
-export const getOpenedSubjectsInFacultyAPI = async (semesterId) => {
-  return await axiosClient.get(`/class-sections/semester/${semesterId}/subjects-in-faculty`);
+export const getOpenedSubjectsInFacultyAPI = async (semesterId, searchWord = "") => {
+  return await axiosClient.get(`/class-sections/semester/${semesterId}/subjects-in-faculty?search=${encodeURIComponent(searchWord)}`);
 };
 
 export const approvePendingClassSectionsAPI = async (semesterId) => {

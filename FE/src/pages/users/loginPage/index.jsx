@@ -113,7 +113,7 @@ const LoginPage = () => {
         <p className="text-8xl text-[#5483B3] text-shadow-2xs font-bold">
           Chào mừng
         </p>
-        <p className="text-3xl text-[#0A4174] text-shadow-2xs font-bold">
+        <p className="text-4xl text-[#0A4174] text-shadow-2xs font-bold">
           Bạn đến với trang đăng ký học
         </p>
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-gray-600">

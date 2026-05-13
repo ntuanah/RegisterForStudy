@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import EditInformationUser from "../Modal/EditInformationUser";
 import InformationUser from "../Modal/InformationUser";
 import { toast } from "react-toastify";
@@ -10,13 +10,16 @@ const UserManagementTable = ({ searchWord, selectedRole, refreshTrigger }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const prevSearchRef = useRef(searchWord);
+  const prevRoleRef = useRef(selectedRole);
 
-  const fetchUsers = async (word, page) => {
+  const fetchUsers = async (word, page, role) => {
     try {
       setIsLoading(true);
       const apiPage = page - 1;
-
-      const response = await getAllUsersAPI(word, apiPage);
+      const roleParam = role === "ALL" ? "" : role;
+      
+      const response = await getAllUsersAPI(word, apiPage, roleParam);
       const { data } = response;
 
       if (data.code === 1000 || data.code === 200) {
@@ -38,24 +41,21 @@ const UserManagementTable = ({ searchWord, selectedRole, refreshTrigger }) => {
   };
 
   useEffect(() => {
+    let targetPage = currentPage;
+
+    if (prevSearchRef.current !== searchWord || prevRoleRef.current !== selectedRole) {
+      targetPage = 1;
+      setCurrentPage(1);
+      prevSearchRef.current = searchWord;
+      prevRoleRef.current = selectedRole;
+    }
+
     const delayDebounceFn = setTimeout(() => {
-      fetchUsers(searchWord, currentPage);
+      fetchUsers(searchWord, targetPage, selectedRole);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchWord, refreshTrigger, currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchWord, selectedRole]);
-
-  const filteredUsers = useMemo(() => {
-    if (!selectedRole || selectedRole === "ALL") return users;
-
-    return users.filter((user) => {
-      return user.roles && user.roles.includes(selectedRole);
-    });
-  }, [users, selectedRole]);
+  }, [searchWord, selectedRole, currentPage, refreshTrigger]);
 
   const formatRoles = (rolesArray) => {
     if (!rolesArray || rolesArray.length === 0) return "N/A";
@@ -80,7 +80,6 @@ const UserManagementTable = ({ searchWord, selectedRole, refreshTrigger }) => {
 
   const getPageNumbers = () => {
     const pageNumbers = [];
-    
     if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
@@ -88,11 +87,9 @@ const UserManagementTable = ({ searchWord, selectedRole, refreshTrigger }) => {
     } else {
       if (currentPage <= 3) {
         pageNumbers.push(1, 2, 3, 4, "...", totalPages);
-      } 
-      else if (currentPage >= totalPages - 2) {
+      } else if (currentPage >= totalPages - 2) {
         pageNumbers.push(1, "...", totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
-      } 
-      else {
+      } else {
         pageNumbers.push(1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages);
       }
     }
@@ -139,7 +136,7 @@ const UserManagementTable = ({ searchWord, selectedRole, refreshTrigger }) => {
                   Đang tải dữ liệu...
                 </td>
               </tr>
-            ) : filteredUsers.length === 0 ? (
+            ) : users.length === 0 ? (
               <tr>
                 <td
                   colSpan="7"
@@ -149,7 +146,7 @@ const UserManagementTable = ({ searchWord, selectedRole, refreshTrigger }) => {
                 </td>
               </tr>
             ) : (
-              filteredUsers.map((user, index) => (
+              users.map((user, index) => (
                 <tr
                   key={user.accountId}
                   className="hover:bg-slate-50 transition-colors"
