@@ -37,6 +37,7 @@ import PayTuitionManagementPage from "./pages/admin/payTuitionManagementPage";
 import SuccessfulPaymentPage from "./pages/users/successfulPaymentPage";
 import PaymentFailedPage from "./pages/users/paymentFailedPage";
 import OAuth2RedirectHandler from "./pages/users/OAuth2RedirectHandler";
+import LecturerSchedulePage from "./pages/departmentHead/lecturerSchedulePage";
 
 const RouterCustom = () => {
   const userRouter = [
@@ -67,6 +68,7 @@ const RouterCustom = () => {
   const departmentHeadRouter = [
     {path: ROUTERS.DEPARTMENTHEAD.PROFILE, component: <ProfileDepartmentHeadPage />},
     {path: ROUTERS.DEPARTMENTHEAD.ASSIGNINSTRUCTORS, component: <AssignInstructorsPage />},
+    {path: ROUTERS.DEPARTMENTHEAD.LECTURERSCHEDULE, component: <LecturerSchedulePage />},
   ];
 
   const adminRouter = [

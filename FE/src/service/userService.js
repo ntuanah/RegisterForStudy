@@ -34,6 +34,6 @@ export const getMyProgramTreeAPI = async () => {
   return await axiosClient.get("/students/my-program-tree");
 };
 
-export const getLecturersByMajorAPI = async (majorId) => {
-  return await axiosClient.get(`/users/lecturers/${majorId}?size=1000`);
+export const getLecturersByMajorAPI = async (majorId, page = 0, size = 10) => {
+  return await axiosClient.get(`/users/lecturers/${majorId}?page=${page}&size=${size}`);
 };

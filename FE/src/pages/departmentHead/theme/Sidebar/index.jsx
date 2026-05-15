@@ -135,6 +135,18 @@ const Sidebar = ({ isOpen, close }) => {
           Phân công giảng viên
         </NavLink>
 
+        <NavLink
+          to="/department-head/lecturer-schedule"
+          onClick={close}
+          className={({ isActive }) =>
+            `border border-[#0A4174] rounded-full px-5 py-3 inline-block hover:bg-gray-200 hover:text-[#5483B3] transition-all duration-300 hover:-translate-y-1 ${
+              isActive ? "bg-[#5483B3] text-white" : ""
+            }`
+          }
+        >
+          Lịch giảng viên
+        </NavLink>
+
         {hasLecturerRole && (
           <button
             onClick={() => {

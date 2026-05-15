@@ -29,6 +29,7 @@ export const ROUTERS = {
   DEPARTMENTHEAD: {
     PROFILE: "/department-head/profile",
     ASSIGNINSTRUCTORS: "/department-head/assign-instructors",
+    LECTURERSCHEDULE: "/department-head/lecturer-schedule",
   },
 
   ADMIN: {
@@ -43,6 +44,5 @@ export const ROUTERS = {
     COHORTMANAGEMENT: "/admin/cohort-management",
     EXPECTEDSEMESTER: "/admin/expected-semester",
     PAYTUITIONMANAGEMENT: "/admin/pay-tuition-management",
-    
-  }
+  },
 };

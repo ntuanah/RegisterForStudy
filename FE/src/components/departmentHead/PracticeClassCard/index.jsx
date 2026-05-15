@@ -27,7 +27,7 @@ const PracticeClassCard = ({ practiceClass, index, refresh }) => {
         if (infoRes.data.code === 1000) {
           const majorId = infoRes.data.result?.lecturerInfo?.majorId;
           if (majorId) {
-            const lecRes = await getLecturersByMajorAPI(majorId);
+            const lecRes = await getLecturersByMajorAPI(majorId, 0, 1000);
             if (lecRes.data.code === 1000) {
               const lecturersData = lecRes.data.result?.content || lecRes.data.result || [];
               setAllLecturers(lecturersData);

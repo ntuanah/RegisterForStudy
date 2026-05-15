@@ -97,14 +97,8 @@ const AssignInstructorsTable = () => {
             <th className="px-6 py-2 text-[10px] font-bold text-slate-400 whitespace-nowrap">
               Tên môn
             </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50 whitespace-nowrap">
+            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-80 whitespace-nowrap">
               Ngành
-            </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50 whitespace-nowrap">
-              Tiết lý thuyết
-            </th>
-            <th className="px-6 py-2 text-[10px] font-bold text-slate-400 w-50 whitespace-nowrap">
-              Tiết thực hành
             </th>
           </tr>
         </thead>
@@ -140,12 +134,6 @@ const AssignInstructorsTable = () => {
                   <td className="px-6 py-4">{subject.code}</td>
                   <td className="px-6 py-4">{subject.name}</td>
                   <td className="px-6 py-4">{subject.departmentName || "-"}</td>
-                  <td className="px-6 py-4 font-medium">
-                    {subject.theoryPeriod}
-                  </td>
-                  <td className="px-6 py-4 font-medium">
-                    {subject.practicePeriod}
-                  </td>
                 </tr>
 
                 {expandedSubjectId === subject.id && (
