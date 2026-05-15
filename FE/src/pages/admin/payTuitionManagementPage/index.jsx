@@ -13,6 +13,7 @@ const PayTuitionManagementPage = () => {
   const [isLoadingPeriods, setIsLoadingPeriods] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentSemester, setCurrentSemester] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,6 +67,7 @@ const PayTuitionManagementPage = () => {
           res.data.message ||
             `Đã chốt học phí thành công! (${res.data.result} hóa đơn)`,
         );
+        setRefreshTrigger((prev) => prev + 1);
       } else {
         toast.error(res.data.message || "Tính học phí thất bại!");
       }
@@ -146,7 +148,7 @@ const PayTuitionManagementPage = () => {
           </div>
         </div>
 
-        <PayTuitionTable />
+        <PayTuitionTable refreshTrigger={refreshTrigger}/>
       </div>
     </div>
   );

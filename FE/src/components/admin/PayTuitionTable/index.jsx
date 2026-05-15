@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getAdminTuitionInvoicesAPI } from "../../../service/tuitionService";
 import { toast } from "react-toastify";
 
-const PayTuitionTable = () => {
+const PayTuitionTable = ({ refreshTrigger }) => {
   const [invoices, setInvoices] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +30,7 @@ const PayTuitionTable = () => {
 
   useEffect(() => {
     fetchInvoices(currentPage);
-  }, [currentPage]);
+  }, [currentPage, refreshTrigger]);
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {

@@ -180,7 +180,7 @@ const SemesterConfigurationPage = () => {
                   </svg>
                 )}
                 <span>
-                  {isSyncing ? "Đang đồng bộ..." : "Đồng bộ dữ liệu redis"}
+                  {isSyncing ? "Đang đồng bộ..." : "Đồng bộ dữ liệu"}
                 </span>
               </button>
 
@@ -226,7 +226,7 @@ const SemesterConfigurationPage = () => {
                   </svg>
                 )}
                 <span>
-                  {isClearing ? "Đang dọn dẹp..." : "Dọn dẹp dữ liệu redis"}
+                  {isClearing ? "Đang dọn dẹp..." : "Dọn dẹp dữ liệu"}
                 </span>
               </button>
 
